@@ -1,0 +1,175 @@
+// src/app/contact/page.tsx
+'use client';
+
+import { motion } from 'framer-motion';
+import { MapPin, Phone, Mail, Globe2, SendHorizontal, Building2, ShieldCheck } from 'lucide-react';
+import Image from 'next/image';
+import Footer from "@/components/Footer";
+
+const offices = [
+  { region: "Global Headquarters", city: "Cairo, Egypt", address: "30 Thawra St., Heliopolis", email: "info@flashtour.travel", phone: "+202 26904654" },
+  { region: "Gulf Region", city: "Dubai, UAE", address: "Business Bay, Executive Towers", email: "uae@flashtour.travel", phone: "+971 4 123 4567" },
+  { region: "Indian Ocean", city: "Zanzibar, Tanzania", address: "Stone Town, Coastal Road", email: "zanzibar@flashtour.travel", phone: "+255 24 123 456" },
+];
+
+export default function ContactPage() {
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-between w-full bg-slate-50 overflow-hidden">
+      
+      {/* 1. Elegant Hero Section */}
+      <section className="relative w-full h-[50vh] flex items-center justify-center bg-slate-950">
+        <div className="absolute inset-0 z-0">
+          <Image 
+            src="/images/office-cairo.jpg" // استخدم صورة للمقر الرئيسي
+            alt="Flash Group Headquarters" 
+            fill 
+            className="object-cover opacity-30"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 to-transparent"></div>
+        </div>
+        
+        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto mt-20">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <h1 className="text-5xl md:text-7xl font-bold text-white font-en mb-4 tracking-tight">
+              Partner With <span className="text-teal-500">Flash Group</span>
+            </h1>
+            <p className="text-xl text-slate-300 font-en leading-relaxed">
+              For tour operators, corporate entities, event planners, and hospitality partners seeking direct access to Flash Group infrastructure.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* 2. Contact Cards */}
+      <section className="w-full py-20 bg-white relative z-20 -mt-10 rounded-t-[3rem] shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {offices.map((office, idx) => (
+              <motion.div 
+                key={idx}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.15 }}
+                className="bg-slate-50 p-10 rounded-3xl border border-slate-100 hover:shadow-xl transition-all duration-300 group"
+              >
+                <div className="w-14 h-14 bg-teal-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-teal-700 transition-colors duration-300">
+                  <Building2 className="w-6 h-6 text-teal-700 group-hover:text-white transition-colors duration-300" />
+                </div>
+                <h3 className="text-xs font-bold text-teal-600 uppercase tracking-widest font-en mb-2">{office.region}</h3>
+                <h4 className="text-2xl font-bold text-slate-900 font-en mb-6">{office.city}</h4>
+                
+                <ul className="space-y-4">
+                  <li className="flex items-start gap-3 text-slate-600 font-en text-sm">
+                    <MapPin className="w-5 h-5 text-slate-400 shrink-0" />
+                    <span>{office.address}</span>
+                  </li>
+                  <li className="flex items-center gap-3 text-slate-600 font-en text-sm">
+                    <Mail className="w-5 h-5 text-slate-400 shrink-0" />
+                    <a href={`mailto:${office.email}`} className="hover:text-teal-700 transition-colors">{office.email}</a>
+                  </li>
+                  <li className="flex items-center gap-3 text-slate-600 font-en text-sm">
+                    <Phone className="w-5 h-5 text-slate-400 shrink-0" />
+                    <span>{office.phone}</span>
+                  </li>
+                </ul>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 3. Partnership Form Section */}
+      <section className="w-full py-24 bg-slate-50">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
+          <div className="bg-white rounded-[3rem] shadow-2xl border border-slate-100 overflow-hidden flex flex-col lg:flex-row">
+            
+            {/* Left Side: Info & Trust */}
+            <div className="lg:w-5/12 bg-slate-900 p-12 md:p-16 text-white relative overflow-hidden flex flex-col justify-between">
+              <div className="absolute inset-0 opacity-10 bg-[url('/images/pattern.png')] bg-repeat"></div>
+              
+              <div className="relative z-10">
+                <h2 className="text-4xl font-bold font-en mb-6">Access the Group Network</h2>
+                <p className="text-slate-400 font-en leading-relaxed mb-10 text-lg">
+                  Tell us what your organization needs. Our corporate relations team will route your inquiry to the right business unit within 24 hours.
+                </p>
+                
+                <div className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
+                      <Globe2 className="w-5 h-5 text-teal-400" />
+                    </div>
+                    <div>
+                      <p className="font-en font-bold">Global Reach</p>
+                      <p className="text-sm text-slate-400 font-en">Operating in 4+ countries</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
+                      <ShieldCheck className="w-5 h-5 text-amber-400" />
+                    </div>
+                    <div>
+                      <p className="font-en font-bold">Certified Excellence</p>
+                      <p className="text-sm text-slate-400 font-en">ISO & IATA Certified</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Side: The Form */}
+            <div className="lg:w-7/12 p-12 md:p-16">
+              <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-slate-700 font-en">First Name *</label>
+                    <input type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900" placeholder="John" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-slate-700 font-en">Last Name *</label>
+                    <input type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900" placeholder="Doe" />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-slate-700 font-en">Corporate Email *</label>
+                    <input type="email" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900" placeholder="john@company.com" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-slate-700 font-en">Phone Number</label>
+                    <input type="tel" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900" placeholder="+1 (555) 000-0000" />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-slate-700 font-en">Inquiry Type *</label>
+                  <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900 appearance-none">
+                    <option value="">Select a topic...</option>
+                    <option value="partnership">B2B Partnership</option>
+                    <option value="booking">Corporate Booking (Cruises/Hotels)</option>
+                    <option value="fleet">Fleet & Transportation Services</option>
+                    <option value="other">Other Inquiry</option>
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-slate-700 font-en">Message *</label>
+                  <textarea rows={5} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900 resize-none" placeholder="Tell us about your business needs..."></textarea>
+                </div>
+
+                <button type="submit" className="w-full bg-teal-700 hover:bg-teal-800 text-white font-bold py-5 rounded-xl transition-all flex items-center justify-center gap-3 group shadow-xl shadow-teal-700/20 font-en text-lg">
+                  Submit Inquiry 
+                  <SendHorizontal className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+                </button>
+              </form>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </main>
+  );
+}

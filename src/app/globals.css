@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --brand-teal: #037373;
+  --brand-gold: #f4c300;
+  --brand-navy: #081427;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Typography control */
+h1 {
+  font-size: clamp(2.4rem, 4.5vw, 4.25rem);
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.045em;
+}
+
+h2 {
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  line-height: 1.12;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+}
+
+h3 {
+  font-size: clamp(1.35rem, 2vw, 2rem);
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+p {
+  font-size: clamp(0.9rem, 1vw, 1rem);
+  line-height: 1.75;
+  font-weight: 400;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
