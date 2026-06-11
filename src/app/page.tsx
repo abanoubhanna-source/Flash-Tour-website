@@ -1,5 +1,5 @@
+// src/app/page.tsx
 import HeroSection from "@/components/HeroSection";
-import TrustedClients from "@/components/TrustedClients";
 import StatsAndCerts from "@/components/StatsAndCerts";
 import InteractiveMap from "@/components/InteractiveMap";
 import HospitalityBrands from "@/components/HospitalityBrands";
