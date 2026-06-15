@@ -81,21 +81,30 @@ export default function ServicesPage() {
     <main className="flex min-h-screen flex-col items-center w-full bg-[#f8fafc] overflow-hidden selection:bg-[#157670] selection:text-white">
       
       {/* 1. Page Header (Hero) */}
-      <section className="relative w-full py-32 flex flex-col items-center justify-center bg-[#020617] overflow-hidden">
+      <section className="relative w-full py-40 flex flex-col items-center justify-center bg-[#020617] overflow-hidden">
+        {/* Background Image & Gradient */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-[url('/images/services-hero.jpg')] bg-cover bg-center opacity-20 mix-blend-luminosity"></div>
-          <div className="absolute inset-0 bg-gradient-to-b from-[#020617]/90 via-[#020617]/80 to-[#f8fafc] z-10"></div>
+          <Image 
+            src="/images/services-hero.jpg" 
+            alt="Services Hero Background" 
+            fill 
+            className="object-cover opacity-50" 
+            priority 
+          />
+          {/* Gradient: Dark at top for text visibility, transparent in middle, fading to white/slate at bottom */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#020617]/95 via-[#020617]/50 to-[#f8fafc] z-10"></div>
         </div>
         
+        {/* Content */}
         <div className="relative z-20 text-center px-6 max-w-4xl mx-auto w-full mt-10">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#F1B820]/30 bg-[#F1B820]/10 text-[#F1B820] font-bold text-xs uppercase tracking-[0.2em] mb-6 font-en">
               <ShieldCheck className="w-4 h-4" /> Global Portfolio
             </span>
-            <h1 className="text-5xl md:text-7xl font-black text-white font-en mb-6 tracking-tight uppercase">
+            <h1 className="text-5xl md:text-7xl font-black text-white font-en mb-6 tracking-tight uppercase drop-shadow-lg">
               Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#157670] to-[#F1B820]">Services.</span>
             </h1>
-            <p className="text-lg md:text-2xl text-slate-300 font-en leading-relaxed max-w-3xl mx-auto font-light">
+            <p className="text-lg md:text-2xl text-slate-200 font-en leading-relaxed max-w-3xl mx-auto font-light drop-shadow-md">
               Egyptian international company that owns various brands and sister companies in the field of tourism and hospitality.
             </p>
           </motion.div>
