@@ -229,10 +229,10 @@ export default function AboutPage() {
               {/* Director Info & Signature */}
               <div className="mt-10 border-t border-white/10 pt-8">
                 <h4 className="text-2xl font-black font-en text-white uppercase tracking-widest">
-                  Ahmed Tawfik
+                Amgad Hassoun
                 </h4>
                 <p className="text-sm text-teal-500 font-bold font-en uppercase tracking-widest mb-6">
-                  Managing Director
+                Chairman
                 </p>
                 
                 {/* The Signature Image */}
