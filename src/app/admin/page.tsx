@@ -205,8 +205,7 @@ export default function AdminDashboard() {
                 <p className="text-sm text-slate-500">This section will be activated in the next phase.</p>
               </div>
             )}
-
-          <//>
+          </>
           }
         </div>
       </main>
