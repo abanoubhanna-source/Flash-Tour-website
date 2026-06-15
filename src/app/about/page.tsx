@@ -249,6 +249,31 @@ export default function AboutPage() {
               </div>
             </motion.div>
 
+            {/* Text of the message goes here... */}
+<p className="text-slate-600 font-en leading-relaxed mb-8">
+  "Our mission is to provide immersive experiences that are bespokely tailored to our clients, through our hospitable culture and uncompromising elite service."
+</p>
+
+{/* Director Info & Signature */}
+<div className="mt-10 border-t border-slate-200 pt-8">
+  <h4 className="text-2xl font-black font-en text-[#020617] uppercase tracking-widest">
+    Ahmed Tawfik
+  </h4>
+  <p className="text-sm text-[#157670] font-bold font-en uppercase tracking-widest mb-6">
+    Managing Director
+  </p>
+  
+  {/* The Signature Image */}
+  <div className="relative w-56 h-20 opacity-80 hover:opacity-100 transition-opacity duration-300 mix-blend-multiply">
+    <Image 
+      src="/images/Signuter.png" 
+      alt="Director Signature" 
+      fill 
+      className="object-contain object-left"
+    />
+  </div>
+</div>
+
           </div>
         </div>
       </section>
