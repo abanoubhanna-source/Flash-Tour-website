@@ -1,52 +1,32 @@
 // src/app/destinations/page.tsx
 'use client';
 
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Compass, MapPin, Sun, Building, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link'; // تفعيل نظام الروابط الذكي
+import Link from 'next/link';
 import Footer from "@/components/Footer";
 
-const destinations = [
-  {
-    id: 'egypt',
-    name: 'Egypt',
-    subtitle: 'The Crown Jewel of History',
-    description: 'Experience more than 7,000 years of living history. From the timeless majesty of the Pyramids to the pristine shores of the Red Sea and the historic waters of the Nile, our Egyptian operations are the beating heart of Flash Group.',
-    highlights: ['Serenity Nile Cruises', 'True Beach Resort - Marsa Alam', '1920s Boutique Hotel - Cairo', 'Tulipe Kitesurfing Hub'],
-    image: '/images/egypt-bg.jpg',
-    icon: Compass,
-  },
-  {
-    id: 'uae',
-    name: 'United Arab Emirates',
-    subtitle: 'Where Luxury Knows No Bounds',
-    description: 'Our UAE division caters to the most discerning travelers. We seamlessly blend ultra-modern luxury with authentic Arabian hospitality, offering exclusive access to VIP services, premium mobility, and bespoke experiences in Dubai and beyond.',
-    highlights: ['VIP Chauffeur Services', 'Luxury Desert Safaris', 'Exclusive Hotel Partnerships', 'Corporate Retreats'],
-    image: '/images/uae-bg.jpg',
-    icon: Building,
-  },
-  {
-    id: 'zanzibar',
-    name: 'Zanzibar',
-    subtitle: 'The Pearl of the Indian Ocean',
-    description: 'Escape to a tropical paradise where white sandy beaches meet rich cultural heritage. Our Zanzibar operations deliver untouched nature paired with Flash Group’s signature 5-star standard of comfort and safety.',
-    highlights: ['Premium Beachfront Resorts', 'Spice Tour Experiences', 'Diving & Water Sports', 'Private Yacht Charters'],
-    image: '/images/zanzibar-bg.jpg',
-    icon: Sun,
-  },
-  {
-    id: 'italy', // تم تعديلها هنا لتطابق فولدر /destinations/italy
-    name: 'Italy',
-    subtitle: 'The Essence of Sophistication',
-    description: 'Catering to the sophisticated European market, we bring our legacy of luxury to the Mediterranean. From the sweet life of Sicily to the glamour of San Remo and Sardinia, we operate 7 exclusive premium properties.',
-    highlights: ['7 Premium Italian Hotels', 'Sicily & Sardinia Excursions', 'Olive Oil Farm Tours', 'Bespoke Mediterranean Hospitality'],
-    image: '/images/italy-bg.jpg',
-    icon: MapPin,
-  }
-];
+// قاموس الأيقونات
+const iconMap: { [key: string]: any } = {
+  Compass: Compass,
+  Building: Building,
+  Sun: Sun,
+  MapPin: MapPin,
+};
 
 export default function DestinationsPage() {
+  const [destinations, setDestinations] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch('/api/destinations')
+      .then(res => res.json())
+      .then(data => {
+        if(data && !data.error) setDestinations(data);
+      });
+  }, []);
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between w-full bg-slate-50 overflow-hidden">
       
@@ -81,12 +61,11 @@ export default function DestinationsPage() {
 
       {/* 2. Alternating Destinations Sections */}
       <section className="w-full">
-        {destinations.map((dest, index) => {
+        {destinations.map((dest: any, index: number) => {
           const isEven = index % 2 === 0;
           return (
             <div key={dest.id} className="relative w-full min-h-[80vh] flex items-center overflow-hidden border-b border-slate-100">
               
-              {/* صورة الخلفية للبلد */}
               <div className="absolute inset-0 z-0">
                 <Image 
                   src={dest.image} 
@@ -97,7 +76,6 @@ export default function DestinationsPage() {
                 <div className={`absolute inset-0 bg-gradient-to-r ${isEven ? 'from-slate-950/90 via-slate-950/70 to-transparent' : 'from-transparent via-slate-950/70 to-slate-950/90'}`}></div>
               </div>
 
-              {/* الكرت الزجاجي جواه رابط للتوجيه الفوري */}
               <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-8 w-full flex">
                 <motion.div 
                   initial={{ opacity: 0, x: isEven ? -50 : 50 }}
@@ -108,7 +86,7 @@ export default function DestinationsPage() {
                 >
                   <div className="flex items-center gap-4 mb-6">
                     <div className="w-14 h-14 rounded-full bg-teal-500/20 flex items-center justify-center border border-teal-500/30">
-                      <dest.icon className="w-6 h-6 text-teal-400" />
+                      {iconMap[dest.icon] && React.createElement(iconMap[dest.icon], { className: "w-6 h-6 text-teal-400" })}
                     </div>
                     <span className="text-amber-500 font-bold uppercase tracking-widest text-sm font-en">Destination Portfolio</span>
                   </div>
@@ -122,7 +100,9 @@ export default function DestinationsPage() {
 
                   <div className="space-y-3 mb-10">
                     <p className="text-white font-bold font-en uppercase tracking-wider text-sm mb-4 border-b border-white/20 pb-2">Flash Infrastructure Highlights</p>
-                    {dest.highlights.map((highlight, idx) => (
+                    
+                    {/* هنا تم حل الإيرور بتحديد الأنواع */}
+                    {dest.highlights && dest.highlights.map((highlight: string, idx: number) => (
                       <div key={idx} className="flex items-center gap-3">
                         <div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
                         <span className="text-slate-200 font-en">{highlight}</span>
@@ -130,7 +110,6 @@ export default function DestinationsPage() {
                     ))}
                   </div>
 
-                  {/* هنا تم التعديل: الزرار بقا Link بينقلك لصفحة البلد فوراً */}
                   <Link 
                     href={`/destinations/${dest.id}`}
                     className="w-fit group flex items-center gap-3 text-white font-bold font-en hover:text-teal-400 transition-colors duration-300"
