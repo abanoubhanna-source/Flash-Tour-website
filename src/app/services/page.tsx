@@ -1,82 +1,23 @@
-// src/app/services/page.tsx
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight, ShieldCheck } from 'lucide-react';
 import Footer from "@/components/Footer";
 
-// الداتا الكاملة للخدمات زي ما طلبتها بالظبط
-const servicesData = [
-  {
-    title: "Inbound & Outbound Tourism",
-    desc: "With many years of experience in the industry, we have diversified our portfolio in hospitality. Flash Tour has expanded its location around the world, offering hotels in many countries ranging from Nile cruises, Boutique hotels, Resorts and Boats. Our hospitality style is diverse, whether you wake up to the sound of the waves of the Indian ocean or find yourself sailing on one of the largest rivers in the world, departing from a city to wake up in another one.",
-    img: "/images/services-hero.jpg" // مسار مؤقت لحد ما تحط صور لكل خدمة
-  },
-  {
-    title: "Flight Reservations",
-    desc: "Our team will handle all ticketing procedures as we have partnered up with IATA. Via the Amadeus system, we are able to view and reserve airline tickets for our clients after analyzing the best options available.",
-    img: "/images/services-hero.jpg"
-  },
-  {
-    title: "Hotel Reservations",
-    desc: "We have contracted most of the hotels in the region across all categories, both in terms of luxury and range of facilities as well as the location. Our partners will be spoiled for choice when selecting the hotels for their clients and our competitive prices combined with exclusive offers will delight you.",
-    img: "/images/services-hero.jpg"
-  },
-  {
-    title: "Tour Guiding Services",
-    desc: "We have a professional team that offers full guidance in several languages. All our team members are bilingual and certified.",
-    img: "/images/services-hero.jpg"
-  },
-  {
-    title: "Transportation",
-    desc: "We offer a variety of Private VIP cars, limousines, coasters, shuttles, up to 50 seater buses. With a fleet of more than 100 vehicles, we guarantee our clients a wide variety of transports that exceed international standards.",
-    img: "/images/services-hero.jpg"
-  },
-  {
-    title: "Leisure: Individuals & Groups",
-    desc: "We provide high quality tailor-made solutions for niche-markets and customized services for mass-markets in the FIT and Leisure Group segments.",
-    img: "/images/services-hero.jpg"
-  },
-  {
-    title: "Premium FIT & Family Travel",
-    desc: "Our experts are happy to handcraft packages for your FIT clients as well as families. We organize every aspect of the trip, from transfers to excursions and hotel stays which are tailored to the specific needs of the clients.",
-    img: "/images/services-hero.jpg"
-  },
-  {
-    title: "Fully Escorted Group Tours",
-    desc: "For those who love to travel with company, we offer an exceptional solution with our Small Group Tours with just 12 to 24 guests. From imaginative trips to off-the-beaten.",
-    img: "/images/services-hero.jpg"
-  },
-  {
-    title: "Hajj and Umrah",
-    desc: "For our Egyptian clients we plan and handle Hajj and Umrah services for those seeking to perform their holy pilgrimages. Our team will arrange everything: transportation, flight, and hotel reservations; furthermore, assist our clients with any special requests.",
-    img: "/images/services-hero.jpg"
-  },
-  {
-    title: "Airport Services",
-    desc: "As we provide outstanding products and services that, together, deliver a premium value to our clients, we are providing all Airport services to our clients like Marhaba services and lounge access; moreover, our team is available 24/7 at the airport to meet and assist our valued clients, and provide shuttle services.",
-    img: "/images/services-hero.jpg"
-  },
-  {
-    title: "MICE Management",
-    desc: "In the UAE we manage large-scale business trips and corporate travels as a different ball game altogether. Therefore we have a specialized in-house team for all MICE industry segments. Meetings, incentives, conferences, or events.",
-    img: "/images/services-hero.jpg"
-  },
-  {
-    title: "Visa Services",
-    desc: "Entry visa to the UAE is one of our services offered at very attractive rates to our valued clients for both vacations or business purposes.",
-    img: "/images/services-hero.jpg"
-  },
-  {
-    title: "Golf",
-    desc: "Since The UAE is a very popular destination for golf enthusiasts, our Flash Horizon Golf team has limitless experience and a wealth of contacts to make sure that any package, green fee or tournament is perfection “to a tee”",
-    img: "/images/services-hero.jpg"
-  }
-];
-
 export default function ServicesPage() {
+  const [servicesData, setServicesData] = useState<any[]>([]);
+
+  useEffect(() => {
+    // سحب البيانات من الـ API الحقيقي
+    fetch('/api/services')
+      .then(res => res.json())
+      .then(data => setServicesData(data));
+  }, []);
+
+// ... هنا بيبدأ الـ return (متغيرش فيه حاجة)
   return (
     <main className="flex min-h-screen flex-col items-center w-full bg-[#f8fafc] overflow-hidden selection:bg-[#157670] selection:text-white">
       

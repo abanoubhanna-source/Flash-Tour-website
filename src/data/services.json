@@ -1,0 +1,5 @@
+[
+    { "id": 1, "title": "Inbound & Outbound Tourism", "desc": "With many years of experience in the industry, we have diversified our portfolio in hospitality...", "img": "/images/services-hero.jpg" },
+    { "id": 2, "title": "Flight Reservations", "desc": "Our team will handle all ticketing procedures as we have partnered up with IATA...", "img": "/images/services-hero.jpg" },
+    { "id": 3, "title": "Hotel Reservations", "desc": "We have contracted most of the hotels in the region across all categories, both in terms of luxury...", "img": "/images/services-hero.jpg" }
+  ]
