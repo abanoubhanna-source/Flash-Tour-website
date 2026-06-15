@@ -1,0 +1,42 @@
+[
+    {
+      "id": "serenity",
+      "name": "Serenity Nile Cruises",
+      "subtitle": "Sailing the Nile in Absolute Luxury",
+      "description": "Experience the magic of ancient Egypt aboard our premium fleet. Featuring completely revamped boutique cruises like Nile Excellence and the ultra-luxurious Nile Serenity, we redefine river hospitality.",
+      "features": ["Premium Suites with Panoramic Views", "Gourmet Dining & Lounge Bars", "Sun Deck & Swimming Pool", "Curated Historical Excursions"],
+      "image": "/images/serenity-card.jpg",
+      "icon": "Anchor",
+      "color": "teal"
+    },
+    {
+      "id": "true-beach",
+      "name": "True Beach Resort",
+      "subtitle": "Your 5-Star Red Sea Sanctuary",
+      "description": "Nestled on the pristine coastline of Marsa Alam, True Beach Resort offers an unparalleled blend of relaxation and adventure. Divided into a family-friendly Resort and an exclusive adults-only Village.",
+      "features": ["Exquisite Private Beach", "5 Specialty Restaurants & 6 Bars", "World-Class Spa & Wellness Center", "Tulipe Kitesurfing Hub"],
+      "image": "/images/true-beach-card.jpg",
+      "icon": "Palmtree",
+      "color": "amber"
+    },
+    {
+      "id": "boutique-1920s",
+      "name": "1920s Boutique Hotel",
+      "subtitle": "A Century of Elegance in Heliopolis",
+      "description": "Step back in time in our beautifully restored 100-year-old villa. Combining classic 1920s architecture with modern sophistication, this boutique hotel is a hidden gem in Cairo.",
+      "features": ["Exclusive Heritage Suites", "Lush Historic Gardens", "Home to Carlo's Restaurant", "Personalized VIP Service"],
+      "image": "/images/boutique-1920s-card.jpg",
+      "icon": "Building",
+      "color": "teal"
+    },
+    {
+      "id": "flash-yachting",
+      "name": "Flash Yachting & Fleet",
+      "subtitle": "Mastering the Land and Sea",
+      "description": "Our commitment to seamless luxury extends beyond accommodation. Command the Red Sea with our exclusive motorboats, or travel overland in absolute comfort with our fleet of over 104 VIP vehicles.",
+      "features": ["Luxury Speed Boats (Flash 3, 4, 5)", "104+ VIP Buses & Coaches", "Premium Airport Transfers", "24/7 Logistics Management"],
+      "image": "/images/yacht.jpg",
+      "icon": "Ship",
+      "color": "amber"
+    }
+  ]

@@ -1,56 +1,31 @@
 // src/app/brands/page.tsx
 'use client';
 
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Anchor, Palmtree, Building, Ship, ArrowRight, CheckCircle2 } from 'lucide-react';
 import Image from 'next/image';
 import Footer from "@/components/Footer";
 
-// بيانات الأصول (البراندات)
-const brands = [
-  {
-    id: 'serenity',
-    name: 'Serenity Nile Cruises',
-    subtitle: 'Sailing the Nile in Absolute Luxury',
-    description: 'Experience the magic of ancient Egypt aboard our premium fleet. Featuring completely revamped boutique cruises like Nile Excellence and the ultra-luxurious Nile Serenity, we redefine river hospitality.',
-    features: ['Premium Suites with Panoramic Views', 'Gourmet Dining & Lounge Bars', 'Sun Deck & Swimming Pool', 'Curated Historical Excursions'],
-    image: '/images/serenity-card.jpg',
-    icon: Anchor,
-    color: 'teal'
-  },
-  {
-    id: 'true-beach',
-    name: 'True Beach Resort',
-    subtitle: 'Your 5-Star Red Sea Sanctuary',
-    description: 'Nestled on the pristine coastline of Marsa Alam, True Beach Resort offers an unparalleled blend of relaxation and adventure. Divided into a family-friendly Resort and an exclusive adults-only Village.',
-    features: ['Exquisite Private Beach', '5 Specialty Restaurants & 6 Bars', 'World-Class Spa & Wellness Center', 'Tulipe Kitesurfing Hub'],
-    image: '/images/true-beach-card.jpg',
-    icon: Palmtree,
-    color: 'amber'
-  },
-  {
-    id: 'boutique-1920s',
-    name: '1920s Boutique Hotel',
-    subtitle: 'A Century of Elegance in Heliopolis',
-    description: 'Step back in time in our beautifully restored 100-year-old villa. Combining classic 1920s architecture with modern sophistication, this boutique hotel is a hidden gem in Cairo.',
-    features: ['Exclusive Heritage Suites', 'Lush Historic Gardens', 'Home to Carlo\'s Restaurant', 'Personalized VIP Service'],
-    image: '/images/boutique-1920s-card.jpg',
-    icon: Building,
-    color: 'teal'
-  },
-  {
-    id: 'flash-yachting',
-    name: 'Flash Yachting & Fleet',
-    subtitle: 'Mastering the Land and Sea',
-    description: 'Our commitment to seamless luxury extends beyond accommodation. Command the Red Sea with our exclusive motorboats, or travel overland in absolute comfort with our fleet of over 104 VIP vehicles.',
-    features: ['Luxury Speed Boats (Flash 3, 4, 5)', '104+ VIP Buses & Coaches', 'Premium Airport Transfers', '24/7 Logistics Management'],
-    image: '/images/yacht.jpg',
-    icon: Ship,
-    color: 'amber'
-  }
-];
+// قاموس الأيقونات
+const iconMap: { [key: string]: any } = {
+  Anchor: Anchor,
+  Palmtree: Palmtree,
+  Building: Building,
+  Ship: Ship,
+};
 
 export default function BrandsPage() {
+  const [brands, setBrands] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch('/api/brands')
+      .then(res => res.json())
+      .then(data => {
+        if(data && !data.error) setBrands(data);
+      });
+  }, []);
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between w-full bg-white overflow-hidden">
       
@@ -58,7 +33,7 @@ export default function BrandsPage() {
       <section className="relative w-full h-[60vh] flex items-center justify-center bg-slate-950">
         <div className="absolute inset-0 z-0">
           <Image 
-            src="/images/vip-bus.jpg" // استخدم صورة قوية بتجمع بين الفخامة والأسطول
+            src="/images/vip-bus.jpg" 
             alt="Flash Group Brands" 
             fill 
             className="object-cover opacity-30"
@@ -81,7 +56,7 @@ export default function BrandsPage() {
 
       {/* 2. The Brands Showcase (Zig-Zag Layout) */}
       <section className="w-full py-12">
-        {brands.map((brand, index) => {
+        {brands.map((brand: any, index: number) => {
           const isEven = index % 2 === 0;
           return (
             <div key={brand.id} className={`w-full py-24 ${isEven ? 'bg-white' : 'bg-slate-50'}`}>
@@ -107,7 +82,7 @@ export default function BrandsPage() {
                       
                       {/* Floating Icon Badge */}
                       <div className="absolute top-8 left-8 w-16 h-16 bg-white/90 backdrop-blur-md rounded-2xl flex items-center justify-center shadow-lg">
-                        <brand.icon className={`w-8 h-8 text-${brand.color}-600`} />
+                        {iconMap[brand.icon] && React.createElement(iconMap[brand.icon], { className: `w-8 h-8 text-${brand.color}-600` })}
                       </div>
                     </div>
                   </motion.div>
@@ -136,7 +111,8 @@ export default function BrandsPage() {
                     </p>
 
                     <div className="pt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {brand.features.map((feature, idx) => (
+                      {/* حل إيرور الـ TypeScript هنا */}
+                      {brand.features && brand.features.map((feature: string, idx: number) => (
                         <div key={idx} className="flex items-start gap-3">
                           <CheckCircle2 className={`w-6 h-6 text-${brand.color}-500 shrink-0`} />
                           <span className="text-slate-700 font-en font-medium">{feature}</span>
