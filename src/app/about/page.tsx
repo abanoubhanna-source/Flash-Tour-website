@@ -3,7 +3,6 @@
 
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-// ضفنا Globe2 و ShieldCheck للأيقونات الجديدة
 import { Building2, Ship, Bus, UtensilsCrossed, Eye, Target, Quote, Globe2, ShieldCheck } from 'lucide-react';
 import Image from 'next/image';
 import Footer from "@/components/Footer";
@@ -164,12 +163,11 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 6. Global Operations Centers (المحدث بالصور المتداخلة بدون أسماء المقرات) */}
+      {/* 6. Global Operations Centers */}
       <section className="w-full py-32 bg-slate-50 border-t border-slate-100 overflow-hidden">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
             
-            {/* Left Content */}
             <motion.div initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
               <span className="text-teal-700 font-bold tracking-[0.2em] uppercase text-sm block mb-4 font-en">
                 Global Infrastructure
@@ -203,26 +201,20 @@ export default function AboutPage() {
               </ul>
             </motion.div>
 
-            {/* Right Side: Overlapping Images (هنا هتحط أقوى صورتين عندك) */}
             <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative h-[500px] lg:h-[650px] w-full flex justify-end">
-              
-              {/* الصورة الرئيسية الكبيرة (مثلاً صورة القاهرة) */}
               <div className="relative w-[80%] h-[80%] rounded-[2.5rem] overflow-hidden shadow-2xl z-10 top-0 right-0 border-[12px] border-slate-50">
                 <Image src="/images/office-1.jpg" fill alt="Flash Group Operations Hub" className="object-cover" />
               </div>
-              
-              {/* الصورة الفرعية المتداخلة (مثلاً صورة زنجبار) */}
               <div className="absolute w-[60%] h-[55%] rounded-[2rem] overflow-hidden shadow-xl z-20 bottom-0 left-0 border-[12px] border-slate-50">
                 <Image src="/images/office-2.jpg" fill alt="Regional Operations Center" className="object-cover" />
               </div>
-
             </motion.div>
 
           </div>
         </div>
       </section>
 
-      {/* 7. CEO Message & Team */}
+      {/* 7. CEO Message, Team & Signature */}
       <section className="w-full py-24 bg-slate-950 text-white">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -233,6 +225,26 @@ export default function AboutPage() {
               <p className="text-slate-300 font-en leading-relaxed text-lg italic mb-8 border-l-4 border-teal-500 pl-6">
                 "Our commitment to excellence has driven Flash Group's growth for over 40 years. We believe in creating memories, setting benchmarks in hospitality, and leading the industry with integrity and passion."
               </p>
+
+              {/* Director Info & Signature */}
+              <div className="mt-10 border-t border-white/10 pt-8">
+                <h4 className="text-2xl font-black font-en text-white uppercase tracking-widest">
+                  Ahmed Tawfik
+                </h4>
+                <p className="text-sm text-teal-500 font-bold font-en uppercase tracking-widest mb-6">
+                  Managing Director
+                </p>
+                
+                {/* The Signature Image */}
+                <div className="relative w-56 h-20 opacity-80 hover:opacity-100 transition-opacity duration-300">
+                  <Image 
+                    src="/images/Signuter.png" 
+                    alt="Director Signature" 
+                    fill 
+                    className="object-contain object-left invert brightness-0"
+                  />
+                </div>
+              </div>
             </motion.div>
 
             <motion.div 
@@ -248,31 +260,6 @@ export default function AboutPage() {
                 <div className="text-sm text-teal-500 font-bold uppercase tracking-[0.2em] font-en">Global<br/>Experts</div>
               </div>
             </motion.div>
-
-            {/* Text of the message goes here... */}
-<p className="text-slate-600 font-en leading-relaxed mb-8">
-  "Our mission is to provide immersive experiences that are bespokely tailored to our clients, through our hospitable culture and uncompromising elite service."
-</p>
-
-{/* Director Info & Signature */}
-<div className="mt-10 border-t border-slate-200 pt-8">
-  <h4 className="text-2xl font-black font-en text-[#020617] uppercase tracking-widest">
-    Ahmed Tawfik
-  </h4>
-  <p className="text-sm text-[#157670] font-bold font-en uppercase tracking-widest mb-6">
-    Managing Director
-  </p>
-  
-  {/* The Signature Image */}
-  <div className="relative w-56 h-20 opacity-80 hover:opacity-100 transition-opacity duration-300 mix-blend-multiply">
-    <Image 
-      src="/images/Signuter.png" 
-      alt="Director Signature" 
-      fill 
-      className="object-contain object-left"
-    />
-  </div>
-</div>
 
           </div>
         </div>
