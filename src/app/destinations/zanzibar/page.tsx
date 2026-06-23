@@ -2,27 +2,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Car, Star, MapPin, ChevronRight, Compass, Trees, Sun, Home, Coffee, Waves } from 'lucide-react';
+import { Star, MapPin, ChevronRight, Compass, Trees, Sun } from 'lucide-react';
 import Image from 'next/image';
 import Footer from "@/components/Footer";
 
-// 1. بيانات المنتجع بالتفصيل زي ما كتبتها في الكود بتاعك
-const kiwengwaResort = {
-  name: "Kiwengwa Beach Resort",
-  type: "5-Star Luxury Resort",
-  location: "Kiwengwa Beach District (50 KM from Airport)",
-  desc: "A 5-star resort for those who seek luxury amidst natural beauty. Situated to offer convenience as well as a retreat for you to unwind in a tropical green scenery full of coconut trees.",
-  img: "/images/zanzibar-main.jpg", 
-  features: [
-    { text: "223 Modern African Style Units", icon: Home },
-    { text: "4 Premium Restaurants & 3 Bars", icon: Coffee },
-    { text: "3 Swimming Pools & A Lagoon", icon: Waves },
-    { text: "Fully Equipped Recreation Center", icon: Sun },
-  ]
-};
-
-// 2. داتا زنجبار والسفاري المدمجة
-const destinationsData = [
+// الداتا الموحدة لزنجبار والسفاري
+const zanzibarData = [
   {
     id: "zanzibar",
     name: "ZANZIBAR",
@@ -62,17 +47,17 @@ export default function ZanzibarDestinationPage() {
   return (
     <main className="flex min-h-screen flex-col items-center w-full bg-white overflow-hidden">
       
-      {/* 1. Epic Hero Section (Dark Luxury) */}
-      <section className="relative w-full h-[90vh] flex flex-col items-center justify-center bg-[#0F162A]">
+      {/* 1. Epic Hero Section */}
+      <section className="relative w-full h-[85vh] flex flex-col items-center justify-center bg-[#0F162A]">
         <div className="absolute inset-0 z-0">
           <Image 
             src="/images/zanzibar-hero.jpg" 
             alt="Exotic Zanzibar & Safari" 
             fill 
-            className="object-cover opacity-40"
+            className="object-cover opacity-50"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0F162A]/70 to-[#0F162A] z-10"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0F162A]/70 to-white z-10"></div>
         </div>
         
         <div className="relative z-20 text-center px-6 mt-16 max-w-4xl mx-auto">
@@ -83,7 +68,7 @@ export default function ZanzibarDestinationPage() {
             <h1 className="text-6xl md:text-8xl font-black text-white font-en mb-6 tracking-tight drop-shadow-2xl">
               Exotic <span className="text-[#F1B820]">ZANZIBAR</span>
             </h1>
-            <p className="text-xl text-slate-300 font-en leading-relaxed max-w-2xl mx-auto font-light drop-shadow-md">
+            <p className="text-lg md:text-xl text-[#0F162A] font-en leading-relaxed max-w-2xl mx-auto font-bold bg-white/60 backdrop-blur-md py-3 px-8 rounded-full shadow-lg">
               Africa, the land of the wildlife. Enjoy the best of both worlds with pristine beaches and unforgettable Savanna Safaris.
             </p>
           </motion.div>
@@ -92,95 +77,31 @@ export default function ZanzibarDestinationPage() {
         {/* Floating Pill Navigation */}
         <motion.div 
           initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
-          className="absolute -bottom-8 left-0 right-0 z-30 flex justify-center px-4"
+          className="absolute -bottom-6 left-0 right-0 z-30 flex justify-center px-4 w-full max-w-[1200px] mx-auto"
         >
-          <div className="bg-white p-2 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.1)] border border-slate-100 flex gap-2 overflow-x-auto max-w-full no-scrollbar">
-            <button onClick={() => scrollToSection('resort')} className="flex items-center gap-2 px-6 py-3 rounded-full hover:bg-[#157670] hover:text-white text-[#0F162A] font-bold font-en text-sm transition-colors whitespace-nowrap">
-              <Home className="w-4 h-4" /> The Resort
-            </button>
-            <button onClick={() => scrollToSection('zanzibar')} className="flex items-center gap-2 px-6 py-3 rounded-full hover:bg-[#157670] hover:text-white text-[#0F162A] font-bold font-en text-sm transition-colors whitespace-nowrap">
-              <Sun className="w-4 h-4" /> Zanzibar
-            </button>
-            <button onClick={() => scrollToSection('safari')} className="flex items-center gap-2 px-6 py-3 rounded-full hover:bg-[#157670] hover:text-white text-[#0F162A] font-bold font-en text-sm transition-colors whitespace-nowrap">
-              <Trees className="w-4 h-4" /> Safari
-            </button>
-            <button onClick={() => scrollToSection('transportation')} className="flex items-center gap-2 px-6 py-3 rounded-full hover:bg-[#157670] hover:text-white text-[#0F162A] font-bold font-en text-sm transition-colors whitespace-nowrap">
-              <Car className="w-4 h-4" /> Transportation
-            </button>
+          <div className="bg-white p-2 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 flex gap-2 overflow-x-auto max-w-full no-scrollbar">
+            {zanzibarData.map((region, idx) => (
+              <button 
+                key={idx} onClick={() => scrollToSection(region.id)}
+                className="flex items-center gap-2 px-8 py-4 rounded-full hover:bg-[#157670] hover:text-white text-[#0F162A] font-black font-en text-sm tracking-wide uppercase transition-colors whitespace-nowrap"
+              >
+                <region.icon className="w-5 h-5" strokeWidth={2} /> {region.name}
+              </button>
+            ))}
           </div>
         </motion.div>
       </section>
 
-      {/* 2. Kiwengwa Beach Resort Showcase (Added back powerfully) */}
-      <section id="resort" className="w-full bg-white relative z-20 pt-32 pb-16 scroll-mt-20">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row gap-16 items-center">
-            
-            {/* Resort Image */}
-            <motion.div 
-              className="lg:w-1/2 w-full relative h-[600px] rounded-[3rem] overflow-hidden shadow-2xl group"
-              initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
-            >
-              <Image src={kiwengwaResort.img} alt={kiwengwaResort.name} fill className="object-cover group-hover:scale-105 transition-transform duration-[1.5s]" />
-              <div className="absolute inset-0 bg-[#0F162A]/10 hover:bg-transparent transition-colors duration-500"></div>
-              <div className="absolute bottom-8 left-8 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-lg border border-slate-100">
-                <p className="font-bold text-[#157670] font-en text-lg">Flash Hospitality</p>
-                <p className="text-sm text-slate-500 font-en">Exclusive Property</p>
-              </div>
-            </motion.div>
-
-            {/* Resort Details */}
-            <motion.div 
-              className="lg:w-1/2 space-y-8"
-              initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
-            >
-              <div>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-[#157670]/10 flex items-center justify-center border border-[#157670]/20">
-                    <Sun className="w-6 h-6 text-[#157670]" />
-                  </div>
-                  <span className="text-[#157670] font-bold uppercase tracking-widest text-sm font-en">{kiwengwaResort.type}</span>
-                </div>
-                <h2 className="text-4xl md:text-5xl font-black text-[#0F162A] font-en leading-tight mb-4 tracking-tight">
-                  {kiwengwaResort.name}
-                </h2>
-                <p className="text-lg text-slate-600 font-en leading-relaxed">
-                  {kiwengwaResort.desc}
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-slate-100">
-                {kiwengwaResort.features.map((feature, idx) => (
-                  <div key={idx} className="flex items-start gap-4">
-                    <div className="mt-1 bg-[#157670]/10 p-2 rounded-lg border border-[#157670]/20">
-                      <feature.icon className="w-5 h-5 text-[#157670]" />
-                    </div>
-                    <span className="text-slate-700 font-en font-medium leading-snug">{feature.text}</span>
-                  </div>
-                ))}
-              </div>
-
-              <button className="mt-4 bg-[#0F162A] text-white px-8 py-4 rounded-full font-bold font-en hover:bg-[#157670] transition-colors shadow-xl flex items-center gap-2 group">
-                Discover Resort <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Separator */}
-      <div className="w-full max-w-[1000px] mx-auto h-px bg-slate-200"></div>
-
-      {/* 3. Zanzibar & Safari Excursions (Editorial Layout) */}
-      <section className="w-full bg-white relative z-20 pt-24 pb-32">
+      {/* 2. Main Content - Editorial White Background Layout */}
+      <section className="w-full bg-white relative z-20 pt-32 pb-32">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-8 space-y-32">
           
           <div className="text-center mb-10">
-            <h2 className="text-4xl md:text-5xl font-black text-[#0F162A] font-en tracking-tight uppercase">African Excursions</h2>
-            <p className="text-slate-500 font-en mt-4 text-lg">Discovering the hidden gems of Zanzibar and the wild Savannas.</p>
+            <h2 className="text-5xl font-black text-[#0F162A] font-en tracking-tight uppercase">Explore Destinations</h2>
+            <div className="w-24 h-1.5 bg-[#F1B820] mx-auto mt-6 rounded-full"></div>
           </div>
 
-          {destinationsData.map((region, idx) => {
+          {zanzibarData.map((region, idx) => {
             const isEven = idx % 2 === 0;
             return (
               <div key={region.id} id={region.id} className="relative scroll-mt-32 group">
@@ -223,47 +144,15 @@ export default function ZanzibarDestinationPage() {
                     </motion.div>
                   ))}
                 </div>
+
+                {/* Separator Line */}
+                {idx !== zanzibarData.length - 1 && (
+                  <div className="w-full max-w-3xl mx-auto h-px bg-slate-200 mt-32"></div>
+                )}
               </div>
             );
           })}
 
-        </div>
-      </section>
-
-      {/* 4. Transportation Section (Teal Background #157670) */}
-      <section id="transportation" className="w-full bg-[#157670] py-24 relative z-20 overflow-hidden scroll-mt-20">
-        <div className="absolute inset-0 opacity-10 bg-[url('/images/pattern.png')] bg-repeat z-0"></div>
-
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-8 relative z-10">
-          
-          <div className="text-center mb-16">
-            <h2 className="text-5xl md:text-6xl font-black text-[#F1B820] font-en tracking-wider drop-shadow-md">
-              Transportation
-            </h2>
-            <div className="w-24 h-1.5 bg-white/20 mx-auto mt-6 rounded-full"></div>
-          </div>
-
-          <div className="flex flex-col lg:flex-row items-center gap-16">
-            
-            {/* Text Side */}
-            <motion.div initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="w-full lg:w-5/12 text-white space-y-6">
-              <p className="font-en leading-relaxed text-lg text-white/90">
-                There is a lot to explore in Zanzibar, and one destination is not enough to explore the island. 
-              </p>
-              <div className="bg-[#0F162A]/40 p-8 rounded-3xl border-l-4 border-[#F1B820] shadow-xl">
-                <p className="font-en text-base leading-relaxed text-slate-200">
-                  We provide our clients with transportation that serve both large groups commuting together and adventurous individuals looking to explore the forest.
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Cinematic Fleet Gallery */}
-            <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="w-full lg:w-7/12 grid grid-cols-2 gap-4">
-              <div className="relative h-48 md:h-64 w-full rounded-2xl overflow-hidden shadow-lg"><Image src="/images/zanzibar-transport-1.jpg" alt="Fleet 1" fill className="object-cover" /></div>
-              <div className="relative h-48 md:h-64 w-full rounded-2xl overflow-hidden shadow-lg"><Image src="/images/zanzibar-transport-2.jpg" alt="Fleet 2" fill className="object-cover" /></div>
-            </motion.div>
-
-          </div>
         </div>
       </section>
 
