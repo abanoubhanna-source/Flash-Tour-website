@@ -34,5 +34,14 @@
       "highlights": ["7 Premium Italian Hotels", "Sicily & Sardinia Excursions", "Olive Oil Farm Tours", "Bespoke Mediterranean Hospitality"],
       "image": "/images/italy-bg.jpg",
       "icon": "MapPin"
+    },
+    {
+      "id": "morocco",
+      "name": "Morocco",
+      "subtitle": "The Gateway to Africa",
+      "description": "Immerse yourself in the vibrant colors and rich traditions of Morocco. From the bustling souks of Marrakech to the serene Atlas Mountains, our operations deliver an authentic and luxurious North African experience.",
+      "highlights": ["Luxury Riads in Marrakech", "Atlas Mountains Excursions", "Sahara Desert Glamping", "Premium Airport Transfers"],
+      "image": "/images/morocco-bg.jpg",
+      "icon": "Compass"
     }
   ]
