@@ -16,7 +16,7 @@ const iconMap: { [key: string]: any } = {
   MapPin: MapPin,
 };
 
-// الداتا البديلة (عشان الموقع ميظهرش فاضي أبداً)
+// الداتا الأساسية
 const fallbackDestinations = [
   {
     id: "egypt",
@@ -30,35 +30,35 @@ const fallbackDestinations = [
   {
     id: "uae",
     name: "United Arab Emirates",
-    subtitle": "Where Luxury Knows No Bounds",
+    subtitle: "Where Luxury Knows No Bounds",
     description: "Our UAE division caters to the most discerning travelers. We seamlessly blend ultra-modern luxury with authentic Arabian hospitality, offering exclusive access to VIP services, premium mobility, and bespoke experiences in Dubai and beyond.",
     highlights: ["VIP Chauffeur Services", "Luxury Desert Safaris", "Exclusive Hotel Partnerships", "Corporate Retreats"],
     image: "/images/uae-bg.jpg",
     icon: "Building"
   },
   {
-    "id": "zanzibar",
+    id: "zanzibar",
     name: "Zanzibar",
-    subtitle": "The Pearl of the Indian Ocean",
-    description": "Escape to a tropical paradise where white sandy beaches meet rich cultural heritage. Our Zanzibar operations deliver untouched nature paired with Flash Group’s signature 5-star standard of comfort and safety.",
+    subtitle: "The Pearl of the Indian Ocean",
+    description: "Escape to a tropical paradise where white sandy beaches meet rich cultural heritage. Our Zanzibar operations deliver untouched nature paired with Flash Group’s signature 5-star standard of comfort and safety.",
     highlights: ["Premium Beachfront Resorts", "Spice Tour Experiences", "Diving & Water Sports", "Private Yacht Charters"],
     image: "/images/zanzibar-bg.jpg",
     icon: "Sun"
   },
   {
-    "id": "italy",
+    id: "italy",
     name: "Italy",
-    subtitle": "The Essence of Sophistication",
-    description": "Catering to the sophisticated European market, we bring our legacy of luxury to the Mediterranean. From the sweet life of Sicily to the glamour of San Remo and Sardinia, we operate 7 exclusive premium properties.",
+    subtitle: "The Essence of Sophistication",
+    description: "Catering to the sophisticated European market, we bring our legacy of luxury to the Mediterranean. From the sweet life of Sicily to the glamour of San Remo and Sardinia, we operate 7 exclusive premium properties.",
     highlights: ["7 Premium Italian Hotels", "Sicily & Sardinia Excursions", "Olive Oil Farm Tours", "Bespoke Mediterranean Hospitality"],
     image: "/images/italy-bg.jpg",
     icon: "MapPin"
   },
   {
-    "id": "morocco",
+    id: "morocco",
     name: "Morocco",
-    subtitle": "The Gateway to Africa",
-    description": "Immerse yourself in the vibrant colors and rich traditions of Morocco. From the bustling souks of Marrakech to the serene Atlas Mountains, our operations deliver an authentic and luxurious North African experience.",
+    subtitle: "The Gateway to Africa",
+    description: "Immerse yourself in the vibrant colors and rich traditions of Morocco. From the bustling souks of Marrakech to the serene Atlas Mountains, our operations deliver an authentic and luxurious North African experience.",
     highlights: ["Luxury Riads in Marrakech", "Atlas Mountains Excursions", "Sahara Desert Glamping", "Premium Airport Transfers"],
     image: "/images/morocco-bg.jpg",
     icon: "Compass"
@@ -72,12 +72,11 @@ export default function DestinationsPage() {
     fetch('/api/destinations')
       .then(res => res.json())
       .then(data => {
-        // نستخدم داتا الـ API لو موجودة وسليمة، غير كده هنفضل على الداتا البديلة
-        if (data && Array.isArray(data) && data.length > 0) {
+        if(data && Array.isArray(data) && data.length > 0) {
           setDestinations(data);
         }
       })
-      .catch(err => console.log("Using static fallback for destinations.", err));
+      .catch(err => console.log("Failed to fetch destinations, using fallback data."));
   }, []);
 
   return (
@@ -116,13 +115,11 @@ export default function DestinationsPage() {
       <section className="w-full">
         {destinations.map((dest: any, index: number) => {
           const isEven = index % 2 === 0;
-          // حماية إضافية لو الأيقونة مش موجودة
           const IconComponent = iconMap[dest.icon] || Globe2; 
 
           return (
             <div key={dest.id || index} className="relative w-full min-h-[80vh] flex items-center overflow-hidden border-b border-slate-100 group">
               
-              {/* Background Image with Hover Zoom Effect */}
               <div className="absolute inset-0 z-0 overflow-hidden">
                 <div className="absolute inset-0 transform group-hover:scale-105 transition-transform duration-[2s] ease-out">
                   <Image 
@@ -135,7 +132,6 @@ export default function DestinationsPage() {
                 <div className={`absolute inset-0 bg-gradient-to-r ${isEven ? 'from-[#020617]/95 via-[#020617]/80 to-transparent' : 'from-transparent via-[#020617]/80 to-[#020617]/95'}`}></div>
               </div>
 
-              {/* Content Card */}
               <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-8 w-full flex">
                 <motion.div 
                   initial={{ opacity: 0, x: isEven ? -50 : 50 }}
