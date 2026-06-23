@@ -2,11 +2,11 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Car, Star, MapPin, ChevronRight, Building2, Landmark, Mountain, Waves, Library } from 'lucide-react';
+import { Star, MapPin, ChevronRight, Building2, Landmark, Mountain, Waves, Library } from 'lucide-react';
 import Image from 'next/image';
 import Footer from "@/components/Footer";
 
-// الداتا الأصلية المكتوبة باحترافية من البروفايل الخاص بالإمارات
+// الداتا الأصلية للإمارات
 const uaeData = [
   {
     id: "dubai",
@@ -80,7 +80,7 @@ export default function UAEDestinationPage() {
   return (
     <main className="flex min-h-screen flex-col items-center w-full bg-white overflow-hidden">
       
-      {/* 1. Epic Hero Section (رجعنا الدارك الفخم بتاعك) */}
+      {/* 1. Epic Hero Section */}
       <section className="relative w-full h-[85vh] flex flex-col items-center justify-center bg-[#0F162A]">
         <div className="absolute inset-0 z-0">
           <Image 
@@ -107,23 +107,20 @@ export default function UAEDestinationPage() {
           </motion.div>
         </div>
 
-        {/* Floating Pill Navigation */}
+        {/* Floating Pill Navigation (No Transportation) */}
         <motion.div 
           initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
-          className="absolute -bottom-6 left-0 right-0 z-30 flex justify-center px-4"
+          className="absolute -bottom-6 left-0 right-0 z-30 flex justify-center px-4 w-full max-w-[1200px] mx-auto"
         >
-          <div className="bg-white p-2 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.1)] border border-slate-100 flex gap-2 overflow-x-auto max-w-full no-scrollbar">
+          <div className="bg-white p-2 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 flex gap-2 overflow-x-auto max-w-full no-scrollbar">
             {uaeData.map((emirate, idx) => (
               <button 
                 key={idx} onClick={() => scrollToSection(emirate.id)}
-                className="flex items-center gap-2 px-6 py-3 rounded-full hover:bg-[#157670] hover:text-white text-[#0F162A] font-bold font-en text-sm transition-colors whitespace-nowrap"
+                className="flex items-center gap-2 px-8 py-4 rounded-full hover:bg-[#157670] hover:text-white text-[#0F162A] font-black font-en text-sm tracking-wide uppercase transition-colors whitespace-nowrap"
               >
-                <emirate.icon className="w-4 h-4" /> {emirate.name}
+                <emirate.icon className="w-5 h-5" strokeWidth={2} /> {emirate.name}
               </button>
             ))}
-            <button onClick={() => scrollToSection('transportation')} className="flex items-center gap-2 px-6 py-3 rounded-full hover:bg-[#157670] hover:text-white text-[#0F162A] font-bold font-en text-sm transition-colors whitespace-nowrap">
-              <Car className="w-4 h-4" /> Transportation
-            </button>
           </div>
         </motion.div>
       </section>
@@ -184,41 +181,6 @@ export default function UAEDestinationPage() {
             );
           })}
 
-        </div>
-      </section>
-
-      {/* 3. Transportation Section (Teal Background #157670) */}
-      <section id="transportation" className="w-full bg-[#157670] py-24 relative z-20 overflow-hidden scroll-mt-20">
-        <div className="absolute inset-0 opacity-10 bg-[url('/images/pattern.png')] bg-repeat z-0"></div>
-
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-8 relative z-10">
-          
-          <div className="text-center mb-16">
-            <h2 className="text-5xl md:text-6xl font-black text-[#F1B820] font-en tracking-wider drop-shadow-md">
-              Transportation
-            </h2>
-            <div className="w-24 h-1.5 bg-white/20 mx-auto mt-6 rounded-full"></div>
-          </div>
-
-          <div className="flex flex-col lg:flex-row items-center gap-16">
-            
-            {/* Text Side */}
-            <motion.div initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="w-full lg:w-5/12 text-white space-y-6">
-              <p className="font-en leading-relaxed text-lg text-white/90">
-                Our mission is to provide our customers with highest quality vehicles and excellent customer services at mega-competitive rates.
-              </p>
-              <div className="bg-[#0F162A]/40 p-8 rounded-3xl border-l-4 border-[#F1B820] shadow-xl">
-                <p className="font-en text-base leading-relaxed text-slate-200">
-                  We have at our disposal an extensive fleet of vehicles, which range from the regular saloon cars to the most premium and glamorous ones. Whether you are looking for luxury limousines, sedan, or 4X4 Drives.
-                  <br/><br/>
-                  We have expertise providing transportation for all kinds of events, Airport transfers, Intercity Transfers, Tours, and corporate events.
-                </p>
-              </div>
-            </motion.div>
-
-           
-
-          </div>
         </div>
       </section>
 
