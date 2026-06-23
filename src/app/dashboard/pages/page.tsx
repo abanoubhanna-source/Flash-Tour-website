@@ -1,10 +1,12 @@
 // src/app/dashboard/pages/page.tsx
 'use client';
 
+
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Save, Upload, ImageIcon, FileText, Eye, CheckCircle2, Loader2, Sparkles } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function PagesContentCMS() {
   const [activeSubTab, setActiveSubTab] = useState('home');
