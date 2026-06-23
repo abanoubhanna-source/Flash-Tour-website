@@ -1,6 +1,16 @@
 {
-    "ceo_message": "Our commitment to excellence has driven Flash Group's growth for over 40 years. We believe in creating memories, setting benchmarks in hospitality, and leading the industry with integrity and passion.",
-    "director_name": "Amgad Hassoun",
-    "director_title": "Chairman",
-    "signature_img": "/images/Signuter.png"
-  }
+  "ceo_message": "Our commitment to excellence has driven Flash Group's growth for over 40 years. We believe in creating memories, setting benchmarks in hospitality, and leading the industry with integrity and passion.",
+  "director_name": "Amgad Hassoun",
+  "director_title": "Chairman",
+  "signature_img": "/images/Signuter.png",
+  "fleet_title": "Unmatched VIP Transportation",
+  "fleet_desc": "Corporate travel requires precision. Our massive, fully-owned fleet of VIP coaches, luxury sedans, and 4x4s ensures that your delegates are moved with absolute safety, punctuality, and prestige.",
+  "fleet_features": [
+    "Over 150+ owned vehicles globally",
+    "Latest Mercedes-Benz & luxury models",
+    "In-house maintenance & safety checks",
+    "GPS tracked with 24/7 operations control",
+    "Highly trained multilingual chauffeurs"
+  ],
+  "fleet_image": "/images/fleet-showcase.jpg"
+}

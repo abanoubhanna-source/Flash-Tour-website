@@ -1,29 +1,117 @@
+// src/app/services/page.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight, ShieldCheck } from 'lucide-react';
 import Footer from "@/components/Footer";
 
+// الداتا الـ 13 الكاملة بتاعتك كـ Fallback (خطة بديلة عشان الموقع ميبقاش فاضي أبداً)
+const fallbackServices = [
+  {
+    id: 1,
+    title: "Inbound & Outbound Tourism",
+    desc: "With many years of experience in the industry, we have diversified our portfolio in hospitality. Flash Tour has expanded its location around the world, offering hotels in many countries ranging from Nile cruises, Boutique hotels, Resorts and Boats. Our hospitality style is diverse, whether you wake up to the sound of the waves of the Indian ocean or find yourself sailing on one of the largest rivers in the world, departing from a city to wake up in another one.",
+    img: "/images/services-hero.jpg"
+  },
+  {
+    id: 2,
+    title: "Flight Reservations",
+    desc: "Our team will handle all ticketing procedures as we have partnered up with IATA. Via the Amadeus system, we are able to view and reserve airline tickets for our clients after analyzing the best options available.",
+    img: "/images/services-hero.jpg"
+  },
+  {
+    id: 3,
+    title: "Hotel Reservations",
+    desc: "We have contracted most of the hotels in the region across all categories, both in terms of luxury and range of facilities as well as the location. Our partners will be spoiled for choice when selecting the hotels for their clients and our competitive prices combined with exclusive offers will delight you.",
+    img: "/images/services-hero.jpg"
+  },
+  {
+    id: 4,
+    title: "Tour Guiding Services",
+    desc: "We have a professional team that offers full guidance in several languages. All our team members are bilingual and certified.",
+    img: "/images/services-hero.jpg"
+  },
+  {
+    id: 5,
+    title: "Transportation",
+    desc: "We offer a variety of Private VIP cars, limousines, coasters, shuttles, up to 50 seater buses. With a fleet of more than 100 vehicles, we guarantee our clients a wide variety of transports that exceed international standards.",
+    img: "/images/services-hero.jpg"
+  },
+  {
+    id: 6,
+    title: "Leisure: Individuals & Groups",
+    desc: "We provide high quality tailor-made solutions for niche-markets and customized services for mass-markets in the FIT and Leisure Group segments.",
+    img: "/images/services-hero.jpg"
+  },
+  {
+    id: 7,
+    title: "Premium FIT & Family Travel",
+    desc: "Our experts are happy to handcraft packages for your FIT clients as well as families. We organize every aspect of the trip, from transfers to excursions and hotel stays which are tailored to the specific needs of the clients.",
+    img: "/images/services-hero.jpg"
+  },
+  {
+    id: 8,
+    title: "Fully Escorted Group Tours",
+    desc: "For those who love to travel with company, we offer an exceptional solution with our Small Group Tours with just 12 to 24 guests. From imaginative trips to off-the-beaten.",
+    img: "/images/services-hero.jpg"
+  },
+  {
+    id: 9,
+    title: "Hajj and Umrah",
+    desc: "For our Egyptian clients we plan and handle Hajj and Umrah services for those seeking to perform their holy pilgrimages. Our team will arrange everything: transportation, flight, and hotel reservations; furthermore, assist our clients with any special requests.",
+    img: "/images/services-hero.jpg"
+  },
+  {
+    id: 10,
+    title: "Airport Services",
+    desc: "As we provide outstanding products and services that, together, deliver a premium value to our clients, we are providing all Airport services to our clients like Marhaba services and lounge access; moreover, our team is available 24/7 at the airport to meet and assist our valued clients, and provide shuttle services.",
+    img: "/images/services-hero.jpg"
+  },
+  {
+    id: 11,
+    title: "MICE management",
+    desc: "In the UAE we manage large-scale business trips and corporate travels as a different ball game altogether. Therefore we have a specialized in-house team for all MICE industry segments. Meetings, incentives, conferences, or events.",
+    img: "/images/services-hero.jpg"
+  },
+  {
+    id: 12,
+    title: "Visa Services",
+    desc: "Entry visa to the UAE is one of our services offered at very attractive rates to our valued clients for both vacations or business purposes.",
+    img: "/images/services-hero.jpg"
+  },
+  {
+    id: 13,
+    title: "Golf",
+    desc: "Since The UAE is a very popular destination for golf enthusiasts, our Flash Horizon Golf team has limitless experience and a wealth of contacts to make sure that any package, green fee or tournament is perfection “to a tee”",
+    img: "/images/services-hero.jpg"
+  }
+];
+
 export default function ServicesPage() {
-  const [servicesData, setServicesData] = useState<any[]>([]);
+  const [servicesData, setServicesData] = useState<any[]>(fallbackServices);
 
   useEffect(() => {
-    // سحب البيانات من الـ API الحقيقي
     fetch('/api/services')
       .then(res => res.json())
-      .then(data => setServicesData(data));
+      .then(data => {
+        // لو السيرفر رجع داتا حقيقية ومش فاضية، استخدمها. غير كده خليك على الـ Fallback
+        if (data && Array.isArray(data) && data.length > 0) {
+          setServicesData(data);
+        }
+      })
+      .catch(err => {
+        console.log("API Fetch failed, using static fallback", err);
+      });
   }, []);
 
-// ... هنا بيبدأ الـ return (متغيرش فيه حاجة)
   return (
     <main className="flex min-h-screen flex-col items-center w-full bg-[#f8fafc] overflow-hidden selection:bg-[#157670] selection:text-white">
       
       {/* 1. Page Header (Hero) */}
       <section className="relative w-full py-40 flex flex-col items-center justify-center bg-[#020617] overflow-hidden">
-        {/* Background Image & Gradient */}
         <div className="absolute inset-0 z-0">
           <Image 
             src="/images/services-hero.jpg" 
@@ -32,11 +120,9 @@ export default function ServicesPage() {
             className="object-cover opacity-50" 
             priority 
           />
-          {/* Gradient: Dark at top for text visibility, transparent in middle, fading to white/slate at bottom */}
           <div className="absolute inset-0 bg-gradient-to-b from-[#020617]/95 via-[#020617]/50 to-[#f8fafc] z-10"></div>
         </div>
         
-        {/* Content */}
         <div className="relative z-20 text-center px-6 max-w-4xl mx-auto w-full mt-10">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#F1B820]/30 bg-[#F1B820]/10 text-[#F1B820] font-bold text-xs uppercase tracking-[0.2em] mb-6 font-en">
@@ -57,9 +143,9 @@ export default function ServicesPage() {
         <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
           
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-            {servicesData.map((service, index) => (
+            {servicesData.map((service: any, index: number) => (
               <motion.div 
-                key={index}
+                key={service.id || index}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
@@ -69,15 +155,13 @@ export default function ServicesPage() {
                 {/* Image Section */}
                 <div className="relative w-full h-64 overflow-hidden bg-slate-200">
                   <Image 
-                    src={service.img} 
+                    src={service.img || "/images/services-hero.jpg"} 
                     alt={service.title} 
                     fill 
                     className="object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
                   />
-                  {/* Subtle Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80"></div>
                   
-                  {/* Title over image (looks very premium) */}
                   <div className="absolute bottom-6 left-6 right-6">
                     <h3 className="text-2xl font-black text-white font-en uppercase tracking-tight leading-snug drop-shadow-lg">
                       {service.title}
@@ -90,8 +174,6 @@ export default function ServicesPage() {
                   <p className="text-slate-600 font-en text-sm leading-relaxed mb-6 flex-grow">
                     {service.desc}
                   </p>
-                  
-                  {/* Small visual anchor at the bottom of each card */}
                   <div className="w-8 h-1 bg-gradient-to-r from-[#157670] to-[#F1B820] rounded-full mt-auto opacity-50 group-hover:opacity-100 transition-opacity"></div>
                 </div>
               </motion.div>

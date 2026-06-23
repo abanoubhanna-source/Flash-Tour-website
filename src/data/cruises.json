@@ -1,0 +1,18 @@
+[
+    {
+      "id": "nile-excellence",
+      "name": "Nile Excellence",
+      "tagline": "Modern Boutique Elegance",
+      "description": "A cozy yet modern boutique Nile cruise featuring 30 revamped cabins with a pharaonic touch.",
+      "features": ["30 Cabins", "Luxurious Suites", "French Balconies", "Swimming Pool"],
+      "image": "/images/nile-excellence-hero.jpg"
+    },
+    {
+      "id": "nile-serenity",
+      "name": "Nile Serenity",
+      "tagline": "Unparalleled Beauty",
+      "description": "Travel in style with 40 luxurious suites and a full-service spa for ultimate relaxation.",
+      "features": ["40 Suites", "Panoramic Views", "Rejuvenating Spa", "Lounge Bar"],
+      "image": "/images/nile-serenity-hero.jpg"
+    }
+  ]
