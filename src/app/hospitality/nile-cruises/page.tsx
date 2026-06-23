@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import Footer from "@/components/Footer";
-import { ArrowUpRight, Anchor } from 'lucide-react';
+import { ArrowUpRight, Anchor, Ship, Waves, MapPin, CheckCircle2, Star } from 'lucide-react';
 
 const fleet = [
   { 
@@ -58,137 +58,166 @@ const fleet = [
   }
 ];
 
-const transitionEase = [0.25, 1, 0.5, 1] as const;
-
 export default function NileCruisesPage() {
   return (
-    <main className="h-screen w-full overflow-y-auto snap-y snap-mandatory bg-[#020617] text-white scroll-smooth selection:bg-[#F1B820] selection:text-black [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+    <main className="flex min-h-screen flex-col items-center w-full bg-white overflow-hidden">
       
-      {/* 1. Hero Slide */}
-      <section className="relative h-screen w-full snap-start snap-always flex flex-col items-center justify-center overflow-hidden shrink-0">
+      {/* 1. Epic Hero Section */}
+      <section className="relative w-full h-[85vh] flex flex-col items-center justify-center bg-[#0F162A]">
         <div className="absolute inset-0 z-0">
-          <Image src="/images/cruise-1.jpg" alt="Flash Group Nile Cruises" fill className="object-cover opacity-50 scale-105" priority />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#020617]/40 via-[#020617]/60 to-[#020617]"></div>
+          <Image 
+            src="/images/cruise-1.jpg" 
+            alt="The Royal Nile Fleet" 
+            fill 
+            className="object-cover opacity-50"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0F162A]/70 to-white z-10"></div>
         </div>
         
-        <div className="relative z-10 text-center px-6 w-full max-w-5xl">
-          <motion.div 
-            initial={{ opacity: 0, y: 50 }} 
-            whileInView={{ opacity: 1, y: 0 }} 
-            transition={{ duration: 1, ease: transitionEase }}
-            viewport={{ once: false }}
-          >
-            <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[#F1B820]/30 bg-[#F1B820]/10 text-[#F1B820] font-bold text-xs uppercase tracking-[0.3em] mb-10 font-en backdrop-blur-md">
-              <Anchor className="w-4 h-4" /> 100% Owned Fleet
+        <div className="relative z-20 text-center px-6 mt-16 max-w-4xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+            <span className="text-[#F1B820] font-bold tracking-[0.25em] uppercase text-xs md:text-sm block mb-6 font-en flex items-center justify-center gap-2">
+              <Anchor className="w-4 h-4 text-[#F1B820]" /> 100% EXCLUSIVELY OWNED FLEET
             </span>
-            <h1 className="text-7xl md:text-[8rem] lg:text-[10rem] font-black font-en mb-6 tracking-tighter uppercase leading-[0.85] text-white">
-              The River <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#157670] to-[#F1B820]">Masters.</span>
+            <h1 className="text-6xl md:text-8xl font-black text-white font-en mb-6 tracking-tight drop-shadow-2xl uppercase">
+              The River <br/> <span className="text-[#F1B820]">Masters</span>
             </h1>
-            <p className="text-lg md:text-2xl text-slate-300 font-en leading-relaxed max-w-3xl mx-auto font-medium mt-10">
-              Scroll down to discover our majestic fleet.
+            <p className="text-lg md:text-xl text-[#0F162A] font-en leading-relaxed max-w-2xl mx-auto font-bold bg-white/70 backdrop-blur-md py-3 px-8 rounded-full shadow-lg">
+              Commanding the ancient waters of the Nile with absolute prestige, uncompromised luxury, and legendary hospitality.
             </p>
           </motion.div>
         </div>
-        
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-px h-24 bg-white/20 overflow-hidden z-20">
-          <motion.div 
-            className="w-full h-1/2 bg-[#F1B820]"
-            animate={{ y: ['-100%', '200%'] }}
-            transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
-          />
+      </section>
+
+      {/* 2. Intro Statement */}
+      <section className="w-full py-20 bg-white relative z-20">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <Waves className="w-12 h-12 text-[#157670] mx-auto mb-6 opacity-50" />
+            <h2 className="text-3xl md:text-4xl font-bold text-[#0F162A] font-en leading-tight mb-6">
+              A Legacy Forged on the World's Most Historic River
+            </h2>
+            <p className="text-lg text-slate-500 font-en leading-relaxed">
+              We do not just broker river cruises; we own and operate a majestic fleet of floating palaces. From intimate boutique vessels to our ultra-luxury flagship, every ship in the Flash Group portfolio guarantees your VIP clients an unforgettable journey through Egypt's timeless wonders.
+            </p>
+          </motion.div>
         </div>
       </section>
 
-      {/* 2. The Fleet Showcase (تعديل بناءً على الصورة اللي بعتها) */}
-      {fleet.map((ship) => (
-        <section 
-          key={ship.id} 
-          className="relative h-screen w-full snap-start snap-always flex flex-col justify-end overflow-hidden shrink-0 group"
-        >
-          {/* Background Image */}
-          <Image 
-            src={ship.img} 
-            alt={ship.name} 
-            fill 
-            className="object-cover opacity-80 scale-100 group-hover:scale-105 transition-transform duration-[5s] ease-out" 
-          />
+      {/* 3. The Fleet Showcase (Alternating Editorial Layout) */}
+      <section className="w-full bg-white relative z-20 pb-32">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-8 space-y-32">
           
-          {/* Gradient overlay to make text readable */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-[#020617]/40 to-transparent z-0"></div>
+          {fleet.map((ship, idx) => {
+            const isEven = idx % 2 === 0;
+            return (
+              <div key={ship.id} className="relative group">
+                
+                {/* Text & Main Image Container */}
+                <div className={`flex flex-col lg:flex-row items-center gap-16 ${isEven ? '' : 'lg:flex-row-reverse'}`}>
+                  
+                  {/* Text Side */}
+                  <motion.div 
+                    initial={{ opacity: 0, x: isEven ? -40 : 40 }} 
+                    whileInView={{ opacity: 1, x: 0 }} 
+                    viewport={{ once: true, margin: "-100px" }} 
+                    className="w-full lg:w-5/12 flex flex-col justify-center"
+                  >
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-12 h-12 rounded-full bg-[#157670]/10 flex items-center justify-center border border-[#157670]/20">
+                        <Ship className="w-6 h-6 text-[#157670]" />
+                      </div>
+                      <span className="text-[#F1B820] font-bold uppercase tracking-widest text-sm font-en">
+                        {ship.tag}
+                      </span>
+                    </div>
+                    
+                    <h2 className="text-4xl md:text-5xl font-black text-[#0F162A] font-en tracking-tight uppercase mb-6">
+                      {ship.name}
+                    </h2>
+                    
+                    <p className="text-slate-600 font-en leading-relaxed text-lg mb-8">
+                      {ship.desc}
+                    </p>
 
-          {/* Content Box (زي الصورة بالمللي) */}
-          <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 lg:px-16 mb-16 md:mb-24">
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 40 }} 
-              whileInView={{ opacity: 1, y: 0 }} 
-              transition={{ duration: 0.8, ease: transitionEase }}
-              className="bg-[#0A0F1C]/80 backdrop-blur-md border border-white/5 p-8 md:p-12 max-w-3xl rounded-sm"
-            >
-              {/* Tag Box */}
-              <div className="inline-block bg-[#1A2130] px-4 py-2 mb-4">
-                <span className="text-[#F1B820] font-bold text-xs uppercase tracking-[0.2em] font-en">
-                  {ship.tag}
-                </span>
+                    {/* Specs Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10 pt-6 border-t border-slate-100">
+                      {ship.specs.map((spec, sIdx) => (
+                        <div key={sIdx} className="flex items-center gap-3">
+                          <CheckCircle2 className="w-5 h-5 text-[#157670]" />
+                          <span className="text-slate-700 font-en font-medium">{spec}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    <Link href="/partner-portal" className="w-fit flex items-center gap-3 text-[#157670] hover:text-[#F1B820] uppercase tracking-widest text-sm font-bold font-en transition-colors group/btn">
+                      Request Fleet Rates 
+                      <span className="w-10 h-10 rounded-full border border-[#157670]/30 flex items-center justify-center group-hover/btn:border-[#F1B820] transition-colors bg-slate-50 group-hover/btn:bg-white">
+                        <ArrowUpRight className="w-4 h-4" />
+                      </span>
+                    </Link>
+                  </motion.div>
+
+                  {/* Image Side */}
+                  <motion.div 
+                    initial={{ opacity: 0, x: isEven ? 40 : -40 }} 
+                    whileInView={{ opacity: 1, x: 0 }} 
+                    viewport={{ once: true, margin: "-100px" }} 
+                    className="w-full lg:w-7/12 relative h-[500px] lg:h-[600px] rounded-[2.5rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.1)] group-hover:shadow-[0_20px_60px_rgba(21,118,112,0.15)] transition-all duration-700"
+                  >
+                    <Image 
+                      src={ship.img} 
+                      alt={ship.name} 
+                      fill 
+                      className="object-cover group-hover:scale-105 transition-transform duration-[2s] ease-out" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0F162A]/60 via-transparent to-transparent"></div>
+                    
+                    {/* Floating ID Badge */}
+                    <div className="absolute top-8 right-8 bg-white/90 backdrop-blur-md w-16 h-16 rounded-full flex items-center justify-center shadow-lg">
+                      <span className="text-[#157670] font-black text-xl font-en">{ship.id}</span>
+                    </div>
+
+                    <div className="absolute bottom-8 left-8 text-white font-bold font-en text-xl flex items-center gap-3">
+                      <Star className="text-[#F1B820] w-6 h-6 fill-[#F1B820]" /> Discover {ship.name}
+                    </div>
+                  </motion.div>
+
+                </div>
+
+                {/* Separator Line */}
+                {idx !== fleet.length - 1 && (
+                  <div className="w-full max-w-3xl mx-auto h-px bg-slate-200 mt-32"></div>
+                )}
               </div>
-              
-              {/* Title */}
-              <h2 className="text-5xl md:text-7xl font-black text-white font-en mb-6 uppercase tracking-tight leading-none">
-                {ship.name}
-              </h2>
-              
-              {/* Description */}
-              <p className="text-slate-300 text-lg md:text-xl font-medium leading-relaxed mb-10 font-en">
-                {ship.desc}
-              </p>
+            );
+          })}
 
-              {/* Specs Grid (العواميد والنقط الخضراء) */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-y-5 gap-x-8 mb-10 border-t border-white/10 pt-8">
-                {ship.specs.map((spec, sIdx) => (
-                  <div key={sIdx} className="flex items-center gap-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#157670] shrink-0"></div>
-                    <span className="text-white text-sm md:text-base font-bold uppercase tracking-widest font-en">{spec}</span>
-                  </div>
-                ))}
-              </div>
+        </div>
+      </section>
 
-              {/* B2B Action Button */}
-              <Link href="/partner-portal" className="inline-flex items-center gap-3 text-[#157670] hover:text-[#F1B820] uppercase tracking-widest text-sm font-bold font-en transition-colors group">
-                Request B2B Rates 
-                <span className="w-8 h-8 rounded-full border border-[#157670] flex items-center justify-center group-hover:border-[#F1B820] transition-colors">
-                  <ArrowUpRight className="w-4 h-4" />
-                </span>
-              </Link>
-            </motion.div>
-
-          </div>
-        </section>
-      ))}
-
-      {/* 3. Final Slide: CTA & Footer */}
-      <section className="relative h-screen w-full snap-start snap-always bg-[#157670] flex flex-col justify-between shrink-0 overflow-y-auto">
-        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#ffffff 2px, transparent 2px)', backgroundSize: '50px 50px' }}></div>
+      {/* 4. Grand CTA Section */}
+      <section className="w-full bg-[#157670] py-24 relative z-20 overflow-hidden">
+        <div className="absolute inset-0 opacity-10 bg-[url('/images/pattern.png')] bg-repeat z-0"></div>
         
-        <div className="flex-1 flex flex-col items-center justify-center relative z-10 px-6 text-center">
-          <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: transitionEase }}>
-            <Anchor className="w-16 h-16 text-[#F1B820] mx-auto mb-8 opacity-90" />
-            <h2 className="text-5xl md:text-8xl font-black font-en tracking-tighter uppercase mb-6 text-white">
+        <div className="max-w-4xl mx-auto px-6 relative z-10 text-center">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <Anchor className="w-16 h-16 text-[#F1B820] mx-auto mb-8" />
+            <h2 className="text-4xl md:text-6xl font-black text-white font-en tracking-tight uppercase mb-6">
               Command The Current.
             </h2>
-            <p className="text-teal-100 text-lg md:text-2xl font-medium leading-relaxed mb-12 font-en max-w-3xl mx-auto">
-              Ready to secure the ultimate floating luxury for your elite clients? Partner with the source directly.
+            <p className="text-teal-100 text-lg md:text-xl font-medium leading-relaxed mb-10 font-en max-w-2xl mx-auto">
+              Ready to secure the ultimate floating luxury for your elite clients? Partner directly with the source.
             </p>
-            <Link href="/partner-portal" className="inline-block bg-[#020617] text-white px-12 py-6 uppercase tracking-widest text-sm font-black font-en hover:bg-white hover:text-[#020617] transition-all duration-500 rounded-full shadow-2xl">
-              Access Partner Portal
+            <Link href="/partner-portal" className="inline-block bg-[#0F162A] text-white px-10 py-5 rounded-full font-bold font-en text-sm uppercase tracking-widest hover:bg-[#F1B820] hover:text-[#0F162A] transition-all duration-300 shadow-xl hover:shadow-2xl">
+              Access B2B Portal
             </Link>
           </motion.div>
         </div>
-
-        <div className="w-full relative z-20">
-          <Footer />
-        </div>
       </section>
 
+      <Footer />
     </main>
   );
 }
