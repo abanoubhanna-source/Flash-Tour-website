@@ -97,7 +97,7 @@ export default function PagesContentCMS() {
           About (The Group)
         </button>
         <button onClick={() => setActiveSubTab('services')} className={`px-6 py-3 font-bold text-sm uppercase tracking-wider border-b-2 transition-all whitespace-nowrap ${activeSubTab === 'services' ? 'border-[#157670] text-[#157670]' : 'border-transparent text-slate-400 hover:text-[#0F162A]'}`}>
-          Enterprise Solutions
+          Service
         </button>
       </div>
 

@@ -1,21 +1,72 @@
 [
   {
+    "id": "egypt",
+    "name": "EGYPT",
+    "subtitle": "The Crown Jewel of History",
+    "description": "Our homeland and the core of our operations. From the majestic Nile River to the vibrant Red Sea and the historic streets of Cairo, we own the complete hospitality experience.",
+    "image": "/images/hospitality-hero.jpg",
+    "icon": "MapPin",
+    "highlights": ["Nile Cruises", "Red Sea Resorts", "Historic Cairo"],
+    "regions": [
+      {
+        "id": "nile-valley",
+        "name": "THE NILE VALLEY",
+        "desc": "Experience the legacy of the Pharaohs with our exclusively owned luxury river fleet. Sailing in absolute luxury.",
+        "mainImg": "/images/cruise-1.jpg",
+        "places": [
+          { "name": "Luxor", "desc": "The world's greatest open-air museum.", "img": "/images/luxor.jpg" },
+          { "name": "Aswan", "desc": "A serene gateway to ancient Nubian culture.", "img": "/images/aswan.jpg" }
+        ]
+      },
+      {
+        "id": "red-sea",
+        "name": "THE RED SEA",
+        "desc": "Dive into the world's most vibrant coral reefs at our premium coastal sanctuaries and private beaches.",
+        "mainImg": "/images/true-beach.jpg",
+        "places": [
+          { "name": "Marsa Alam", "desc": "Home to our 5-Star True Beach Resort.", "img": "/images/true-beach.jpg" },
+          { "name": "Hurghada", "desc": "The ultimate hub for water sports and marine charters.", "img": "/images/flash-boats.jpg" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "uae",
+    "name": "UNITED ARAB EMIRATES",
+    "subtitle": "The Corporate Hub",
+    "description": "Our strategic base for MICE and enterprise solutions. We handle large-scale business trips, corporate travels, and VIP luxury experiences in the heart of the Emirates.",
+    "image": "/images/uae-hero.jpg",
+    "icon": "Building2",
+    "highlights": ["MICE Management", "VIP Mobility", "Luxury Packages"],
+    "regions": [
+      {
+        "id": "dubai",
+        "name": "DUBAI",
+        "desc": "The ultimate destination for luxury, shopping, and cutting-edge corporate events.",
+        "mainImg": "/images/dubai-main.jpg",
+        "places": [
+          { "name": "Corporate Events", "desc": "World-class MICE setups and execution.", "img": "/images/dubai-mice.jpg" },
+          { "name": "Premium Leisure", "desc": "Exclusive FIT and family packages.", "img": "/images/dubai-leisure.jpg" }
+        ]
+      }
+    ]
+  },
+  {
     "id": "italy",
     "name": "ITALY",
     "subtitle": "Classic Italy & Dolce Vita",
     "description": "With a warm and friendly nature, a Dolce Vita lifestyle, and a passion for fine cuisine. Flash Group brings unparalleled hospitality to the Mediterranean.",
-    "image": "/images/italy-hero.jpg",
+    "image": "/images/italy-resorts.jpg",
     "icon": "Wine",
     "highlights": ["Sicily Splendor", "Sardinia Emerald Coast", "Hotel Portfolio"],
     "regions": [
       {
         "id": "sicily",
         "name": "SICILY",
-        "desc": "Sicily, the beauty of Italy. It is one of the most renowned islands in Europe due to its greenery, its endless beaches and locally grown products; moreover, its history and lots of films and movies have been shot there.",
+        "desc": "Sicily, the beauty of Italy. It is one of the most renowned islands in Europe due to its greenery, its endless beaches and locally grown products.",
         "mainImg": "/images/sicily-main.jpg",
         "places": [
           { "name": "Palermo", "desc": "The capital city, known for its narrow streets and traditional street markets.", "img": "/images/palermo.jpg" },
-          { "name": "Olive Oil Farms", "desc": "Sicilian olive oil is renowned as the best made in Italy. Learn how this culinary liquid gold is produced.", "img": "/images/olive-oil.jpg" },
           { "name": "Ortigia", "desc": "An old city built in the Baroque style, and regarded as a UNESCO world heritage site.", "img": "/images/ortigia.jpg" }
         ]
       },
@@ -26,8 +77,7 @@
         "mainImg": "/images/sardinia-main.jpg",
         "places": [
           { "name": "Porto Cervo", "desc": "A magnificent marina hosting high-end boutiques and mega-yachts. The ultimate VIP destination.", "img": "/images/porto-cervo.jpg" },
-          { "name": "Costa Smeralda", "desc": "A stretch of land surrounded by turquoise water, famous for its exclusive beaches and upscale hotels.", "img": "/images/costa-smeralda.jpg" },
-          { "name": "Cagliari", "desc": "The capital city of the Island, featuring a rich medieval history and the hilltop Castello.", "img": "/images/cagliari.jpg" }
+          { "name": "Costa Smeralda", "desc": "A stretch of land surrounded by turquoise water, famous for its exclusive beaches and upscale hotels.", "img": "/images/costa-smeralda.jpg" }
         ]
       }
     ]
@@ -37,7 +87,7 @@
     "name": "ZANZIBAR & SAFARI",
     "subtitle": "Exotic Escapes & Wildlife",
     "description": "Africa, the land of the wildlife. Enjoy the best of both worlds with pristine tropical beaches and unforgettable Savanna Safaris.",
-    "image": "/images/zanzibar-hero.jpg",
+    "image": "/images/zanzibar-resort.jpg",
     "icon": "Sun",
     "highlights": ["Kiwengwa Beach Resort", "Savanna Safaris", "Stone Town Heritage"],
     "regions": [
@@ -48,8 +98,7 @@
         "mainImg": "/images/zanzibar-island.jpg",
         "places": [
           { "name": "National Park", "desc": "A vast lagoon blessed with a spectacular landscape of striped sand and mangrove trees.", "img": "/images/zanzibar-national-park.jpg" },
-          { "name": "Stone Town", "desc": "The ancient capital city. A visit is never complete without seeing Freddie Mercury’s home museum.", "img": "/images/stone-town.jpg" },
-          { "name": "Jozani Forest", "desc": "Home to the Red Colobus: a rare species of monkey regarded as the national symbol of Zanzibar.", "img": "/images/jozani.jpg" }
+          { "name": "Stone Town", "desc": "The ancient capital city. A visit is never complete without seeing Freddie Mercury’s home museum.", "img": "/images/stone-town.jpg" }
         ]
       },
       {
@@ -59,8 +108,7 @@
         "mainImg": "/images/safari-main.jpg",
         "places": [
           { "name": "Selous Reserve", "desc": "Africa’s largest protected reserve and home to the largest concentration of elephants. UNESCO site.", "img": "/images/selous.jpg" },
-          { "name": "Ngorongoro", "desc": "A safe haven for globally threatened species to thrive in their natural habitat free of poachers.", "img": "/images/ngorongoro.jpg" },
-          { "name": "Mikumi Park", "desc": "A wild park featuring a variety of wild animals and home to the famous tree-climbing lions.", "img": "/images/mikumi.jpg" }
+          { "name": "Ngorongoro", "desc": "A safe haven for globally threatened species to thrive in their natural habitat free of poachers.", "img": "/images/ngorongoro.jpg" }
         ]
       }
     ]
@@ -81,8 +129,7 @@
         "mainImg": "/images/marrakech-main.jpg",
         "places": [
           { "name": "Luxury Riads", "desc": "Experience ultimate privacy and authentic Moroccan hospitality in high-end boutique Riads.", "img": "/images/luxury-riad.jpg" },
-          { "name": "Jemaa el-Fnaa", "desc": "The vibrant heartbeat of the city and a UNESCO Masterpiece of world cultural heritage.", "img": "/images/jemaa-elfna.jpg" },
-          { "name": "Bahia Palace", "desc": "A 19th-century palace reflecting the true essence of Islamic and Moroccan architectural brilliance.", "img": "/images/bahia-palace.jpg" }
+          { "name": "Jemaa el-Fnaa", "desc": "The vibrant heartbeat of the city and a UNESCO Masterpiece of world cultural heritage.", "img": "/images/jemaa-elfna.jpg" }
         ]
       }
     ]
