@@ -1,42 +1,62 @@
 [
-    {
-      "id": "serenity",
-      "name": "Serenity Nile Cruises",
-      "subtitle": "Sailing the Nile in Absolute Luxury",
-      "description": "Experience the magic of ancient Egypt aboard our premium fleet. Featuring completely revamped boutique cruises like Nile Excellence and the ultra-luxurious Nile Serenity, we redefine river hospitality.",
-      "features": ["Premium Suites with Panoramic Views", "Gourmet Dining & Lounge Bars", "Sun Deck & Swimming Pool", "Curated Historical Excursions"],
-      "image": "/images/serenity-card.jpg",
-      "icon": "Anchor",
-      "color": "teal"
-    },
-    {
-      "id": "true-beach",
-      "name": "True Beach Resort",
-      "subtitle": "Your 5-Star Red Sea Sanctuary",
-      "description": "Nestled on the pristine coastline of Marsa Alam, True Beach Resort offers an unparalleled blend of relaxation and adventure. Divided into a family-friendly Resort and an exclusive adults-only Village.",
-      "features": ["Exquisite Private Beach", "5 Specialty Restaurants & 6 Bars", "World-Class Spa & Wellness Center", "Tulipe Kitesurfing Hub"],
-      "image": "/images/true-beach-card.jpg",
-      "icon": "Palmtree",
-      "color": "amber"
-    },
-    {
-      "id": "boutique-1920s",
-      "name": "1920s Boutique Hotel",
-      "subtitle": "A Century of Elegance in Heliopolis",
-      "description": "Step back in time in our beautifully restored 100-year-old villa. Combining classic 1920s architecture with modern sophistication, this boutique hotel is a hidden gem in Cairo.",
-      "features": ["Exclusive Heritage Suites", "Lush Historic Gardens", "Home to Carlo's Restaurant", "Personalized VIP Service"],
-      "image": "/images/boutique-1920s-card.jpg",
-      "icon": "Building",
-      "color": "teal"
-    },
-    {
-      "id": "flash-yachting",
-      "name": "Flash Yachting & Fleet",
-      "subtitle": "Mastering the Land and Sea",
-      "description": "Our commitment to seamless luxury extends beyond accommodation. Command the Red Sea with our exclusive motorboats, or travel overland in absolute comfort with our fleet of over 104 VIP vehicles.",
-      "features": ["Luxury Speed Boats (Flash 3, 4, 5)", "104+ VIP Buses & Coaches", "Premium Airport Transfers", "24/7 Logistics Management"],
-      "image": "/images/yacht.jpg",
-      "icon": "Ship",
-      "color": "amber"
-    }
-  ]
+  {
+    "id": "nile-serenity",
+    "name": "Nile Serenity",
+    "type": "Cruise",
+    "tag": "THE FLAGSHIP",
+    "subtitle": "Setting the absolute benchmark for river cruising.",
+    "description": "Designed for the global elite, offering uninterrupted panoramic views and uncompromised luxury on the Nile.",
+    "image": "/images/cruise-1.jpg",
+    "features": ["72 Luxury Suites", "Gourmet Gastronomy", "Rooftop Infinity Pool", "Private Docking"]
+  },
+  {
+    "id": "nile-excellence",
+    "name": "Nile Excellence",
+    "type": "Cruise",
+    "tag": "MODERN ELEGANCE",
+    "subtitle": "A seamless blend of contemporary design and classic river heritage.",
+    "description": "Featuring expansive sun decks and premium culinary experiences along the historic waters.",
+    "image": "/images/cruise-2.jpg",
+    "features": ["68 Premium Cabins", "Panoramic Lounge", "Spa & Wellness", "VIP Concierge"]
+  },
+  {
+    "id": "true-beach-resort",
+    "name": "True Beach Resort",
+    "type": "Hotel",
+    "tag": "5-STAR LUXURY",
+    "subtitle": "Our signature hospitality shines at Marsa Alam.",
+    "description": "Thoughtfully divided into a vibrant family-friendly resort and an exclusive adults-only village for ultimate serenity.",
+    "image": "/images/true-beach.jpg",
+    "features": ["Family & Adults Zones", "Premium Dining", "Private Pools", "Kitesurfing Hub"]
+  },
+  {
+    "id": "kiwengwa-beach-resort",
+    "name": "Kiwengwa Beach Resort",
+    "type": "Hotel",
+    "tag": "5-STAR ESTATES",
+    "subtitle": "Flash Group standard of luxury in Zanzibar.",
+    "description": "Boasting over 200 modern African-style units, it offers a seamless blend of natural beauty and tropical premium comfort.",
+    "image": "/images/zanzibar-island.jpg",
+    "features": ["200+ Luxury Rooms", "4 Restaurants & 3 Bars", "3 Swimming Pools", "Private Sandbanks"]
+  },
+  {
+    "id": "1920s-boutique-hotel",
+    "name": "1920s Boutique Hotel",
+    "type": "Hotel",
+    "tag": "HISTORIC STAY",
+    "subtitle": "Step back in time in the prestigious district of Heliopolis.",
+    "description": "A meticulously restored 100-year-old historic villa, offering a seamless blend of classic 1920s architecture and modern sophistication.",
+    "image": "/images/1920s-hotel.jpg",
+    "features": ["Restored 1920s Villa", "Luxury Boutique Suites", "Historic Garden Setting", "VIP Concierge"]
+  },
+  {
+    "id": "rossini-fine-dining",
+    "name": "Rossini Fine Dining",
+    "type": "Restaurant",
+    "tag": "AWARD-WINNING CULINARY",
+    "subtitle": "A true landmark in Cairo's fine dining scene since 1993.",
+    "description": "Proud bearer of the prestigious Chaine des Rotisseurs certification, Rossini offers authentic Italian and Mediterranean gastronomy.",
+    "image": "/images/rossini.jpg",
+    "features": ["Chaine des Rotisseurs", "Italian Gastronomy", "Premium Seafood", "Elite Atmosphere"]
+  }
+]
