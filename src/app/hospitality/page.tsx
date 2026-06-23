@@ -2,12 +2,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Ship, Waves, Palmtree, Map, Building2, CheckCircle, ArrowRight, Sparkles, ShieldCheck } from 'lucide-react';
+import { Ship, Waves, Palmtree, Map, Building2, CheckCircle, ArrowRight, Sparkles } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Footer from "@/components/Footer";
 
-// الداتا مع التركيز على فكرة "موجودين في كل مكان بتجربة مختلفة"
+// الداتا مع إضافة مسار الروابط (link) لكل قسم
 const portfolioRegions = [
   {
     id: "nile",
@@ -17,6 +17,7 @@ const portfolioRegions = [
     desc: "We don't just cruise the Nile; we own its finest vessels. Our massive fleet of 7 luxury floating hotels, including the ultra-luxurious 'Serenity' line, guarantees an unmatched river hospitality experience where every detail is under our direct control.",
     icon: Ship,
     img: "/images/cruise-1.jpg",
+    link: "/hospitality/nile-cruises",
     features: [
       "Serenity I & II Luxury Cruises",
       "Premium Suites with Panoramic Views",
@@ -32,6 +33,7 @@ const portfolioRegions = [
     desc: "From the golden sands to the deep blue. You will find our signature hospitality at the 5-Star True Beach Resort in Marsa Alam, complemented by our private motorboats and diving yachts dominating the coastline.",
     icon: Waves,
     img: "/images/true-beach.jpg",
+    link: "/hospitality/coastal-sanctuaries",
     features: [
       "True Beach Resort (Family & Adults-Only)",
       "Flash Yachting (Flash 3, 4, 5)",
@@ -47,6 +49,7 @@ const portfolioRegions = [
     desc: "Our footprint extends to the exotic shores of Tanzania. At our fully-owned Kiwengwa Beach Resort in Zanzibar, we deliver the Flash Group standard of luxury wrapped in a breathtaking tropical environment.",
     icon: Palmtree,
     img: "/images/zanzibar-resort.jpg",
+    link: "/hospitality/tropical-retreats",
     features: [
       "Kiwengwa Beach Resort",
       "Exclusive White Sand Beaches",
@@ -62,6 +65,7 @@ const portfolioRegions = [
     desc: "A strategic, commanding presence in Europe's most elite destinations. Our curated collection of 7 exclusive properties across Sardinia and Sicily proves that our hospitality knows no borders.",
     icon: Map,
     img: "/images/italy-resorts.jpg",
+    link: "/hospitality/european-elegance",
     features: [
       "7 Exclusive Italian Resorts",
       "Sardinia & Sicily Prime Locations",
@@ -77,6 +81,7 @@ const portfolioRegions = [
     desc: "In the heart of the city, our hospitality takes a cultural form. We preserve history through meticulously restored 100-year-old boutique villas and elevate the culinary scene with our award-winning dining lounges.",
     icon: Building2,
     img: "/images/boutique-hotel.jpg",
+    link: "/hospitality/urban-centers",
     features: [
       "1920s Boutique Hotel (Heliopolis)",
       "Carlo's Restaurant (Historic Gardens)",
@@ -90,17 +95,12 @@ export default function HospitalityPage() {
   return (
     <main className="flex min-h-screen flex-col items-center w-full bg-white overflow-hidden">
       
-      {/* 1. Redesigned Premium Hero (تم توضيح الصورة وتخفيف المربعات) */}
+      {/* 1. Redesigned Premium Hero */}
       <section className="relative w-full h-[85vh] flex flex-col items-center justify-center bg-[#020617] mt-16 md:mt-20 overflow-hidden">
         
         <div className="absolute inset-0 z-0">
-          {/* رفعنا وضوح الصورة لـ 50% (opacity-50 بدل opacity-30) */}
           <Image src="/images/hospitality-hero.jpg" alt="Flash Group Portfolio" fill className="object-cover opacity-50 scale-105 animate-[pulse_10s_ease-in-out_infinite_alternate]" />
-          
-          {/* خففنا الطبقة السوداء عشان الصورة تنور أكتر */}
           <div className="absolute inset-0 bg-gradient-to-b from-[#020617]/70 via-[#020617]/40 to-[#020617] z-10"></div>
-          
-          {/* شبكة المربعات بقت شفافة جداً جداً 3% وكبرنا حجمها عشان متبقاش مزعجة للعين */}
           <div className="absolute inset-0 opacity-[0.03] z-10" style={{ backgroundImage: 'linear-gradient(#ffffff 1px, transparent 1px), linear-gradient(90deg, #ffffff 1px, transparent 1px)', backgroundSize: '60px 60px' }}></div>
         </div>
         
@@ -150,14 +150,13 @@ export default function HospitalityPage() {
 
       </section>
 
-      {/* 2. Editorial Overlap Layout (تم حل مشكلة المحاذاة جذرياً هنا) */}
+      {/* 2. Editorial Overlap Layout */}
       <div className="w-full bg-slate-50 relative z-20 py-24">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-8 space-y-32">
           
           {portfolioRegions.map((region, index) => {
             const isEven = index % 2 === 0;
             return (
-              // تم استخدام flexbox مع items-center لضمان التوسيط الدائم
               <div key={region.id} className={`flex flex-col lg:flex-row items-center ${isEven ? 'lg:flex-row-reverse' : ''}`}>
                 
                 {/* Image Section */}
@@ -171,7 +170,7 @@ export default function HospitalityPage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
                 </motion.div>
 
-                {/* Content Box Section - مضمون توسيطه تماماً فوق الصورة */}
+                {/* Content Box Section */}
                 <motion.div 
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -206,7 +205,8 @@ export default function HospitalityPage() {
                     ))}
                   </div>
 
-                  <Link href="#" className="inline-flex items-center gap-3 text-[#020617] font-black font-en text-lg hover:text-[#157670] transition-colors group">
+                  {/* تم تحديث الرابط ليوجه للصفحة الفرعية الخاصة بالقسم */}
+                  <Link href={region.link} className="inline-flex items-center gap-3 text-[#020617] font-black font-en text-lg hover:text-[#157670] transition-colors group">
                     Explore This Destination <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
                   </Link>
                 </motion.div>
@@ -243,4 +243,4 @@ export default function HospitalityPage() {
       <Footer />
     </main>
   );
-} 
+}
