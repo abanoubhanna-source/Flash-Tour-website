@@ -216,18 +216,7 @@ export default function UAEDestinationPage() {
               </div>
             </motion.div>
 
-            {/* Cinematic Fleet Gallery */}
-            <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="w-full lg:w-7/12 grid grid-cols-2 lg:grid-cols-3 gap-4">
-              <div className="relative h-40 md:h-48 w-full rounded-2xl overflow-hidden shadow-lg"><Image src="/images/uae-transport-1.jpg" alt="Fleet 1" fill className="object-cover" /></div>
-              <div className="relative h-40 md:h-48 w-full rounded-2xl overflow-hidden shadow-lg"><Image src="/images/uae-transport-2.jpg" alt="Fleet 2" fill className="object-cover" /></div>
-              <div className="relative h-40 md:h-48 w-full rounded-2xl overflow-hidden shadow-lg hidden lg:block"><Image src="/images/uae-transport-3.jpg" alt="Fleet 3" fill className="object-cover" /></div>
-              <div className="relative h-40 md:h-48 w-full rounded-2xl overflow-hidden shadow-lg hidden lg:block"><Image src="/images/uae-transport-4.jpg" alt="Fleet 4" fill className="object-cover" /></div>
-              <div className="relative h-40 md:h-48 w-full rounded-2xl overflow-hidden shadow-lg col-span-2 lg:col-span-1"><Image src="/images/uae-transport-5.jpg" alt="Fleet 5" fill className="object-cover" /></div>
-              <div className="relative h-40 md:h-48 w-full rounded-2xl overflow-hidden shadow-lg bg-[#0F162A] flex flex-col items-center justify-center border border-white/10 p-4 text-center">
-                <Car className="w-12 h-12 text-[#F1B820] mb-3" />
-                <span className="text-white font-bold font-en text-sm tracking-widest uppercase">Premium Fleet</span>
-              </div>
-            </motion.div>
+           
 
           </div>
         </div>
