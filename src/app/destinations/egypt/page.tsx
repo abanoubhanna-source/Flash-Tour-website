@@ -2,32 +2,11 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Anchor, Building2, UtensilsCrossed, Ship, Waves, ArrowRight, MapPin, Car, Star, Compass } from 'lucide-react';
+import { ArrowRight, MapPin, Star } from 'lucide-react';
 import Image from 'next/image';
 import Footer from "@/components/Footer";
 
-// 1. Nile Cruises Fleet (The Royal Fleet)
-const cruises = [
-  { name: "Nile Serenity", type: "Ultra-Luxury Flagship", desc: "Redefining river hospitality with unmatched suite spaces, fine dining, and panoramic views.", image: "/images/nile-serenity.jpg", cols: "lg:col-span-2" },
-  { name: "Nile Excellence", type: "Boutique Luxury", desc: "An exclusive boutique vessel featuring 30 premium suites for discerning travelers seeking intimacy.", image: "/images/nile-excellence.jpg", cols: "lg:col-span-1" },
-  { name: "Magic I", type: "Premium Cruise", desc: "Renovated in 2021, offering a premium boutique experience with 70 luxury cabins and 2 magnificent suites.", image: "/images/magic1.jpg", cols: "lg:col-span-1" },
-  { name: "Magic II", type: "Premium Cruise", desc: "Designed for ultimate relaxation, featuring 72 newly renovated cabins and 2 majestic suites.", image: "/images/magic2.jpg", cols: "lg:col-span-1" },
-  { name: "Lady Mary", type: "Classic Luxury", desc: "Experience the timeless elegance with 72 beautifully appointed cabins.", image: "/images/lady-mary.jpg", cols: "lg:col-span-1" },
-];
-
-// 2. Hotels (Sanctuaries)
-const hotels = [
-  { name: "True Beach Resort", location: "Marsa Alam", desc: "5-Star serenity on the pristine Red Sea coastline. Divided into a family-friendly resort and an exclusive adults-only village with private beaches.", image: "/images/true-beach.jpg" },
-  { name: "1920s Boutique Hotel", location: "Heliopolis, Cairo", desc: "Step back in time in our beautifully restored 100-year-old historic villa. Combining classic architecture with modern sophistication.", image: "/images/1920s-hotel.jpg" }
-];
-
-// 3. Fine Dining
-const dining = [
-  { name: "Rossini", type: "Italian & Mediterranean", desc: "A landmark in Cairo's fine dining since 1993. Proud bearer of the Chaine des Rotisseurs certification.", image: "/images/rossini.jpg" },
-  { name: "Carlo's", type: "Premium Casual", desc: "Nestled in a beautiful historic villa garden, serving a wide variety of Oriental, Asian, and international dishes.", image: "/images/carlos.jpg" }
-];
-
-// 4. Destinations Data (Added from your text)
+// Destinations Data
 const destinationsData = [
   {
     id: "sharm",
@@ -87,15 +66,6 @@ const destinationsData = [
 ];
 
 export default function EgyptComprehensivePage() {
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      const yOffset = -100;
-      const y = element.getBoundingClientRect().top + window.scrollY + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-    }
-  };
-
   return (
     <main className="flex min-h-screen flex-col items-center w-full bg-white overflow-hidden">
       
@@ -127,22 +97,12 @@ export default function EgyptComprehensivePage() {
             </p>
           </motion.div>
         </div>
-
-        {/* Quick Navigation Pills */}
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="absolute -bottom-6 left-0 right-0 z-30 flex justify-center px-4">
-          <div className="bg-white/10 backdrop-blur-md p-2 rounded-full shadow-2xl border border-white/20 flex gap-2 overflow-x-auto max-w-full no-scrollbar">
-            <button onClick={() => scrollToSection('hospitality')} className="flex items-center gap-2 px-6 py-3 rounded-full hover:bg-[#F1B820] hover:text-[#0F162A] text-white font-bold font-en text-sm transition-colors whitespace-nowrap"><Building2 className="w-4 h-4" /> Hospitality</button>
-            <button onClick={() => scrollToSection('destinations')} className="flex items-center gap-2 px-6 py-3 rounded-full hover:bg-[#F1B820] hover:text-[#0F162A] text-white font-bold font-en text-sm transition-colors whitespace-nowrap"><Compass className="w-4 h-4" /> Destinations</button>
-            <button onClick={() => scrollToSection('transportation')} className="flex items-center gap-2 px-6 py-3 rounded-full hover:bg-[#F1B820] hover:text-[#0F162A] text-white font-bold font-en text-sm transition-colors whitespace-nowrap"><Car className="w-4 h-4" /> Transportation</button>
-          </div>
-        </motion.div>
       </section>
 
-  
       {/* =========================================
-          PART 2: DESTINATIONS (White Background)
+          PART 2: EXPLORE DESTINATIONS
       ========================================= */}
-      <section id="destinations" className="w-full bg-white relative z-20 pt-24 pb-32 border-t border-slate-200">
+      <section className="w-full bg-white relative z-20 pt-24 pb-32">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-8 space-y-32">
           
           <div className="text-center mb-10">
@@ -196,48 +156,6 @@ export default function EgyptComprehensivePage() {
             );
           })}
 
-        </div>
-      </section>
-
-      {/* =========================================
-          PART 3: TRANSPORTATION (Teal Background)
-      ========================================= */}
-      <section id="transportation" className="w-full bg-[#157670] py-24 relative z-20 overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[url('/images/pattern.png')] bg-repeat z-0"></div>
-        
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-8 relative z-10">
-          <div className="flex flex-col lg:flex-row items-center gap-16 bg-[#0d4a46]/30 p-10 md:p-16 rounded-[3rem] border border-white/10 backdrop-blur-sm shadow-2xl">
-            
-            {/* Texts */}
-            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="w-full lg:w-1/2 text-white space-y-6">
-              <div className="flex items-center gap-3 mb-2">
-                <Car className="w-8 h-8 text-[#F1B820]" />
-                <h2 className="text-4xl md:text-5xl font-black text-white font-en tracking-tight">Transportation</h2>
-              </div>
-              <p className="font-en leading-relaxed text-lg text-white/90">
-                Our team takes care of all our client's transportation. Our fleet is equipped with a variety of vehicles that serve all purposes; moreover, We handle transportation services for both leisure and business travelers.
-              </p>
-              <div className="bg-[#0F162A]/40 p-8 rounded-3xl border-l-4 border-[#F1B820] shadow-xl">
-                <p className="font-en text-base leading-relaxed text-slate-200">
-                  With a fleet of more than <strong className="text-[#F1B820]">100 vehicles</strong>, we guarantee our clients a wide variety of transports that exceed international standards. Whether our clients are seeking leisure or a professional atmosphere, Flash Transportation is ready. 
-                  <br/><br/>
-                  We offer a variety of Private VIP cars, Limousines, coasters, shuttles, to 50 seater buses.
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Cinematic Fleet Gallery */}
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="w-full lg:w-1/2 grid grid-cols-2 gap-4">
-              <div className="relative h-40 md:h-56 w-full rounded-2xl overflow-hidden shadow-lg"><Image src="/images/egypt-transport-1.jpg" alt="Fleet 1" fill className="object-cover" /></div>
-              <div className="relative h-40 md:h-56 w-full rounded-2xl overflow-hidden shadow-lg"><Image src="/images/egypt-transport-2.jpg" alt="Fleet 2" fill className="object-cover" /></div>
-              <div className="relative h-40 md:h-56 w-full rounded-2xl overflow-hidden shadow-lg"><Image src="/images/egypt-transport-3.jpg" alt="Fleet 3" fill className="object-cover" /></div>
-              <div className="relative h-40 md:h-56 w-full rounded-2xl overflow-hidden shadow-lg bg-[#0F162A] flex flex-col items-center justify-center p-4 text-center border border-white/10">
-                <h3 className="text-[#F1B820] font-black text-3xl font-en mb-1">100+</h3>
-                <p className="text-white text-xs font-en uppercase tracking-widest">Premium Vehicles</p>
-              </div>
-            </motion.div>
-
-          </div>
         </div>
       </section>
 
