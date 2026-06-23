@@ -1,38 +1,47 @@
 [
-    {
-      "id": "egypt",
-      "name": "Egypt",
-      "subtitle": "The Crown Jewel of History",
-      "description": "Experience more than 7,000 years of living history. From the timeless majesty of the Pyramids to the pristine shores of the Red Sea and the historic waters of the Nile, our Egyptian operations are the beating heart of Flash Group.",
-      "highlights": ["Serenity Nile Cruises", "True Beach Resort - Marsa Alam", "1920s Boutique Hotel - Cairo", "Tulipe Kitesurfing Hub"],
-      "image": "/images/egypt-bg.jpg",
-      "icon": "Compass"
-    },
-    {
-      "id": "uae",
-      "name": "United Arab Emirates",
-      "subtitle": "Where Luxury Knows No Bounds",
-      "description": "Our UAE division caters to the most discerning travelers. We seamlessly blend ultra-modern luxury with authentic Arabian hospitality, offering exclusive access to VIP services, premium mobility, and bespoke experiences in Dubai and beyond.",
-      "highlights": ["VIP Chauffeur Services", "Luxury Desert Safaris", "Exclusive Hotel Partnerships", "Corporate Retreats"],
-      "image": "/images/uae-bg.jpg",
-      "icon": "Building"
-    },
-    {
-      "id": "zanzibar",
-      "name": "Zanzibar",
-      "subtitle": "The Pearl of the Indian Ocean",
-      "description": "Escape to a tropical paradise where white sandy beaches meet rich cultural heritage. Our Zanzibar operations deliver untouched nature paired with Flash Group’s signature 5-star standard of comfort and safety.",
-      "highlights": ["Premium Beachfront Resorts", "Spice Tour Experiences", "Diving & Water Sports", "Private Yacht Charters"],
-      "image": "/images/zanzibar-bg.jpg",
-      "icon": "Sun"
-    },
-    {
-      "id": "italy",
-      "name": "Italy",
-      "subtitle": "The Essence of Sophistication",
-      "description": "Catering to the sophisticated European market, we bring our legacy of luxury to the Mediterranean. From the sweet life of Sicily to the glamour of San Remo and Sardinia, we operate 7 exclusive premium properties.",
-      "highlights": ["7 Premium Italian Hotels", "Sicily & Sardinia Excursions", "Olive Oil Farm Tours", "Bespoke Mediterranean Hospitality"],
-      "image": "/images/italy-bg.jpg",
-      "icon": "MapPin"
-    }
-  ]
+  {
+    "id": "egypt",
+    "name": "Egypt",
+    "subtitle": "The Crown Jewel of History",
+    "description": "Experience more than 7,000 years of living history. From the timeless majesty of the Pyramids to the pristine shores of the Red Sea and the historic waters of the Nile, our Egyptian operations are the beating heart of Flash Group.",
+    "highlights": ["Serenity Nile Cruises", "True Beach Resort - Marsa Alam", "1920s Boutique Hotel - Cairo", "Tulipe Kitesurfing Hub"],
+    "image": "/images/egypt-bg.jpg",
+    "icon": "Compass"
+  },
+  {
+    "id": "uae",
+    "name": "United Arab Emirates",
+    "subtitle": "Where Luxury Knows No Bounds",
+    "description": "Our UAE division caters to the most discerning travelers. We seamlessly blend ultra-modern luxury with authentic Arabian hospitality, offering exclusive access to VIP services, premium mobility, and bespoke experiences in Dubai and beyond.",
+    "highlights": ["VIP Chauffeur Services", "Luxury Desert Safaris", "Exclusive Hotel Partnerships", "Corporate Retreats"],
+    "image": "/images/uae-bg.jpg",
+    "icon": "Building"
+  },
+  {
+    "id": "zanzibar",
+    "name": "Zanzibar",
+    "subtitle": "The Pearl of the Indian Ocean",
+    "description": "Escape to a tropical paradise where white sandy beaches meet rich cultural heritage. Our Zanzibar operations deliver untouched nature paired with Flash Group’s signature 5-star standard of comfort and safety.",
+    "highlights": ["Premium Beachfront Resorts", "Spice Tour Experiences", "Diving & Water Sports", "Private Yacht Charters"],
+    "image": "/images/zanzibar-bg.jpg",
+    "icon": "Sun"
+  },
+  {
+    "id": "italy",
+    "name": "Italy",
+    "subtitle": "The Essence of Sophistication",
+    "description": "Catering to the sophisticated European market, we bring our legacy of luxury to the Mediterranean. From the sweet life of Sicily to the glamour of San Remo and Sardinia, we operate 7 exclusive premium properties.",
+    "highlights": ["7 Premium Italian Hotels", "Sicily & Sardinia Excursions", "Olive Oil Farm Tours", "Bespoke Mediterranean Hospitality"],
+    "image": "/images/italy-bg.jpg",
+    "icon": "MapPin"
+  },
+  {
+    "id": "morocco",
+    "name": "Morocco",
+    "subtitle": "The Gateway to Africa",
+    "description": "Immerse yourself in vibrant colors, rich traditions, and unparalleled North African luxury. From the bustling souks of Marrakech to the majestic Atlas Mountains and the serene Sahara, our Moroccan operations offer an unforgettable blend of culture and elegance.",
+    "highlights": ["Marrakech Luxury Riads", "Atlas Mountains Excursions", "Sahara Desert Camps", "Authentic Culinary Tours"],
+    "image": "/images/morocco-bg.jpg",
+    "icon": "Map"
+  }
+]
