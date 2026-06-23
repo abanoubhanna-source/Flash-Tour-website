@@ -81,8 +81,8 @@ export default function Navbar() {
             <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className="text-slate-800 font-medium">The Group</Link>
             {/* تم إضافة Hospitality وتعديل المسميات لتطابق نسخة الديسكتوب */}
             <Link href="/hospitality" onClick={() => setIsMobileMenuOpen(false)} className="text-slate-800 font-medium">Hospitality</Link>
-            <Link href="/services" onClick={() => setIsMobileMenuOpen(false)} className="text-slate-800 font-medium">Enterprise Solutions</Link>
-            <Link href="/destinations" onClick={() => setIsMobileMenuOpen(false)} className="text-slate-800 font-medium">Global Operations</Link>
+            <Link href="/services" onClick={() => setIsMobileMenuOpen(false)} className="text-slate-800 font-medium">Services</Link>
+            <Link href="/destinations" onClick={() => setIsMobileMenuOpen(false)} className="text-slate-800 font-medium">Destinations</Link>
             <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className="text-center px-6 py-3 bg-slate-900 text-white rounded-full font-medium">Partner With Us</Link>
           </motion.div>
         )}
