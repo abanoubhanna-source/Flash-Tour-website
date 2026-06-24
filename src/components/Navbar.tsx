@@ -33,7 +33,7 @@ export default function Navbar() {
             <Link href="/" className="font-en text-slate-800 hover:text-teal-700 transition-colors font-medium">Home</Link>
             <Link href="/about" className="font-en text-slate-800 hover:text-teal-700 transition-colors font-medium">The Group</Link>
             <Link href="/hospitality" className="font-en text-slate-800 hover:text-teal-700 transition-colors font-medium">Hospitality</Link>
-            <Link href="/services" className="font-en text-slate-800 hover:text-teal-700 transition-colors font-medium">Enterprise Solutions</Link>
+            <Link href="/services" className="font-en text-slate-800 hover:text-teal-700 transition-colors font-medium">Service</Link>
             
             {/* Operations Dropdown */}
             <div 
@@ -42,7 +42,7 @@ export default function Navbar() {
               onMouseLeave={() => setIsOperationsHovered(false)}
             >
               <Link href="/destinations" className="font-en text-slate-800 hover:text-teal-700 transition-colors font-medium flex items-center gap-1">
-                Global Operations <ChevronDown className={`w-4 h-4 transition-transform ${isOperationsHovered ? 'rotate-180' : ''}`} />
+                Destinations <ChevronDown className={`w-4 h-4 transition-transform ${isOperationsHovered ? 'rotate-180' : ''}`} />
               </Link>
 
               <AnimatePresence>

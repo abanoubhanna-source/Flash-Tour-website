@@ -1,16 +1,37 @@
 {
+  "hero": {
+    "tag": "A 40-Year Legacy",
+    "title_part1": "Building an Empire",
+    "title_part2": "of Hospitality.",
+    "desc": "Since 1985, Flash Group has evolved from a visionary agency into a multinational asset-owning powerhouse in tourism, accommodation, and fine dining."
+  },
+  "vision": "To be the ultimate global benchmark in the tourism and hospitality industry, crafting impeccable experiences that inspire and endure.",
+  "mission": "To provide unparalleled, end-to-end travel solutions by leveraging our owned assets, ensuring absolute quality, safety, and luxury at every step of the journey.",
   "ceo_message": "Our commitment to excellence has driven Flash Group's growth for over 40 years. We believe in creating memories, setting benchmarks in hospitality, and leading the industry with integrity and passion.",
   "director_name": "Amgad Hassoun",
   "director_title": "Chairman",
   "signature_img": "/images/Signuter.png",
-  "fleet_title": "Unmatched VIP Transportation",
-  "fleet_desc": "Corporate travel requires precision. Our massive, fully-owned fleet of VIP coaches, luxury sedans, and 4x4s ensures that your delegates are moved with absolute safety, punctuality, and prestige.",
-  "fleet_features": [
-    "Over 150+ owned vehicles globally",
-    "Latest Mercedes-Benz & luxury models",
-    "In-house maintenance & safety checks",
-    "GPS tracked with 24/7 operations control",
-    "Highly trained multilingual chauffeurs"
-  ],
-  "fleet_image": "/images/fleet-showcase.jpg"
+  "team_stats": "1000+",
+  "timeline": [
+    { 
+      "year": "1985", 
+      "title": "THE FOUNDATION", 
+      "desc": "Flash Tour was established in Cairo, Egypt. What started as an ambitious inbound travel agency rapidly set the foundation for redefining regional tourism standards through uncompromised dedication to quality and client satisfaction." 
+    },
+    { 
+      "year": "2000", 
+      "title": "THE EMPIRE EMERGES", 
+      "desc": "Evolution into the integrated 'Flash Group'. This pivotal era marked our shift from a service provider to an asset owner, acquiring real estate, establishing robust ground operations, and scaling our B2B logistical capabilities." 
+    },
+    { 
+      "year": "2015", 
+      "title": "ASSET DOMINANCE", 
+      "desc": "A massive expansion phase solidifying our control over the supply chain. We aggressively scaled our Nile Cruise fleet, integrated luxury hotel management, and deployed one of the largest VIP transport fleets in the region." 
+    },
+    { 
+      "year": "2026", 
+      "title": "GLOBAL LEADERSHIP", 
+      "desc": "Celebrating over 40 years of unparalleled expertise. Today, Flash Group operates across multiple continents as a premier Destination Management Company, offering elite MICE solutions, exclusive hospitality, and a massive global network." 
+    }
+  ]
 }

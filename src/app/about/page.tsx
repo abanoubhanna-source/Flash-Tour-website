@@ -1,41 +1,43 @@
 // src/app/about/page.tsx
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Building2, Ship, Bus, UtensilsCrossed, Eye, Target, Quote, Globe2, ShieldCheck } from 'lucide-react';
+import { Building2, Ship, Bus, UtensilsCrossed, Eye, Target, Quote, Globe2, ShieldCheck, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import Footer from "@/components/Footer";
 import FlawlessProcess from '@/components/FlawlessProcess';
-
-// الداتا التاريخية
-const timeline = [
-  { 
-    year: "1985", 
-    title: "THE FOUNDATION", 
-    desc: "Flash Tour was established in Cairo, Egypt. What started as an ambitious inbound travel agency rapidly set the foundation for redefining regional tourism standards through uncompromised dedication to quality and client satisfaction." 
-  },
-  { 
-    year: "2000", 
-    title: "THE EMPIRE EMERGES", 
-    desc: "Evolution into the integrated 'Flash Group'. This pivotal era marked our shift from a service provider to an asset owner, acquiring real estate, establishing robust ground operations, and scaling our B2B logistical capabilities." 
-  },
-  { 
-    year: "2015", 
-    title: "ASSET DOMINANCE", 
-    desc: "A massive expansion phase solidifying our control over the supply chain. We aggressively scaled our Nile Cruise fleet, integrated luxury hotel management, and deployed one of the largest VIP transport fleets in the region." 
-  },
-  { 
-    year: "2026", 
-    title: "GLOBAL LEADERSHIP", 
-    desc: "Celebrating over 40 years of unparalleled expertise. Today, Flash Group operates across multiple continents as a premier Destination Management Company, offering elite MICE solutions, exclusive hospitality, and a massive global network." 
-  },
-];
 
 export default function AboutPage() {
   const targetRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: targetRef, offset: ["start center", "end center"] });
   const scaleHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
+  const [aboutData, setAboutData] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // جلب البيانات ديناميكياً من الـ API
+  useEffect(() => {
+    fetch('/api/about')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data) setAboutData(data);
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.error("Error loading about data:", err);
+        setIsLoading(false);
+      });
+  }, []);
+
+  if (isLoading || !aboutData) {
+    return (
+      <div className="min-h-screen w-full flex flex-col items-center justify-center bg-slate-50 font-en">
+        <Loader2 className="w-12 h-12 animate-spin text-teal-700 mb-4" />
+        <p className="text-sm font-bold uppercase tracking-[0.25em] text-slate-400">Loading Legacy...</p>
+      </div>
+    );
+  }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between w-full bg-white overflow-hidden">
@@ -48,13 +50,13 @@ export default function AboutPage() {
         <div className="max-w-[1400px] mx-auto px-6 lg:px-8 relative z-10 w-full flex flex-col items-center text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <span className="inline-block py-2 px-6 rounded-full bg-teal-50 text-teal-800 font-bold font-en tracking-[0.2em] uppercase text-sm mb-8 border border-teal-100">
-              A 40-Year Legacy
+              {aboutData.hero.tag}
             </span>
             <h1 className="text-6xl md:text-8xl font-bold text-slate-900 font-en mb-6 tracking-tight leading-tight">
-              Building an <span className="text-teal-700">Empire</span> <br /> of Hospitality.
+              {aboutData.hero.title_part1} <span className="text-teal-700">Empire</span> <br /> {aboutData.hero.title_part2}
             </h1>
             <p className="text-xl md:text-2xl text-slate-500 font-en max-w-3xl mx-auto leading-relaxed">
-              Since 1985, Flash Group has evolved from a visionary agency into a multinational asset-owning powerhouse in tourism, accommodation, and fine dining.
+              {aboutData.hero.desc}
             </p>
           </motion.div>
         </div>
@@ -70,7 +72,7 @@ export default function AboutPage() {
               </div>
               <h2 className="text-3xl font-bold text-slate-900 font-en mb-4">Our Vision</h2>
               <p className="text-slate-600 font-en leading-relaxed text-lg">
-                To be the ultimate global benchmark in the tourism and hospitality industry, crafting impeccable experiences that inspire and endure.
+                {aboutData.vision}
               </p>
             </motion.div>
 
@@ -80,7 +82,7 @@ export default function AboutPage() {
               </div>
               <h2 className="text-3xl font-bold text-slate-900 font-en mb-4">Our Mission</h2>
               <p className="text-slate-600 font-en leading-relaxed text-lg">
-                To provide unparalleled, end-to-end travel solutions by leveraging our owned assets, ensuring absolute quality, safety, and luxury at every step of the journey.
+                {aboutData.mission}
               </p>
             </motion.div>
           </div>
@@ -123,7 +125,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 5. The Heritage Timeline */}
+      {/* 5. The Heritage Timeline (Dynamic) */}
       <section className="w-full py-32 bg-white" ref={targetRef}>
         <div className="max-w-[1200px] mx-auto px-6 lg:px-8 relative">
           
@@ -137,7 +139,7 @@ export default function AboutPage() {
           </div>
 
           <div className="space-y-32 relative z-10">
-            {timeline.map((item, index) => {
+            {aboutData.timeline.map((item: any, index: number) => {
               const isEven = index % 2 === 0;
               return (
                 <div key={item.year} className={`flex flex-col md:flex-row items-center justify-between w-full ${isEven ? 'md:flex-row-reverse' : ''}`}>
@@ -214,7 +216,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 7. CEO Message, Team & Signature */}
+      {/* 7. CEO Message, Team & Signature (Dynamic) */}
       <section className="w-full py-24 bg-slate-950 text-white">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -223,27 +225,29 @@ export default function AboutPage() {
               <Quote className="w-12 h-12 text-teal-500 mb-8 opacity-50" />
               <h2 className="text-4xl font-bold font-en mb-6">Message From The <span className="text-teal-500">CEO</span></h2>
               <p className="text-slate-300 font-en leading-relaxed text-lg italic mb-8 border-l-4 border-teal-500 pl-6">
-                "Our commitment to excellence has driven Flash Group's growth for over 40 years. We believe in creating memories, setting benchmarks in hospitality, and leading the industry with integrity and passion."
+                "{aboutData.ceo_message}"
               </p>
 
               {/* Director Info & Signature */}
               <div className="mt-10 border-t border-white/10 pt-8">
                 <h4 className="text-2xl font-black font-en text-white uppercase tracking-widest">
-                Amgad Hassoun
+                  {aboutData.director_name}
                 </h4>
                 <p className="text-sm text-teal-500 font-bold font-en uppercase tracking-widest mb-6">
-                Chairman
+                  {aboutData.director_title}
                 </p>
                 
                 {/* The Signature Image */}
-                <div className="relative w-56 h-20 opacity-80 hover:opacity-100 transition-opacity duration-300">
-                  <Image 
-                    src="/images/Signuter.png" 
-                    alt="Director Signature" 
-                    fill 
-                    className="object-contain object-left invert brightness-0"
-                  />
-                </div>
+                {aboutData.signature_img && (
+                  <div className="relative w-56 h-20 opacity-80 hover:opacity-100 transition-opacity duration-300">
+                    <Image 
+                      src={aboutData.signature_img} 
+                      alt="Director Signature" 
+                      fill 
+                      className="object-contain object-left invert brightness-0"
+                    />
+                  </div>
+                )}
               </div>
             </motion.div>
 
@@ -253,10 +257,10 @@ export default function AboutPage() {
             >
               <h3 className="text-3xl font-bold font-en mb-6 text-amber-500">The Team Behind The Empire</h3>
               <p className="text-slate-400 font-en leading-relaxed mb-8 text-lg">
-                With more than 1000+ dedicated experts and consultants, our workforce is our greatest asset. From the captains of our Nile cruises to the concierges at our 5-star resorts, every member of the Flash family is committed to delivering perfection.
+                With more than {aboutData.team_stats} dedicated experts and consultants, our workforce is our greatest asset. From the captains of our Nile cruises to the concierges at our 5-star resorts, every member of the Flash family is committed to delivering perfection.
               </p>
               <div className="flex items-center gap-6">
-                <div className="text-6xl font-black text-white font-en">1000+</div>
+                <div className="text-6xl font-black text-white font-en">{aboutData.team_stats}</div>
                 <div className="text-sm text-teal-500 font-bold uppercase tracking-[0.2em] font-en">Global<br/>Experts</div>
               </div>
             </motion.div>

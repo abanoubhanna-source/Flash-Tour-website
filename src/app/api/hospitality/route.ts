@@ -1,8 +1,9 @@
+// src/app/api/hospitality/route.ts
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 
-const dataFilePath = path.join(process.cwd(), 'src', 'data', 'about.json');
+const dataFilePath = path.join(process.cwd(), 'src', 'data', 'hospitality.json');
 
 export async function GET() {
   try {

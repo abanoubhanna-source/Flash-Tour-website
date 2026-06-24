@@ -1,0 +1,82 @@
+[
+    {
+      "id": "nile",
+      "tag": "THE NILE RIVER",
+      "title": "The River Fleet",
+      "subtitle": "Sailing the Nile in Absolute Luxury",
+      "desc": "We don't just cruise the Nile; we own its finest vessels. Our massive fleet of 7 luxury floating hotels, including the ultra-luxurious 'Serenity' line, guarantees an unmatched river hospitality experience where every detail is under our direct control.",
+      "icon": "Ship",
+      "img": "/images/cruise-1.jpg",
+      "link": "/hospitality/nile-cruises",
+      "features": [
+        "Serenity I & II Luxury Cruises",
+        "Premium Suites with Panoramic Views",
+        "Gourmet Dining & Lounge Bars",
+        "Exclusive Docking Rights"
+      ]
+    },
+    {
+      "id": "red-sea",
+      "tag": "THE RED SEA",
+      "title": "Coastal Sanctuaries",
+      "subtitle": "Mastering the Land and Sea",
+      "desc": "From the golden sands to the deep blue. You will find our signature hospitality at the 5-Star True Beach Resort in Marsa Alam, complemented by our private motorboats and diving yachts dominating the coastline.",
+      "icon": "Waves",
+      "img": "/images/true-beach.jpg",
+      "link": "/hospitality/coastal-sanctuaries",
+      "features": [
+        "True Beach Resort (Family & Adults-Only)",
+        "Flash Yachting (Flash 3, 4, 5)",
+        "Exquisite Private Beaches",
+        "World-Class Spa & Kitesurfing Hub"
+      ]
+    },
+    {
+      "id": "indian-ocean",
+      "tag": "THE INDIAN OCEAN",
+      "title": "Tropical Retreats",
+      "subtitle": "Zanzibar's Premium Estates",
+      "desc": "Our footprint extends to the exotic shores of Tanzania. At our fully-owned Kiwengwa Beach Resort in Zanzibar, we deliver the Flash Group standard of luxury wrapped in a breathtaking tropical environment.",
+      "icon": "Palmtree",
+      "img": "/images/zanzibar-resort.jpg",
+      "link": "/hospitality/tropical-retreats",
+      "features": [
+        "Kiwengwa Beach Resort",
+        "Exclusive White Sand Beaches",
+        "Premium Safari Integrations",
+        "Tropical Corporate Retreats"
+      ]
+    },
+    {
+      "id": "mediterranean",
+      "tag": "THE MEDITERRANEAN",
+      "title": "European Elegance",
+      "subtitle": "The Italian Collection",
+      "desc": "A strategic, commanding presence in Europe's most elite destinations. Our curated collection of 7 exclusive properties across Sardinia and Sicily proves that our hospitality knows no borders.",
+      "icon": "Map",
+      "img": "/images/italy-resorts.jpg",
+      "link": "/hospitality/european-elegance",
+      "features": [
+        "7 Exclusive Italian Resorts",
+        "Sardinia & Sicily Prime Locations",
+        "Authentic Mediterranean Hospitality",
+        "Elite European MICE Capabilities"
+      ]
+    },
+    {
+      "id": "urban",
+      "tag": "URBAN CENTERS",
+      "title": "Heritage & Fine Dining",
+      "subtitle": "A Century of Elegance in Cairo",
+      "desc": "In the heart of the city, our hospitality takes a cultural form. We preserve history through meticulously restored 100-year-old boutique villas and elevate the culinary scene with our award-winning dining lounges.",
+      "icon": "Building2",
+      "img": "/images/boutique-hotel.jpg",
+      "link": "/hospitality/urban-centers",
+      "features": [
+        "1920s Boutique Hotel (Heliopolis)",
+        "Carlo's Restaurant (Historic Gardens)",
+        "Rossini Italian Fine Dining",
+        "Personalized VIP Concierge"
+      ]
+    }
+  ]
