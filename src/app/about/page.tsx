@@ -45,7 +45,7 @@ export default function AboutPage() {
       {/* 1. Monumental Hero Section */}
       <section className="relative w-full h-[70vh] flex items-center bg-slate-50 border-b border-slate-100 mt-16 md:mt-20">
         <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none" 
-             style={{ backgroundImage: 'radial-gradient(#0F766E 2px, transparent 2px)', backgroundSize: '40px 40px' }} />
+             style={{ backgroundImage: 'radial-gradient(var(--color-brand-teal) 2px, transparent 2px)', backgroundSize: '40px 40px' }} />
         
         <div className="max-w-[1400px] mx-auto px-6 lg:px-8 relative z-10 w-full flex flex-col items-center text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
@@ -66,7 +66,7 @@ export default function AboutPage() {
       <section className="w-full py-24 bg-white">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-slate-50 p-12 rounded-[2.5rem] border border-slate-100">
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-slate-50 p-12 rounded-[1.5rem] border border-slate-100">
               <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mb-8">
                 <Eye className="w-8 h-8 text-teal-700" />
               </div>
@@ -76,7 +76,7 @@ export default function AboutPage() {
               </p>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="bg-slate-50 p-12 rounded-[2.5rem] border border-slate-100">
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="bg-slate-50 p-12 rounded-[1.5rem] border border-slate-100">
               <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mb-8">
                 <Target className="w-8 h-8 text-teal-700" />
               </div>
@@ -118,7 +118,7 @@ export default function AboutPage() {
               </div>
             </motion.div>
             
-            <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative h-[600px] rounded-[2.5rem] overflow-hidden shadow-2xl border border-slate-100">
+            <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative h-[600px] rounded-[1.5rem] overflow-hidden shadow-2xl border border-slate-100">
               <Image src="/images/vip-bus.jpg" alt="Flash Group Infrastructure" fill className="object-cover" />
             </motion.div>
           </div>
@@ -153,7 +153,7 @@ export default function AboutPage() {
                     viewport={{ once: true, margin: "-100px" }}
                     className={`w-full md:w-5/12 pl-16 md:pl-0 ${isEven ? 'md:text-left' : 'md:text-right'}`}
                   >
-                    <span className="text-6xl font-black text-slate-100 block mb-2 font-en">{item.year}</span>
+                    <span className="text-6xl font-bold text-slate-100 block mb-2 font-en">{item.year}</span>
                     <h3 className="text-3xl font-bold text-teal-800 font-en mb-3 tracking-widest">{item.title}</h3>
                     <p className="text-slate-600 font-en leading-relaxed text-lg">{item.desc}</p>
                   </motion.div>
@@ -204,10 +204,10 @@ export default function AboutPage() {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative h-[500px] lg:h-[650px] w-full flex justify-end">
-              <div className="relative w-[80%] h-[80%] rounded-[2.5rem] overflow-hidden shadow-2xl z-10 top-0 right-0 border-[12px] border-slate-50">
+              <div className="relative w-[80%] h-[80%] rounded-[1.5rem] overflow-hidden shadow-2xl z-10 top-0 right-0 border-[12px] border-slate-50">
                 <Image src="/images/office-1.jpg" fill alt="Flash Group Operations Hub" className="object-cover" />
               </div>
-              <div className="absolute w-[60%] h-[55%] rounded-[2rem] overflow-hidden shadow-xl z-20 bottom-0 left-0 border-[12px] border-slate-50">
+              <div className="absolute w-[60%] h-[55%] rounded-2xl overflow-hidden shadow-xl z-20 bottom-0 left-0 border-[12px] border-slate-50">
                 <Image src="/images/office-2.jpg" fill alt="Regional Operations Center" className="object-cover" />
               </div>
             </motion.div>
@@ -230,7 +230,7 @@ export default function AboutPage() {
 
               {/* Director Info & Signature */}
               <div className="mt-10 border-t border-white/10 pt-8">
-                <h4 className="text-2xl font-black font-en text-white uppercase tracking-widest">
+                <h4 className="text-2xl font-bold font-en text-white uppercase tracking-widest">
                   {aboutData.director_name}
                 </h4>
                 <p className="text-sm text-teal-500 font-bold font-en uppercase tracking-widest mb-6">
@@ -253,14 +253,14 @@ export default function AboutPage() {
 
             <motion.div 
               initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
-              className="bg-white/5 backdrop-blur-md p-12 rounded-[2.5rem] border border-white/10"
+              className="bg-white/5 backdrop-blur-md p-12 rounded-[1.5rem] border border-white/10"
             >
               <h3 className="text-3xl font-bold font-en mb-6 text-amber-500">The Team Behind The Empire</h3>
               <p className="text-slate-400 font-en leading-relaxed mb-8 text-lg">
                 With more than {aboutData.team_stats} dedicated experts and consultants, our workforce is our greatest asset. From the captains of our Nile cruises to the concierges at our 5-star resorts, every member of the Flash family is committed to delivering perfection.
               </p>
               <div className="flex items-center gap-6">
-                <div className="text-6xl font-black text-white font-en">{aboutData.team_stats}</div>
+                <div className="text-6xl font-bold text-white font-en">{aboutData.team_stats}</div>
                 <div className="text-sm text-teal-500 font-bold uppercase tracking-[0.2em] font-en">Global<br/>Experts</div>
               </div>
             </motion.div>

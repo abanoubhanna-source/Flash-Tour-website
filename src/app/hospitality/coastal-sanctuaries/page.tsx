@@ -51,7 +51,7 @@ export default function CoastalSanctuariesPage() {
     <main className="flex min-h-screen flex-col items-center w-full bg-white overflow-hidden">
       
       {/* 1. Epic Hero Section */}
-      <section className="relative w-full h-[85vh] flex flex-col items-center justify-center bg-[#0F162A]">
+      <section className="relative w-full h-[85vh] flex flex-col items-center justify-center bg-brand-navy">
         <div className="absolute inset-0 z-0">
           <Image 
             src="/images/true-beach.jpg" 
@@ -60,18 +60,18 @@ export default function CoastalSanctuariesPage() {
             className="object-cover opacity-50"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0F162A]/70 to-white z-10"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-brand-navy/70 to-white z-10"></div>
         </div>
         
         <div className="relative z-20 text-center px-6 mt-16 max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <span className="text-[#F1B820] font-bold tracking-[0.25em] uppercase text-xs md:text-sm block mb-6 font-en flex items-center justify-center gap-2">
-              <Anchor className="w-4 h-4 text-[#F1B820]" /> MASTERING THE LAND AND SEA
+            <span className="text-brand-gold font-bold tracking-[0.25em] uppercase text-xs md:text-sm block mb-6 font-en flex items-center justify-center gap-2">
+              <Anchor className="w-4 h-4 text-brand-gold" /> MASTERING THE LAND AND SEA
             </span>
-            <h1 className="text-6xl md:text-8xl font-black text-white font-en mb-6 tracking-tight drop-shadow-2xl uppercase">
-              Coastal <br/> <span className="text-[#F1B820]">Sanctuaries</span>
+            <h1 className="text-6xl md:text-8xl font-bold text-white font-en mb-6 tracking-tight drop-shadow-2xl uppercase">
+              Coastal <br/> <span className="text-brand-gold">Sanctuaries</span>
             </h1>
-            <p className="text-lg md:text-xl text-[#0F162A] font-en leading-relaxed max-w-2xl mx-auto font-bold bg-white/70 backdrop-blur-md py-3 px-8 rounded-full shadow-lg">
+            <p className="text-lg md:text-xl text-brand-navy font-en leading-relaxed max-w-2xl mx-auto font-bold bg-white/70 backdrop-blur-md py-3 px-8 rounded-full shadow-lg">
               From the golden sands to the deep blue. Experience our signature hospitality dominating the coastline.
             </p>
           </motion.div>
@@ -82,8 +82,8 @@ export default function CoastalSanctuariesPage() {
       <section className="w-full py-20 bg-white relative z-20">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <Waves className="w-12 h-12 text-[#157670] mx-auto mb-6 opacity-50" />
-            <h2 className="text-3xl md:text-4xl font-bold text-[#0F162A] font-en leading-tight mb-6">
+            <Waves className="w-12 h-12 text-brand-teal mx-auto mb-6 opacity-50" />
+            <h2 className="text-3xl md:text-4xl font-bold text-brand-navy font-en leading-tight mb-6">
               A Symphony of Sand and Sea
             </h2>
             <p className="text-lg text-slate-500 font-en leading-relaxed">
@@ -113,15 +113,15 @@ export default function CoastalSanctuariesPage() {
                     className="w-full lg:w-5/12 flex flex-col justify-center"
                   >
                     <div className="flex items-center gap-3 mb-6">
-                      <div className="w-12 h-12 rounded-full bg-[#157670]/10 flex items-center justify-center border border-[#157670]/20">
-                        <item.icon className="w-6 h-6 text-[#157670]" />
+                      <div className="w-12 h-12 rounded-full bg-brand-teal/10 flex items-center justify-center border border-brand-teal/20">
+                        <item.icon className="w-6 h-6 text-brand-teal" />
                       </div>
-                      <span className="text-[#F1B820] font-bold uppercase tracking-widest text-sm font-en">
+                      <span className="text-brand-gold font-bold uppercase tracking-widest text-sm font-en">
                         {item.tag}
                       </span>
                     </div>
                     
-                    <h2 className="text-4xl md:text-5xl font-black text-[#0F162A] font-en tracking-tight uppercase mb-6">
+                    <h2 className="text-4xl md:text-5xl font-bold text-brand-navy font-en tracking-tight uppercase mb-6">
                       {item.name}
                     </h2>
                     
@@ -133,15 +133,15 @@ export default function CoastalSanctuariesPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10 pt-6 border-t border-slate-100">
                       {item.specs.map((spec, sIdx) => (
                         <div key={sIdx} className="flex items-center gap-3">
-                          <CheckCircle2 className="w-5 h-5 text-[#157670]" />
+                          <CheckCircle2 className="w-5 h-5 text-brand-teal" />
                           <span className="text-slate-700 font-en font-medium">{spec}</span>
                         </div>
                       ))}
                     </div>
 
-                    <Link href="/contact" className="w-fit flex items-center gap-3 text-[#157670] hover:text-[#F1B820] uppercase tracking-widest text-sm font-bold font-en transition-colors group/btn">
+                    <Link href="/contact" className="w-fit flex items-center gap-3 text-brand-teal hover:text-brand-gold uppercase tracking-widest text-sm font-bold font-en transition-colors group/btn">
                       Request B2B Rates 
-                      <span className="w-10 h-10 rounded-full border border-[#157670]/30 flex items-center justify-center group-hover/btn:border-[#F1B820] transition-colors bg-slate-50 group-hover/btn:bg-white">
+                      <span className="w-10 h-10 rounded-full border border-brand-teal/30 flex items-center justify-center group-hover/btn:border-brand-gold transition-colors bg-slate-50 group-hover/btn:bg-white">
                         <ArrowUpRight className="w-4 h-4" />
                       </span>
                     </Link>
@@ -152,7 +152,7 @@ export default function CoastalSanctuariesPage() {
                     initial={{ opacity: 0, x: isEven ? 40 : -40 }} 
                     whileInView={{ opacity: 1, x: 0 }} 
                     viewport={{ once: true, margin: "-100px" }} 
-                    className="w-full lg:w-7/12 relative h-[500px] lg:h-[600px] rounded-[2.5rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.1)] group-hover:shadow-[0_20px_60px_rgba(21,118,112,0.15)] transition-all duration-700"
+                    className="w-full lg:w-7/12 relative h-[500px] lg:h-[600px] rounded-[1.5rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.1)] group-hover:shadow-[0_20px_60px_rgba(21,118,112,0.15)] transition-all duration-700"
                   >
                     <Image 
                       src={item.img} 
@@ -160,15 +160,15 @@ export default function CoastalSanctuariesPage() {
                       fill 
                       className="object-cover group-hover:scale-105 transition-transform duration-[2s] ease-out" 
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0F162A]/60 via-transparent to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/60 via-transparent to-transparent"></div>
                     
                     {/* Floating ID Badge */}
                     <div className="absolute top-8 right-8 bg-white/90 backdrop-blur-md w-16 h-16 rounded-full flex items-center justify-center shadow-lg">
-                      <span className="text-[#157670] font-black text-xl font-en">{item.id}</span>
+                      <span className="text-brand-teal font-bold text-xl font-en">{item.id}</span>
                     </div>
 
                     <div className="absolute bottom-8 left-8 text-white font-bold font-en text-xl flex items-center gap-3">
-                      <Star className="text-[#F1B820] w-6 h-6 fill-[#F1B820]" /> Discover {item.name}
+                      <Star className="text-brand-gold w-6 h-6 fill-brand-gold" /> Discover {item.name}
                     </div>
                   </motion.div>
 
@@ -186,19 +186,19 @@ export default function CoastalSanctuariesPage() {
       </section>
 
       {/* 4. Grand CTA Section */}
-      <section className="w-full bg-[#157670] py-24 relative z-20 overflow-hidden">
+      <section className="w-full bg-brand-teal py-24 relative z-20 overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[url('/images/pattern.png')] bg-repeat z-0"></div>
         
         <div className="max-w-4xl mx-auto px-6 relative z-10 text-center">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <Anchor className="w-16 h-16 text-[#F1B820] mx-auto mb-8" />
-            <h2 className="text-4xl md:text-6xl font-black text-white font-en tracking-tight uppercase mb-6">
+            <Anchor className="w-16 h-16 text-brand-gold mx-auto mb-8" />
+            <h2 className="text-4xl md:text-6xl font-bold text-white font-en tracking-tight uppercase mb-6">
               Partner With The Best.
             </h2>
             <p className="text-teal-100 text-lg md:text-xl font-medium leading-relaxed mb-10 font-en max-w-2xl mx-auto">
               Secure the ultimate coastal luxury for your elite clients. Connect with our corporate relations team today.
             </p>
-            <Link href="/partner-portal" className="inline-block bg-[#0F162A] text-white px-10 py-5 rounded-full font-bold font-en text-sm uppercase tracking-widest hover:bg-[#F1B820] hover:text-[#0F162A] transition-all duration-300 shadow-xl hover:shadow-2xl">
+            <Link href="/partner-portal" className="inline-block bg-brand-navy text-white px-10 py-5 rounded-full font-bold font-en text-sm uppercase tracking-widest hover:bg-brand-gold hover:text-brand-navy transition-all duration-300 shadow-xl hover:shadow-2xl">
               Access B2B Portal
             </Link>
           </motion.div>

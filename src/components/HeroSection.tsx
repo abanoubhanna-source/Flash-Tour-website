@@ -3,7 +3,7 @@
 
 import { useState, MouseEvent } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 const showcases = [
@@ -58,7 +58,7 @@ export default function HeroSection() {
   const bgY = useTransform(mouseY, [-0.5, 0.5], ['1.5%', '-1.5%']);
 
   return (
-    <section className="relative w-full h-screen min-h-[760px] overflow-hidden bg-[#081427]" onMouseMove={handleMouseMove}>
+    <section className="relative w-full h-screen min-h-[760px] overflow-hidden bg-brand-navy" onMouseMove={handleMouseMove}>
       <AnimatePresence mode="wait">
         <motion.div
           key={selected.id}
@@ -70,12 +70,12 @@ export default function HeroSection() {
           className="absolute inset-0 z-0"
         >
           <img src={selected.bg} alt={selected.name} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#081427]/80 via-[#081427]/35 to-white/5" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#081427]/70 via-transparent to-white/10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/80 via-brand-navy/35 to-white/5" />
+          <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/70 via-transparent to-white/10" />
         </motion.div>
       </AnimatePresence>
 
-      <div className="absolute inset-0 opacity-[0.08]" style={{ backgroundImage: 'radial-gradient(#F4C300 1px, transparent 1px)', backgroundSize: '34px 34px' }} />
+      <div className="absolute inset-0 opacity-[0.08]" style={{ backgroundImage: 'radial-gradient(var(--color-brand-gold) 1px, transparent 1px)', backgroundSize: '34px 34px' }} />
 
       <div className="relative z-10 w-full max-w-[1400px] mx-auto h-full flex flex-col justify-center px-6 lg:px-8 pt-24">
         <AnimatePresence mode="wait">
@@ -85,12 +85,12 @@ export default function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -24 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="max-w-3xl rounded-[2rem] border border-white/20 bg-white/[0.13] backdrop-blur-xl p-8 md:p-12 shadow-[0_30px_90px_rgba(0,0,0,0.35)]"
+            className="max-w-3xl rounded-2xl border border-white/20 bg-white/[0.13] backdrop-blur-sm p-8 md:p-12 shadow-[0_30px_90px_rgba(0,0,0,0.35)]"
           >
-            <p className="flex items-center gap-3 text-[#F4C300] font-en font-black tracking-[0.28em] uppercase mb-5 text-xs md:text-sm">
-              <Sparkles className="w-4 h-4" /> {selected.eyebrow}
+            <p className="flex items-center gap-3 text-brand-gold font-en font-bold tracking-[0.28em] uppercase mb-5 text-xs md:text-sm">
+              <span className="h-px w-8 bg-brand-gold/70" /> {selected.eyebrow}
             </p>
-            <h1 className="text-5xl md:text-7xl xl:text-8xl font-black text-white font-en mb-7 tracking-[-0.055em] leading-[0.92] drop-shadow-lg">
+            <h1 className="text-5xl md:text-7xl xl:text-8xl font-bold text-white font-en mb-7 tracking-[-0.055em] leading-[0.92] drop-shadow-lg">
               {selected.title}
             </h1>
             <p className="text-lg md:text-2xl text-white/90 font-en mb-10 max-w-2xl leading-relaxed drop-shadow-md">
@@ -98,11 +98,11 @@ export default function HeroSection() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/contact" className="group inline-flex items-center justify-center gap-3 bg-[#081427] text-white px-8 py-4 rounded-full text-base font-black font-en hover:bg-[#037373] transition-all duration-300 shadow-xl">
+              <Link href="/contact" className="group inline-flex items-center justify-center gap-3 bg-brand-navy text-white px-8 py-4 rounded-full text-base font-bold font-en hover:bg-brand-teal transition-all duration-300 shadow-xl">
                 Partner With Flash Group
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
-              <Link href="/brands" className="inline-flex items-center justify-center gap-3 bg-white/15 text-white border border-white/25 px-8 py-4 rounded-full text-base font-black font-en hover:bg-white/25 transition-all duration-300">
+              <Link href="/brands" className="inline-flex items-center justify-center gap-3 bg-white/15 text-white border border-white/25 px-8 py-4 rounded-full text-base font-bold font-en hover:bg-white/25 transition-all duration-300">
                 Explore Portfolio
               </Link>
             </div>
@@ -114,9 +114,9 @@ export default function HeroSection() {
             <button
               key={item.id}
               onClick={() => setSelected(item)}
-              className={`font-en font-black text-xs md:text-sm tracking-widest uppercase px-5 md:px-7 py-3 rounded-full transition-all duration-300 backdrop-blur-xl shadow-lg
+              className={`font-en font-bold text-xs md:text-sm tracking-widest uppercase px-5 md:px-7 py-3 rounded-full transition-all duration-300 backdrop-blur-sm shadow-lg
                 ${selected.id === item.id
-                  ? 'bg-[#F4C300] text-[#081427] border border-[#F4C300] scale-105'
+                  ? 'bg-brand-gold text-brand-navy border border-brand-gold scale-105'
                   : 'bg-white/15 text-white border border-white/25 hover:bg-white/30'}`}
             >
               {item.name}

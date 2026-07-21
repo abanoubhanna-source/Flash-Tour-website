@@ -9,10 +9,10 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-[#020617] text-white pt-24 pb-8 font-en relative overflow-hidden border-t border-white/10">
+    <footer className="w-full bg-brand-navy-deep text-white pt-24 pb-8 font-en relative overflow-hidden border-t border-white/10">
       
       {/* Watermark */}
-      <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-[18vw] font-black text-white/[0.02] pointer-events-none select-none z-0 whitespace-nowrap">
+      <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-[18vw] font-bold text-white/[0.02] pointer-events-none select-none z-0 whitespace-nowrap">
         FLASH GROUP
       </div>
 
@@ -25,7 +25,7 @@ export default function Footer() {
               <Image src="/images/logo.png" alt="Flash Group" fill className="object-contain object-left" priority />
             </div>
             <p className="text-slate-400 text-lg leading-relaxed max-w-md">
-              Crafting world-class hospitality standards since 1985. Join our global network and let's redefine the future of tourism together.
+              Crafting world-class hospitality standards since 1985. Join our global network and let&apos;s redefine the future of tourism together.
             </p>
             <div className="flex gap-4">
               <Link href="https://www.facebook.com/Flashtour.Egypt" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-teal-700 hover:border-teal-700 transition-all duration-300 group">

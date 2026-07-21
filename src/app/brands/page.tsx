@@ -71,7 +71,7 @@ export default function BrandsPage() {
                     transition={{ duration: 0.8, ease: "easeOut" }}
                     className="w-full lg:w-1/2"
                   >
-                    <div className="relative aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl group">
+                    <div className="relative aspect-[4/3] rounded-[1.5rem] overflow-hidden shadow-2xl group">
                       <Image 
                         src={brand.image} 
                         alt={brand.name} 

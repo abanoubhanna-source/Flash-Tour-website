@@ -19,8 +19,8 @@ export default function FlawlessProcess() {
         
         {/* Header */}
         <div className="text-center mb-24">
-          <h2 className="text-4xl md:text-5xl font-black text-[#0F162A] font-en tracking-tight">
-            The <span className="text-[#F1B820]">Flawless</span> Process
+          <h2 className="text-4xl md:text-5xl font-bold text-brand-navy font-en tracking-tight">
+            The <span className="text-brand-gold">Flawless</span> Process
           </h2>
         </div>
 
@@ -38,10 +38,10 @@ export default function FlawlessProcess() {
               transition={{ delay: idx * 0.15 }}
               className="relative z-10 flex flex-col items-center w-32 lg:w-40 group cursor-default"
             >
-              <div className="w-20 h-20 rounded-full border-4 border-[#F1B820] bg-white flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 group-hover:shadow-md transition-all duration-300">
-                <step.icon className="w-8 h-8 text-[#157670]" />
+              <div className="w-20 h-20 rounded-full border-4 border-brand-gold bg-white flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 group-hover:shadow-md transition-all duration-300">
+                <step.icon className="w-8 h-8 text-brand-teal" />
               </div>
-              <h3 className="text-center font-bold text-[#0F162A] font-en text-sm lg:text-base leading-snug">
+              <h3 className="text-center font-bold text-brand-navy font-en text-sm lg:text-base leading-snug">
                 {step.title}
               </h3>
             </motion.div>
@@ -62,10 +62,10 @@ export default function FlawlessProcess() {
               transition={{ delay: idx * 0.1 }}
               className="relative z-10 flex flex-col items-center bg-white py-2"
             >
-              <div className="w-20 h-20 rounded-full border-4 border-[#F1B820] bg-white flex items-center justify-center mb-3 shadow-sm">
-                <step.icon className="w-8 h-8 text-[#157670]" />
+              <div className="w-20 h-20 rounded-full border-4 border-brand-gold bg-white flex items-center justify-center mb-3 shadow-sm">
+                <step.icon className="w-8 h-8 text-brand-teal" />
               </div>
-              <h3 className="text-center font-bold text-[#0F162A] font-en text-base">
+              <h3 className="text-center font-bold text-brand-navy font-en text-base">
                 {step.title}
               </h3>
             </motion.div>

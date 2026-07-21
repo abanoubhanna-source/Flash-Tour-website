@@ -1,11 +1,19 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #0f172a;
-  --brand-teal: #037373;
-  --brand-gold: #f4c300;
-  --brand-navy: #081427;
+/*
+ * Flash Group design tokens.
+ * One brand navy, one brand teal, one brand gold — every component should
+ * reference these instead of ad-hoc hex values. "-deep" is a deliberate
+ * darker shade of navy for full-bleed hero/CTA sections, not a second color.
+ */
+@theme {
+  --color-background: #ffffff;
+  --color-foreground: #0f172a;
+
+  --color-brand-navy: #0f162a;
+  --color-brand-navy-deep: #020617;
+  --color-brand-teal: #157670;
+  --color-brand-gold: #f1b820;
 }
 
 html {
@@ -13,9 +21,9 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: system-ui, -apple-system, sans-serif;
 }
 
 /* Typography control */

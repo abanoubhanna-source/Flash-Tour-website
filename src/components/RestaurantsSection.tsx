@@ -16,7 +16,7 @@ export default function RestaurantsSection() {
               Fine <span className="text-teal-700">Dining</span>
             </h2>
             <p className="text-lg text-slate-500 font-en max-w-xl">
-              Award-winning culinary experiences catering to Egypt's elite.
+              Award-winning culinary experiences catering to Egypt&apos;s elite.
             </p>
           </motion.div>
           <motion.button initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex items-center gap-2 font-en font-bold text-teal-700 hover:text-slate-900 transition-colors">
@@ -54,7 +54,7 @@ export default function RestaurantsSection() {
             </div>
             <div className="p-8 md:w-1/2 flex flex-col justify-center">
               <UtensilsCrossed className="w-6 h-6 text-teal-600 mb-4" />
-              <h3 className="text-2xl font-bold text-slate-900 font-en mb-2">Carlo's Heliopolis</h3>
+              <h3 className="text-2xl font-bold text-slate-900 font-en mb-2">Carlo&apos;s Heliopolis</h3>
               <p className="text-sm font-bold text-teal-700 tracking-widest uppercase mb-4 font-en">Middle Eastern & Int.</p>
               <p className="text-slate-600 font-en text-sm leading-relaxed mb-6">
                 Nestled in a beautiful 1920s villa garden, serving a wide variety of Oriental, Asian, and Italian dishes[cite: 436, 448].

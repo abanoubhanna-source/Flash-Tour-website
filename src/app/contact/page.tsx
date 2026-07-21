@@ -82,7 +82,7 @@ export default function ContactPage() {
       {/* 3. Partnership Form Section */}
       <section className="w-full py-24 bg-slate-50">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
-          <div className="bg-white rounded-[3rem] shadow-2xl border border-slate-100 overflow-hidden flex flex-col lg:flex-row">
+          <div className="bg-white rounded-[1.75rem] shadow-2xl border border-slate-100 overflow-hidden flex flex-col lg:flex-row">
             
             {/* Left Side: Info & Trust */}
             <div className="lg:w-5/12 bg-slate-900 p-12 md:p-16 text-white relative overflow-hidden flex flex-col justify-between">

@@ -46,9 +46,9 @@ const globalFootprint = [
 
 export default function InteractiveMap() {
   return (
-    <section className="w-full py-24 bg-[#0F162A] relative z-20 overflow-hidden">
+    <section className="w-full py-28 bg-brand-navy relative z-20 overflow-hidden">
       {/* Pattern Background */}
-      <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#157670 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
+      <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(var(--color-brand-teal) 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
       
       <div className="max-w-[1400px] mx-auto px-6 relative z-10 flex flex-col lg:flex-row items-center gap-16">
         
@@ -59,10 +59,10 @@ export default function InteractiveMap() {
           viewport={{ once: true }}
           className="w-full lg:w-1/3 text-white"
         >
-          <h2 className="text-4xl md:text-5xl font-black font-en mb-6 leading-tight">
-            Our Global <br/><span className="text-[#157670]">Infrastructure</span>
+          <h2 className="text-4xl md:text-5xl font-bold font-en mb-6 leading-tight">
+            Our Global <br/><span className="text-brand-teal">Infrastructure</span>
           </h2>
-          <div className="w-16 h-1 bg-[#F1B820] mb-8 rounded-full"></div>
+          <div className="w-16 h-1 bg-brand-gold mb-8 rounded-full"></div>
           
           <p className="text-slate-400 font-en leading-relaxed mb-10 text-lg">
             We do not outsource luxury. Flash Group owns and operates a massive network of hotels, vehicle fleets, and river cruises across Europe, Africa, and the Middle East, giving our B2B partners absolute control over quality and pricing.
@@ -70,15 +70,15 @@ export default function InteractiveMap() {
           
           <ul className="space-y-5">
             <li className="flex items-center gap-4 font-en text-slate-200 font-medium">
-              <div className="bg-[#157670]/20 p-2 rounded-full"><CheckCircle className="text-[#F1B820] w-5 h-5"/></div> 
+              <div className="bg-brand-teal/20 p-2 rounded-full"><CheckCircle className="text-brand-gold w-5 h-5"/></div> 
               Global Headquarters & Hubs
             </li>
             <li className="flex items-center gap-4 font-en text-slate-200 font-medium">
-              <div className="bg-[#157670]/20 p-2 rounded-full"><CheckCircle className="text-[#F1B820] w-5 h-5"/></div> 
+              <div className="bg-brand-teal/20 p-2 rounded-full"><CheckCircle className="text-brand-gold w-5 h-5"/></div> 
               Owned Luxury Resorts
             </li>
             <li className="flex items-center gap-4 font-en text-slate-200 font-medium">
-              <div className="bg-[#157670]/20 p-2 rounded-full"><CheckCircle className="text-[#F1B820] w-5 h-5"/></div> 
+              <div className="bg-brand-teal/20 p-2 rounded-full"><CheckCircle className="text-brand-gold w-5 h-5"/></div> 
               VIP Transport Fleets
             </li>
           </ul>
@@ -92,7 +92,7 @@ export default function InteractiveMap() {
           className="w-full lg:w-2/3 relative p-6 md:p-10 flex items-center justify-center"
         >
           {/* الإطار الزجاجي الخارجي */}
-          <div className="absolute inset-0 bg-white/[0.02] border border-white/10 rounded-[3rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-sm pointer-events-none"></div>
+          <div className="absolute inset-0 bg-white/[0.02] border border-white/10 rounded-[1.75rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-sm pointer-events-none"></div>
 
           {/* الكونتينر اللي واخد نفس مقاس الصورة بالظبط عشان النقط متتحركش */}
           <div 
@@ -115,14 +115,14 @@ export default function InteractiveMap() {
                 
                 {/* النبض الأخضر والأصفر */}
                 <div className="relative flex items-center justify-center w-5 h-5 md:w-6 md:h-6 -translate-x-1/2 -translate-y-1/2">
-                  <span className="absolute inline-flex h-full w-full rounded-full bg-[#157670] opacity-75 animate-ping"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 md:h-3 md:w-3 bg-[#F1B820] border-[1.5px] border-[#0F162A]"></span>
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-brand-teal opacity-75 animate-ping"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 md:h-3 md:w-3 bg-brand-gold border-[1.5px] border-brand-navy"></span>
                 </div>
                 
                 {/* الكارت اللي بيظهر لما تقف بالماوس */}
                 <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 md:mb-4 w-48 md:w-64 bg-white rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] p-4 md:p-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:-translate-y-2 pointer-events-none z-50">
-                  <h4 className="font-bold text-[#0F162A] font-en border-b border-slate-100 pb-2 md:pb-3 mb-2 md:mb-3 flex items-center gap-2 text-sm md:text-base">
-                    <span className="w-2 h-2 rounded-full bg-[#157670]"></span>
+                  <h4 className="font-bold text-brand-navy font-en border-b border-slate-100 pb-2 md:pb-3 mb-2 md:mb-3 flex items-center gap-2 text-sm md:text-base">
+                    <span className="w-2 h-2 rounded-full bg-brand-teal"></span>
                     {loc.name}
                   </h4>
                   <p className="text-xs md:text-sm text-slate-600 font-en leading-relaxed font-medium">

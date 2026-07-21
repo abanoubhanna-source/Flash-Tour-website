@@ -97,12 +97,12 @@ export default function DestinationsPage() {
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto mt-20">
           <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }}>
             <div className="flex items-center justify-center gap-4 mb-6">
-              <div className="h-px w-16 bg-[#157670]"></div>
-              <p className="text-[#157670] font-bold tracking-[0.3em] uppercase text-sm font-en">Global Reach</p>
-              <div className="h-px w-16 bg-[#157670]"></div>
+              <div className="h-px w-16 bg-brand-teal"></div>
+              <p className="text-brand-teal font-bold tracking-[0.3em] uppercase text-sm font-en">Global Reach</p>
+              <div className="h-px w-16 bg-brand-teal"></div>
             </div>
-            <h1 className="text-6xl md:text-8xl font-black text-white font-en mb-6 tracking-tight leading-none">
-              Explore Our <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-[#157670] to-[#F1B820]">World</span>
+            <h1 className="text-6xl md:text-8xl font-bold text-white font-en mb-6 tracking-tight leading-none">
+              Explore Our <br/><span className="text-brand-gold">World</span>
             </h1>
             <p className="text-xl text-slate-300 font-en leading-relaxed max-w-2xl mx-auto">
               Five distinct regions. Infinite possibilities. Discover the destinations where Flash Group brings luxury to life.
@@ -129,7 +129,7 @@ export default function DestinationsPage() {
                     className="object-cover"
                   />
                 </div>
-                <div className={`absolute inset-0 bg-gradient-to-r ${isEven ? 'from-[#020617]/95 via-[#020617]/80 to-transparent' : 'from-transparent via-[#020617]/80 to-[#020617]/95'}`}></div>
+                <div className={`absolute inset-0 bg-gradient-to-r ${isEven ? 'from-brand-navy-deep/95 via-brand-navy-deep/80 to-transparent' : 'from-transparent via-brand-navy-deep/80 to-brand-navy-deep/95'}`}></div>
               </div>
 
               <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-8 w-full flex">
@@ -138,17 +138,17 @@ export default function DestinationsPage() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: "-100px" }}
                   transition={{ duration: 0.8 }}
-                  className={`w-full lg:w-1/2 p-8 md:p-12 bg-[#020617]/40 backdrop-blur-xl border border-white/10 rounded-[2.5rem] shadow-2xl hover:shadow-[#157670]/10 hover:border-[#157670]/30 transition-all duration-500 ${isEven ? 'mr-auto' : 'ml-auto'}`}
+                  className={`w-full lg:w-1/2 p-8 md:p-12 bg-brand-navy-deep/40 backdrop-blur-sm border border-white/10 rounded-[1.5rem] shadow-2xl hover:shadow-brand-teal/10 hover:border-brand-teal/30 transition-all duration-500 ${isEven ? 'mr-auto' : 'ml-auto'}`}
                 >
                   <div className="flex items-center gap-4 mb-6">
-                    <div className="w-14 h-14 rounded-full bg-[#157670]/20 flex items-center justify-center border border-[#157670]/30 group-hover:bg-[#157670]/40 transition-colors">
-                      <IconComponent className="w-6 h-6 text-[#F1B820]" />
+                    <div className="w-14 h-14 rounded-full bg-brand-teal/20 flex items-center justify-center border border-brand-teal/30 group-hover:bg-brand-teal/40 transition-colors">
+                      <IconComponent className="w-6 h-6 text-brand-gold" />
                     </div>
-                    <span className="text-[#F1B820] font-bold uppercase tracking-widest text-sm font-en">Destination Portfolio</span>
+                    <span className="text-brand-gold font-bold uppercase tracking-widest text-sm font-en">Destination Portfolio</span>
                   </div>
 
                   <h2 className="text-5xl font-bold text-white font-en mb-2 tracking-tight group-hover:text-slate-100 transition-colors">{dest.name}</h2>
-                  <h3 className="text-xl text-[#157670] font-en mb-6 font-semibold">{dest.subtitle}</h3>
+                  <h3 className="text-xl text-brand-teal font-en mb-6 font-semibold">{dest.subtitle}</h3>
                   
                   <p className="text-lg text-slate-300 font-en leading-relaxed mb-8">
                     {dest.description}
@@ -159,7 +159,7 @@ export default function DestinationsPage() {
                     
                     {dest.highlights && dest.highlights.map((highlight: string, idx: number) => (
                       <div key={idx} className="flex items-center gap-3">
-                        <div className="w-1.5 h-1.5 rounded-full bg-[#F1B820] shadow-[0_0_8px_rgba(241,184,32,0.6)]"></div>
+                        <div className="w-1.5 h-1.5 rounded-full bg-brand-gold shadow-[0_0_8px_rgba(241,184,32,0.6)]"></div>
                         <span className="text-slate-200 font-en font-medium">{highlight}</span>
                       </div>
                     ))}
@@ -167,10 +167,10 @@ export default function DestinationsPage() {
 
                   <Link 
                     href={`/destinations/${dest.id}`}
-                    className="w-fit group/btn flex items-center gap-3 text-white font-bold font-en hover:text-[#F1B820] transition-colors duration-300"
+                    className="w-fit group/btn flex items-center gap-3 text-white font-bold font-en hover:text-brand-gold transition-colors duration-300"
                   >
                     Discover {dest.name}
-                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover/btn:bg-[#F1B820] group-hover/btn:text-[#020617] transition-all">
+                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover/btn:bg-brand-gold group-hover/btn:text-brand-navy-deep transition-all">
                       <ArrowRight className="w-4 h-4" />
                     </div>
                   </Link>
@@ -190,7 +190,7 @@ export default function DestinationsPage() {
           <p className="text-lg text-slate-500 font-en mb-10 leading-relaxed">
             Connect with our localized regional offices to secure exclusive B2B partnerships and seamless global destination management.
           </p>
-          <Link href="/contact" className="inline-block bg-[#157670] text-white px-10 py-5 rounded-full font-bold font-en text-lg hover:bg-[#020617] transition-all duration-300 shadow-xl shadow-[#157670]/20 hover:-translate-y-1">
+          <Link href="/contact" className="inline-block bg-brand-teal text-white px-10 py-5 rounded-full font-bold font-en text-lg hover:bg-brand-navy-deep transition-all duration-300 shadow-xl shadow-brand-teal/20 hover:-translate-y-1">
             Contact Our Corporate Relations
           </Link>
         </div>

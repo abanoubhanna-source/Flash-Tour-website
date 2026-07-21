@@ -21,7 +21,7 @@ export default function Navbar() {
   const [isOperationsHovered, setIsOperationsHovered] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-slate-100 shadow-sm">
+    <nav className="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-sm border-b border-slate-100 shadow-sm">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
         <div className="flex justify-between items-center h-24">
           
