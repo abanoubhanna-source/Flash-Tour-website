@@ -1,7 +1,7 @@
 begin;
 
 create extension if not exists pgtap with schema extensions;
-select plan(37);
+select plan(48);
 
 select is((select count(*)::integer from public.roles), 4, 'four system roles are seeded');
 select is((select count(*)::integer from public.permissions), 22, 'the permission catalog is seeded');
@@ -46,13 +46,18 @@ insert into public.content_entries (
 set local role anon;
 select is(
   (select count(*)::integer from public.published_content_entries),
-  1,
-  'anonymous visitors see only published entries'
+  14,
+  'anonymous visitors see all and only published entries'
 );
 select is(
-  (select data ->> 'description' from public.published_content_entries limit 1),
+  (select data ->> 'description' from public.published_content_entries where slug = 'published-service'),
   'public copy',
   'the public projection exposes published data'
+);
+select is(
+  (select count(*)::integer from public.published_content_entries where id::text like '32000000-%'),
+  13,
+  'the existing public services are migrated without omissions'
 );
 select throws_ok(
   $$ select draft_data from public.content_entries $$,
@@ -110,6 +115,49 @@ select ok(not public.current_user_has_permission('content.publish'), 'editor can
 select lives_ok(
   $$ insert into public.content_entries (content_type, slug, title, created_by) values ('service', 'editor-draft', 'Allowed', '10000000-0000-0000-0000-000000000002') $$,
   'editor can create a draft'
+);
+select lives_ok(
+  $$
+    select public.cms_create_service(
+      'CMS Test Service', 'cms-test-service', 'en',
+      '{"title":"CMS Test Service","slug":"cms-test-service","description":"Draft copy","image":{"assetId":null,"url":"/images/services-hero.jpg","alt":"CMS Test Service"},"eyebrow":"Service","iconKey":"globe","sortOrder":0}',
+      '{"title":"CMS Test Service | Flash Group","description":"Draft copy","canonicalPath":"/services","ogImage":"/images/services-hero.jpg"}'
+    )
+  $$,
+  'editor can create a complete service draft'
+);
+select is(
+  (select status from public.content_entries where slug = 'cms-test-service'),
+  'draft'::public.content_status,
+  'new CMS services start as drafts'
+);
+select lives_ok(
+  $$
+    select public.cms_save_service_draft(
+      (select id from public.content_entries where slug = 'cms-test-service'), 1,
+      '{"title":"CMS Test Service","slug":"cms-test-service","description":"Updated draft copy","image":{"assetId":null,"url":"/images/services-hero.jpg","alt":"CMS Test Service"},"eyebrow":"Service","iconKey":"globe","sortOrder":140}',
+      '{"title":"CMS Test Service | Flash Group","description":"Updated draft copy","canonicalPath":"/services","ogImage":"/images/services-hero.jpg"}',
+      true
+    )
+  $$,
+  'editor can autosave service content and SEO atomically'
+);
+select is(
+  (select draft_data ->> 'description' from public.content_entries where slug = 'cms-test-service'),
+  'Updated draft copy',
+  'service autosave changes only the draft content'
+);
+select throws_ok(
+  $$
+    select public.cms_publish_service(
+      (select id from public.content_entries where slug = 'cms-test-service'), 2,
+      (select draft_data from public.content_entries where slug = 'cms-test-service'),
+      (select draft_data from public.seo_entries where content_entry_id = (select id from public.content_entries where slug = 'cms-test-service'))
+    )
+  $$,
+  '42501',
+  'Publishing requires an authorized MFA session.',
+  'editor cannot publish a service'
 );
 select lives_ok(
   $$
@@ -200,6 +248,41 @@ select lives_ok(
     )
   $$,
   'AAL2 administrator can publish a page draft'
+);
+select lives_ok(
+  $$
+    select public.cms_publish_service(
+      (select id from public.content_entries where slug = 'cms-test-service'), 2,
+      (select draft_data from public.content_entries where slug = 'cms-test-service'),
+      (select draft_data from public.seo_entries where content_entry_id = (select id from public.content_entries where slug = 'cms-test-service'))
+    )
+  $$,
+  'AAL2 administrator can publish a service draft'
+);
+select is(
+  (select data ->> 'description' from public.published_content_entries where slug = 'cms-test-service'),
+  'Updated draft copy',
+  'service publishing exposes the validated draft projection'
+);
+select lives_ok(
+  $$
+    select public.cms_restore_service_revision(
+      (select id from public.content_entries where slug = 'cms-test-service'),
+      (select id from public.content_revisions where resource_type = 'service' and resource_id = (select id from public.content_entries where slug = 'cms-test-service') and version = 1),
+      3
+    )
+  $$,
+  'an authorized editor can restore a previous service version to draft'
+);
+select is(
+  (select draft_data ->> 'description' from public.content_entries where slug = 'cms-test-service'),
+  'Draft copy',
+  'restoring service history changes the draft content'
+);
+select is(
+  (select data ->> 'description' from public.published_content_entries where slug = 'cms-test-service'),
+  'Updated draft copy',
+  'restoring a service draft does not change the live projection'
 );
 select is(
   (

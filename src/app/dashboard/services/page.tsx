@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-import { ModulePlaceholder } from "@/components/cms/module-placeholder";
+import { requireCmsUser } from "@/lib/auth/session";
+import { getCmsServices } from "@/lib/cms/services/queries";
+import { ServicesList } from "@/components/cms/services/services-list";
 
 export const metadata: Metadata = { title: "Services" };
 
-export default function ServicesModulePage() {
-  return <ModulePlaceholder title="Services" description="Service collection editing is intentionally reserved for a later implementation phase." />;
+export default async function ServicesModulePage() {
+  const [user, services] = await Promise.all([requireCmsUser(), getCmsServices()]);
+  return <ServicesList services={services} canCreate={user.permissions.includes("content.create")} canEdit={user.permissions.includes("content.edit")} canDelete={user.permissions.includes("content.purge")} />;
 }

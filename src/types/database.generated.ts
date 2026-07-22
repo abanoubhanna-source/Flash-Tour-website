@@ -1130,6 +1130,16 @@ export type Database = {
         }
         Returns: string
       }
+      cms_create_service: {
+        Args: {
+          content_data: Json
+          requested_locale: string
+          requested_slug: string
+          requested_title: string
+          seo_data: Json
+        }
+        Returns: string
+      }
       cms_publish_page: {
         Args: {
           expected_lock_version: number
@@ -1139,11 +1149,28 @@ export type Database = {
         }
         Returns: Json
       }
+      cms_publish_service: {
+        Args: {
+          content_data: Json
+          expected_lock_version: number
+          requested_service_id: string
+          seo_data: Json
+        }
+        Returns: Json
+      }
       cms_restore_page_revision: {
         Args: {
           expected_lock_version: number
           requested_page_id: string
           requested_revision_id: string
+        }
+        Returns: Json
+      }
+      cms_restore_service_revision: {
+        Args: {
+          expected_lock_version: number
+          requested_revision_id: string
+          requested_service_id: string
         }
         Returns: Json
       }
@@ -1157,8 +1184,22 @@ export type Database = {
         }
         Returns: Json
       }
+      cms_save_service_draft: {
+        Args: {
+          content_data: Json
+          create_revision?: boolean
+          expected_lock_version: number
+          requested_service_id: string
+          seo_data: Json
+        }
+        Returns: Json
+      }
       cms_unpublish_page: {
         Args: { expected_lock_version: number; requested_page_id: string }
+        Returns: Json
+      }
+      cms_unpublish_service: {
+        Args: { expected_lock_version: number; requested_service_id: string }
         Returns: Json
       }
       current_cms_context: { Args: never; Returns: Json }

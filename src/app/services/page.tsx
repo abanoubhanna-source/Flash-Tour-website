@@ -10,9 +10,12 @@ import {
   Briefcase, FileCheck, Flag
 } from 'lucide-react';
 import Footer from "@/components/Footer";
+import { RichText } from "@/components/content/rich-text";
+
+type PublicService = { id?: string; title: string; desc: string; img?: string };
 
 // قاموس الأيقونات عشان نربط كل خدمة بالأيقونة بتاعتها أوتوماتيك
-const iconMapping: { [key: string]: any } = {
+const iconMapping: Record<string, React.ComponentType<{ className?: string }>> = {
   "Inbound & Outbound Tourism": Globe2,
   "Flight Reservations": PlaneTakeoff,
   "Hotel Reservations": Building2,
@@ -46,7 +49,7 @@ const fallbackServices = [
 ];
 
 export default function ServicesPage() {
-  const [servicesData, setServicesData] = useState<any[]>(fallbackServices);
+  const [servicesData, setServicesData] = useState<PublicService[]>(fallbackServices);
 
   useEffect(() => {
     fetch('/api/services')
@@ -87,7 +90,7 @@ export default function ServicesPage() {
         <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {servicesData.map((service: any, index: number) => {
+            {servicesData.map((service, index) => {
               // بنختار الأيقونة من القاموس، ولو الخدمة جديدة من الداش بورد بنديلها أيقونة افتراضية محايدة
               const IconComponent = iconMapping[service.title] || Globe2;
 
@@ -114,9 +117,7 @@ export default function ServicesPage() {
                   </div>
 
                   {/* Description */}
-                  <p className="text-slate-500 font-en text-sm leading-relaxed mb-6 flex-grow relative z-10">
-                    {service.desc}
-                  </p>
+                  <RichText value={service.desc} className="text-slate-500 font-en text-sm leading-relaxed mb-6 flex-grow relative z-10 space-y-2" />
                   
                   {/* Visual Anchor */}
                   <div className="w-full h-1 bg-slate-100 rounded-full mt-auto overflow-hidden">
