@@ -43,7 +43,7 @@ export default function HospitalityPage() {
       {/* 1. Redesigned Premium Hero */}
       <section className="relative w-full h-[85vh] flex flex-col items-center justify-center bg-brand-navy-deep mt-16 md:mt-20 overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <Image src="/images/hospitality-hero.jpg" alt="Flash Group Portfolio" fill className="object-cover opacity-50 scale-105 animate-[pulse_10s_ease-in-out_infinite_alternate]" priority />
+          <Image src="/images/hospitality-hero.jpg" alt="Flash Group Portfolio" fill sizes="100vw" className="object-cover opacity-50 scale-105 animate-[pulse_10s_ease-in-out_infinite_alternate]" loading="eager" fetchPriority="high" />
           <div className="absolute inset-0 bg-gradient-to-b from-brand-navy-deep/70 via-brand-navy-deep/40 to-brand-navy-deep z-10"></div>
           <div className="absolute inset-0 opacity-[0.03] z-10" style={{ backgroundImage: 'linear-gradient(#ffffff 1px, transparent 1px), linear-gradient(90deg, #ffffff 1px, transparent 1px)', backgroundSize: '60px 60px' }}></div>
         </div>
@@ -108,7 +108,7 @@ export default function HospitalityPage() {
                       initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true, margin: "-100px" }}
                       className="w-full lg:w-7/12 relative h-[450px] lg:h-[650px] rounded-[1.5rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.1)] z-0"
                     >
-                      <Image src={region.img} alt={region.title} fill className="object-cover hover:scale-105 transition-transform duration-[1.5s]" />
+                      <Image src={region.img} alt={region.title} fill sizes="(max-width: 1024px) 100vw, 58vw" className="object-cover hover:scale-105 transition-transform duration-[1.5s]" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
                     </motion.div>
 

@@ -4,6 +4,7 @@
 import { motion } from 'framer-motion';
 import { Briefcase, Building2, Mail, Phone, MapPin, Send, ShieldCheck, UserCheck } from 'lucide-react';
 import Footer from "@/components/Footer";
+import { trackPartnerInquirySubmit } from '@/lib/analytics';
 
 export default function PartnerPortal() {
   return (
@@ -100,32 +101,32 @@ export default function PartnerPortal() {
                   {/* Row 1: Names */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label className="text-sm font-bold text-slate-700 font-en">First Name *</label>
-                      <input type="text" className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors" placeholder="John" />
+                      <label htmlFor="rfp-first-name" className="text-sm font-bold text-slate-700 font-en">First Name *</label>
+                      <input id="rfp-first-name" type="text" required className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors" placeholder="John" />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-bold text-slate-700 font-en">Last Name *</label>
-                      <input type="text" className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors" placeholder="Doe" />
+                      <label htmlFor="rfp-last-name" className="text-sm font-bold text-slate-700 font-en">Last Name *</label>
+                      <input id="rfp-last-name" type="text" required className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors" placeholder="Doe" />
                     </div>
                   </div>
 
                   {/* Row 2: Company Details */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label className="text-sm font-bold text-slate-700 font-en">Company Name *</label>
-                      <input type="text" className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors" placeholder="Flash Partners LLC" />
+                      <label htmlFor="rfp-company-name" className="text-sm font-bold text-slate-700 font-en">Company Name *</label>
+                      <input id="rfp-company-name" type="text" required className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors" placeholder="Flash Partners LLC" />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-bold text-slate-700 font-en">Corporate Email *</label>
-                      <input type="email" className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors" placeholder="john@company.com" />
+                      <label htmlFor="rfp-email" className="text-sm font-bold text-slate-700 font-en">Corporate Email *</label>
+                      <input id="rfp-email" type="email" required className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors" placeholder="john@company.com" />
                     </div>
                   </div>
 
                   {/* Row 3: Inquiry Type & Destination */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label className="text-sm font-bold text-slate-700 font-en">Inquiry Type *</label>
-                      <select className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors bg-white appearance-none">
+                      <label htmlFor="rfp-inquiry-type" className="text-sm font-bold text-slate-700 font-en">Inquiry Type *</label>
+                      <select id="rfp-inquiry-type" required className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors bg-white appearance-none">
                         <option>DMC Partnership</option>
                         <option>MICE / Corporate Event</option>
                         <option>VIP Fleet & Mobility</option>
@@ -134,8 +135,8 @@ export default function PartnerPortal() {
                       </select>
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-bold text-slate-700 font-en">Target Destination</label>
-                      <select className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors bg-white appearance-none">
+                      <label htmlFor="rfp-destination" className="text-sm font-bold text-slate-700 font-en">Target Destination</label>
+                      <select id="rfp-destination" className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors bg-white appearance-none">
                         <option>Egypt</option>
                         <option>United Arab Emirates</option>
                         <option>Italy (Sardinia / Sicily)</option>
@@ -147,17 +148,20 @@ export default function PartnerPortal() {
 
                   {/* Message Area */}
                   <div className="space-y-2">
-                    <label className="text-sm font-bold text-slate-700 font-en">Project Details / Message *</label>
-                    <textarea 
-                      rows={5} 
-                      className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors resize-none" 
+                    <label htmlFor="rfp-message" className="text-sm font-bold text-slate-700 font-en">Project Details / Message *</label>
+                    <textarea
+                      id="rfp-message"
+                      required
+                      rows={5}
+                      className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors resize-none"
                       placeholder="Please provide details such as expected group size, tentative dates, or specific services required..."
                     ></textarea>
                   </div>
 
                   {/* Submit Button */}
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
+                    onClick={() => trackPartnerInquirySubmit()}
                     className="w-full bg-brand-navy hover:bg-brand-teal text-white font-bold font-en text-lg py-4 rounded-xl transition-all duration-300 shadow-lg flex items-center justify-center gap-3 group"
                   >
                     Submit Proposal Request 

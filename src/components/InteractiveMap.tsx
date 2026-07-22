@@ -3,6 +3,7 @@
 
 import { motion } from 'framer-motion';
 import { CheckCircle } from 'lucide-react';
+import Image from 'next/image';
 
 // دي الإحداثيات، ممكن تحتاج تظبطها تظبيطة أخيرة بسيطة جداً بعد التعديل ده
 // وبمجرد ما تظبطها، مستحيل تتحرك تاني في أي شاشة
@@ -103,9 +104,12 @@ export default function InteractiveMap() {
             }}
           >
             {/* استخدام صورة حقيقية بدل الخلفية */}
-            <img 
-              src="/images/Screenshot-Map.png" 
-              alt="Global Map" 
+            <Image
+              src="/images/Screenshot-Map.png"
+              alt="Global Map"
+              width={1418}
+              height={985}
+              sizes="(max-width: 1024px) 100vw, 66vw"
               className="w-full h-auto opacity-80 block"
             />
             
@@ -121,10 +125,10 @@ export default function InteractiveMap() {
                 
                 {/* الكارت اللي بيظهر لما تقف بالماوس */}
                 <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 md:mb-4 w-48 md:w-64 bg-white rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] p-4 md:p-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:-translate-y-2 pointer-events-none z-50">
-                  <h4 className="font-bold text-brand-navy font-en border-b border-slate-100 pb-2 md:pb-3 mb-2 md:mb-3 flex items-center gap-2 text-sm md:text-base">
+                  <h3 className="font-bold text-brand-navy font-en border-b border-slate-100 pb-2 md:pb-3 mb-2 md:mb-3 flex items-center gap-2 text-sm md:text-base">
                     <span className="w-2 h-2 rounded-full bg-brand-teal"></span>
                     {loc.name}
-                  </h4>
+                  </h3>
                   <p className="text-xs md:text-sm text-slate-600 font-en leading-relaxed font-medium">
                     {loc.details}
                   </p>

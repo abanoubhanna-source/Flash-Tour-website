@@ -32,10 +32,11 @@ export default function BrandsPage() {
       {/* 1. Hero Section */}
       <section className="relative w-full h-[60vh] flex items-center justify-center bg-slate-950">
         <div className="absolute inset-0 z-0">
-          <Image 
-            src="/images/vip-bus.jpg" 
-            alt="Flash Group Brands" 
-            fill 
+          <Image
+            src="/images/vip-bus.jpg"
+            alt="Flash Group Brands"
+            fill
+            sizes="100vw"
             className="object-cover opacity-30"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-slate-950/50 to-slate-950"></div>
@@ -72,10 +73,11 @@ export default function BrandsPage() {
                     className="w-full lg:w-1/2"
                   >
                     <div className="relative aspect-[4/3] rounded-[1.5rem] overflow-hidden shadow-2xl group">
-                      <Image 
-                        src={brand.image} 
-                        alt={brand.name} 
-                        fill 
+                      <Image
+                        src={brand.image}
+                        alt={brand.name}
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 50vw"
                         className="object-cover transition-transform duration-[2s] group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-500"></div>

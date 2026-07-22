@@ -108,9 +108,9 @@ export default function ServicesPage() {
                     <div className="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100 group-hover:border-brand-teal/30 group-hover:bg-brand-teal/5 transition-colors duration-300">
                       <IconComponent className="w-8 h-8 text-brand-teal group-hover:scale-110 transition-transform duration-300" />
                     </div>
-                    <h3 className="text-xl font-bold text-slate-900 font-en leading-tight flex-1 group-hover:text-brand-teal transition-colors">
+                    <h2 className="text-xl font-bold text-slate-900 font-en leading-tight flex-1 group-hover:text-brand-teal transition-colors">
                       {service.title}
-                    </h3>
+                    </h2>
                   </div>
 
                   {/* Description */}

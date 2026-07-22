@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { MapPin, Phone, Mail, Globe2, SendHorizontal, Building2, ShieldCheck } from 'lucide-react';
 import Image from 'next/image';
 import Footer from "@/components/Footer";
+import { trackContactFormSubmit, trackEmailClick } from '@/lib/analytics';
 
 const offices = [
   { region: "Global Headquarters", city: "Cairo, Egypt", address: "30 Thawra St., Heliopolis", email: "info@flashtour.travel", phone: "+202 26904654" },
@@ -19,10 +20,11 @@ export default function ContactPage() {
       {/* 1. Elegant Hero Section */}
       <section className="relative w-full h-[50vh] flex items-center justify-center bg-slate-950">
         <div className="absolute inset-0 z-0">
-          <Image 
+          <Image
             src="/images/office-cairo.jpg" // استخدم صورة للمقر الرئيسي
-            alt="Flash Group Headquarters" 
-            fill 
+            alt="Flash Group Headquarters"
+            fill
+            sizes="100vw"
             className="object-cover opacity-30"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 to-transparent"></div>
@@ -56,8 +58,8 @@ export default function ContactPage() {
                 <div className="w-14 h-14 bg-teal-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-teal-700 transition-colors duration-300">
                   <Building2 className="w-6 h-6 text-teal-700 group-hover:text-white transition-colors duration-300" />
                 </div>
-                <h3 className="text-xs font-bold text-teal-600 uppercase tracking-widest font-en mb-2">{office.region}</h3>
-                <h4 className="text-2xl font-bold text-slate-900 font-en mb-6">{office.city}</h4>
+                <h2 className="text-xs font-bold text-teal-600 uppercase tracking-widest font-en mb-2">{office.region}</h2>
+                <h3 className="text-2xl font-bold text-slate-900 font-en mb-6">{office.city}</h3>
                 
                 <ul className="space-y-4">
                   <li className="flex items-start gap-3 text-slate-600 font-en text-sm">
@@ -66,7 +68,7 @@ export default function ContactPage() {
                   </li>
                   <li className="flex items-center gap-3 text-slate-600 font-en text-sm">
                     <Mail className="w-5 h-5 text-slate-400 shrink-0" />
-                    <a href={`mailto:${office.email}`} className="hover:text-teal-700 transition-colors">{office.email}</a>
+                    <a href={`mailto:${office.email}`} onClick={() => trackEmailClick({ location: 'contact_office_card', office: office.city })} className="hover:text-teal-700 transition-colors">{office.email}</a>
                   </li>
                   <li className="flex items-center gap-3 text-slate-600 font-en text-sm">
                     <Phone className="w-5 h-5 text-slate-400 shrink-0" />
@@ -119,32 +121,32 @@ export default function ContactPage() {
 
             {/* Right Side: The Form */}
             <div className="lg:w-7/12 p-12 md:p-16">
-              <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
+              <form className="space-y-8" onSubmit={(e) => { e.preventDefault(); trackContactFormSubmit(); }}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-2">
-                    <label className="text-sm font-bold text-slate-700 font-en">First Name *</label>
-                    <input type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900" placeholder="John" />
+                    <label htmlFor="contact-first-name" className="text-sm font-bold text-slate-700 font-en">First Name *</label>
+                    <input id="contact-first-name" type="text" required className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900" placeholder="John" />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-bold text-slate-700 font-en">Last Name *</label>
-                    <input type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900" placeholder="Doe" />
+                    <label htmlFor="contact-last-name" className="text-sm font-bold text-slate-700 font-en">Last Name *</label>
+                    <input id="contact-last-name" type="text" required className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900" placeholder="Doe" />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-2">
-                    <label className="text-sm font-bold text-slate-700 font-en">Corporate Email *</label>
-                    <input type="email" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900" placeholder="john@company.com" />
+                    <label htmlFor="contact-email" className="text-sm font-bold text-slate-700 font-en">Corporate Email *</label>
+                    <input id="contact-email" type="email" required className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900" placeholder="john@company.com" />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-bold text-slate-700 font-en">Phone Number</label>
-                    <input type="tel" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900" placeholder="+1 (555) 000-0000" />
+                    <label htmlFor="contact-phone" className="text-sm font-bold text-slate-700 font-en">Phone Number</label>
+                    <input id="contact-phone" type="tel" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900" placeholder="+1 (555) 000-0000" />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-700 font-en">Inquiry Type *</label>
-                  <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900 appearance-none">
+                  <label htmlFor="contact-inquiry-type" className="text-sm font-bold text-slate-700 font-en">Inquiry Type *</label>
+                  <select id="contact-inquiry-type" required className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900 appearance-none">
                     <option value="">Select a topic...</option>
                     <option value="partnership">B2B Partnership</option>
                     <option value="booking">Corporate Booking (Cruises/Hotels)</option>
@@ -154,8 +156,8 @@ export default function ContactPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-700 font-en">Message *</label>
-                  <textarea rows={5} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900 resize-none" placeholder="Tell us about your business needs..."></textarea>
+                  <label htmlFor="contact-message" className="text-sm font-bold text-slate-700 font-en">Message *</label>
+                  <textarea id="contact-message" required rows={5} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900 resize-none" placeholder="Tell us about your business needs..."></textarea>
                 </div>
 
                 <button type="submit" className="w-full bg-teal-700 hover:bg-teal-800 text-white font-bold py-5 rounded-xl transition-all flex items-center justify-center gap-3 group shadow-xl shadow-teal-700/20 font-en text-lg">

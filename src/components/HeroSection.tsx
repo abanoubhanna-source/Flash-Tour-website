@@ -4,6 +4,7 @@
 import { useState, MouseEvent } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 const showcases = [
@@ -69,7 +70,7 @@ export default function HeroSection() {
           style={{ x: bgX, y: bgY }}
           className="absolute inset-0 z-0"
         >
-          <img src={selected.bg} alt={selected.name} className="w-full h-full object-cover" />
+          <Image src={selected.bg} alt={selected.name} fill loading="eager" fetchPriority="high" sizes="100vw" className="object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/80 via-brand-navy/35 to-white/5" />
           <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/70 via-transparent to-white/10" />
         </motion.div>

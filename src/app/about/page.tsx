@@ -1,18 +1,14 @@
 // src/app/about/page.tsx
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Building2, Ship, Bus, UtensilsCrossed, Eye, Target, Quote, Globe2, ShieldCheck, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import Footer from "@/components/Footer";
 import FlawlessProcess from '@/components/FlawlessProcess';
 
 export default function AboutPage() {
-  const targetRef = useRef(null);
-  const { scrollYProgress } = useScroll({ target: targetRef, offset: ["start center", "end center"] });
-  const scaleHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
-
   const [aboutData, setAboutData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -53,7 +49,7 @@ export default function AboutPage() {
               {aboutData.hero.tag}
             </span>
             <h1 className="text-6xl md:text-8xl font-bold text-slate-900 font-en mb-6 tracking-tight leading-tight">
-              {aboutData.hero.title_part1} <span className="text-teal-700">Empire</span> <br /> {aboutData.hero.title_part2}
+              {aboutData.hero.title_part1.replace('Empire', '').trim()} <span className="text-teal-700">Empire</span> <br /> {aboutData.hero.title_part2}
             </h1>
             <p className="text-xl md:text-2xl text-slate-500 font-en max-w-3xl mx-auto leading-relaxed">
               {aboutData.hero.desc}
@@ -119,23 +115,29 @@ export default function AboutPage() {
             </motion.div>
             
             <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative h-[600px] rounded-[1.5rem] overflow-hidden shadow-2xl border border-slate-100">
-              <Image src="/images/vip-bus.jpg" alt="Flash Group Infrastructure" fill className="object-cover" />
+              <Image src="/images/vip-bus.jpg" alt="Flash Group Infrastructure" fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
             </motion.div>
           </div>
         </div>
       </section>
 
       {/* 5. The Heritage Timeline (Dynamic) */}
-      <section className="w-full py-32 bg-white" ref={targetRef}>
+      <section className="w-full py-32 bg-white">
         <div className="max-w-[1200px] mx-auto px-6 lg:px-8 relative">
-          
+
           <div className="text-center mb-24">
             <h2 className="text-4xl md:text-5xl font-bold text-slate-900 font-en mb-4">The <span className="text-teal-700">Evolution</span></h2>
             <div className="w-24 h-1.5 bg-teal-700 mx-auto rounded-full"></div>
           </div>
 
           <div className="absolute left-6 md:left-1/2 top-[200px] bottom-0 w-1 bg-slate-100 -translate-x-1/2 rounded-full overflow-hidden">
-            <motion.div style={{ height: scaleHeight }} className="w-full bg-teal-700 rounded-full" />
+            <motion.div
+              initial={{ height: '0%' }}
+              whileInView={{ height: '100%' }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 1.5, ease: 'easeOut' }}
+              className="w-full bg-teal-700 rounded-full"
+            />
           </div>
 
           <div className="space-y-32 relative z-10">
@@ -187,7 +189,7 @@ export default function AboutPage() {
                     <Globe2 className="w-6 h-6 text-teal-700" />
                   </div>
                   <div>
-                    <h4 className="text-xl font-bold text-slate-900 font-en mb-2">Localized Excellence</h4>
+                    <h3 className="text-xl font-bold text-slate-900 font-en mb-2">Localized Excellence</h3>
                     <p className="text-slate-500 font-en leading-relaxed">Direct oversight of all ground operations, VIP fleets, and hospitality assets without intermediaries.</p>
                   </div>
                 </li>
@@ -196,7 +198,7 @@ export default function AboutPage() {
                     <ShieldCheck className="w-6 h-6 text-teal-700" />
                   </div>
                   <div>
-                    <h4 className="text-xl font-bold text-slate-900 font-en mb-2">24/7 Precision Control</h4>
+                    <h3 className="text-xl font-bold text-slate-900 font-en mb-2">24/7 Precision Control</h3>
                     <p className="text-slate-500 font-en leading-relaxed">Dedicated regional teams providing round-the-clock support for elite corporate events and high-net-worth clients.</p>
                   </div>
                 </li>
@@ -205,10 +207,10 @@ export default function AboutPage() {
 
             <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative h-[500px] lg:h-[650px] w-full flex justify-end">
               <div className="relative w-[80%] h-[80%] rounded-[1.5rem] overflow-hidden shadow-2xl z-10 top-0 right-0 border-[12px] border-slate-50">
-                <Image src="/images/office-1.jpg" fill alt="Flash Group Operations Hub" className="object-cover" />
+                <Image src="/images/office-1.jpg" fill sizes="(max-width: 1024px) 80vw, 40vw" alt="Flash Group Operations Hub" className="object-cover" />
               </div>
               <div className="absolute w-[60%] h-[55%] rounded-2xl overflow-hidden shadow-xl z-20 bottom-0 left-0 border-[12px] border-slate-50">
-                <Image src="/images/office-2.jpg" fill alt="Regional Operations Center" className="object-cover" />
+                <Image src="/images/office-2.jpg" fill sizes="(max-width: 1024px) 60vw, 30vw" alt="Regional Operations Center" className="object-cover" />
               </div>
             </motion.div>
 
@@ -230,9 +232,9 @@ export default function AboutPage() {
 
               {/* Director Info & Signature */}
               <div className="mt-10 border-t border-white/10 pt-8">
-                <h4 className="text-2xl font-bold font-en text-white uppercase tracking-widest">
+                <h3 className="text-2xl font-bold font-en text-white uppercase tracking-widest">
                   {aboutData.director_name}
-                </h4>
+                </h3>
                 <p className="text-sm text-teal-500 font-bold font-en uppercase tracking-widest mb-6">
                   {aboutData.director_title}
                 </p>
@@ -243,7 +245,8 @@ export default function AboutPage() {
                     <Image 
                       src={aboutData.signature_img} 
                       alt="Director Signature" 
-                      fill 
+                      fill
+                      sizes="224px"
                       className="object-contain object-left invert brightness-0"
                     />
                   </div>

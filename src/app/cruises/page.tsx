@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
-import { Anchor, Users, Utensils, Waves, ArrowRight } from 'lucide-react';
+import { Anchor, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 
 const cruises = [
@@ -29,10 +29,11 @@ export default function CruisesPage() {
     <div className="bg-white">
       {/* Hero Section - Serenity Cruises */}
       <section className="relative h-[70vh] flex items-center justify-center overflow-hidden">
-        <Image 
-          src="/images/cruises-header.jpg" 
-          alt="Serenity Nile Cruises" 
-          fill 
+        <Image
+          src="/images/cruises-header.jpg"
+          alt="Serenity Nile Cruises"
+          fill
+          sizes="100vw"
           className="object-cover"
         />
         <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px]"></div>
@@ -74,10 +75,11 @@ function CruiseRow({ cruise, reverse }: { cruise: any, reverse: boolean }) {
         {/* Image side with Parallax Effect */}
         <div className="flex-1 relative w-full aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl">
           <motion.div style={{ y }} className="absolute inset-0 h-[120%] -top-[10%]">
-            <Image 
-              src={cruise.image} 
-              alt={cruise.name} 
-              fill 
+            <Image
+              src={cruise.image}
+              alt={cruise.name}
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover"
             />
           </motion.div>

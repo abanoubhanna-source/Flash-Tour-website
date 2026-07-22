@@ -1,11 +1,13 @@
 // src/app/hospitality/coastal-sanctuaries/page.tsx
 'use client';
 
+import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import Footer from "@/components/Footer";
-import { ArrowUpRight, Anchor, Ship, Waves, MapPin, CheckCircle2, Building2, Sun, Wind } from 'lucide-react';
+import { ArrowUpRight, Anchor, Ship, Waves, CheckCircle2, Building2, Sun, Wind } from 'lucide-react';
+import { trackHospitalityPropertyView } from '@/lib/analytics';
 
 const coastalData = [
   { 
@@ -47,6 +49,8 @@ const coastalData = [
 ];
 
 export default function CoastalSanctuariesPage() {
+  useEffect(() => { trackHospitalityPropertyView('Coastal Sanctuaries'); }, []);
+
   return (
     <main className="flex min-h-screen flex-col items-center w-full bg-white overflow-hidden">
       
@@ -56,9 +60,11 @@ export default function CoastalSanctuariesPage() {
           <Image 
             src="/images/true-beach.jpg" 
             alt="Coastal Sanctuaries" 
+            sizes="100vw"
             fill 
             className="object-cover opacity-50"
-            priority
+            loading="eager"
+            fetchPriority="high"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-brand-navy/70 to-white z-10"></div>
         </div>
@@ -157,6 +163,7 @@ export default function CoastalSanctuariesPage() {
                     <Image 
                       src={item.img} 
                       alt={item.name} 
+                      sizes="(max-width: 1024px) 100vw, 58vw"
                       fill 
                       className="object-cover group-hover:scale-105 transition-transform duration-[2s] ease-out" 
                     />

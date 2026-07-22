@@ -6,13 +6,14 @@ import { SendHorizontal, MapPin, Mail, Phone } from 'lucide-react';
 import { FaFacebookF, FaLinkedinIn, FaInstagram, FaXTwitter } from 'react-icons/fa6';
 import Image from 'next/image';
 import Link from 'next/link';
+import { trackEmailClick, trackPhoneClick } from '@/lib/analytics';
 
 export default function Footer() {
   return (
     <footer className="w-full bg-brand-navy-deep text-white pt-24 pb-8 font-en relative overflow-hidden border-t border-white/10">
       
       {/* Watermark */}
-      <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-[18vw] font-bold text-white/[0.02] pointer-events-none select-none z-0 whitespace-nowrap">
+      <div aria-hidden="true" className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-[18vw] font-bold text-white/[0.02] pointer-events-none select-none z-0 whitespace-nowrap">
         FLASH GROUP
       </div>
 
@@ -22,23 +23,23 @@ export default function Footer() {
           
           <div className="lg:col-span-5 space-y-8">
             <div className="relative w-56 h-14">
-              <Image src="/images/logo.png" alt="Flash Group" fill className="object-contain object-left" priority />
+              <Image src="/images/logo.png" alt="Flash Group" fill sizes="224px" className="object-contain object-left" />
             </div>
             <p className="text-slate-400 text-lg leading-relaxed max-w-md">
               Crafting world-class hospitality standards since 1985. Join our global network and let&apos;s redefine the future of tourism together.
             </p>
             <div className="flex gap-4">
-              <Link href="https://www.facebook.com/Flashtour.Egypt" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-teal-700 hover:border-teal-700 transition-all duration-300 group">
-                <FaFacebookF className="w-5 h-5 text-slate-400 group-hover:text-white" />
+              <Link href="https://www.facebook.com/Flashtour.Egypt" target="_blank" rel="noopener noreferrer" aria-label="Flash Group on Facebook" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-teal-700 hover:border-teal-700 transition-all duration-300 group">
+                <FaFacebookF aria-hidden="true" className="w-5 h-5 text-slate-400 group-hover:text-white" />
               </Link>
-              <Link href="https://www.linkedin.com/company/flash-tour/posts/?feedView=all" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-teal-700 hover:border-teal-700 transition-all duration-300 group">
-                <FaLinkedinIn className="w-5 h-5 text-slate-400 group-hover:text-white" />
+              <Link href="https://www.linkedin.com/company/flash-tour/posts/?feedView=all" target="_blank" rel="noopener noreferrer" aria-label="Flash Group on LinkedIn" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-teal-700 hover:border-teal-700 transition-all duration-300 group">
+                <FaLinkedinIn aria-hidden="true" className="w-5 h-5 text-slate-400 group-hover:text-white" />
               </Link>
-              <Link href="https://www.instagram.com/flash.tour/" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-teal-700 hover:border-teal-700 transition-all duration-300 group">
-                <FaInstagram className="w-5 h-5 text-slate-400 group-hover:text-white" />
+              <Link href="https://www.instagram.com/flash.tour/" target="_blank" rel="noopener noreferrer" aria-label="Flash Group on Instagram" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-teal-700 hover:border-teal-700 transition-all duration-300 group">
+                <FaInstagram aria-hidden="true" className="w-5 h-5 text-slate-400 group-hover:text-white" />
               </Link>
-              <Link href="#" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-teal-700 hover:border-teal-700 transition-all duration-300 group">
-                <FaXTwitter className="w-5 h-5 text-slate-400 group-hover:text-white" />
+              <Link href="#" aria-label="Flash Group on X" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-teal-700 hover:border-teal-700 transition-all duration-300 group">
+                <FaXTwitter aria-hidden="true" className="w-5 h-5 text-slate-400 group-hover:text-white" />
               </Link>
             </div>
           </div>
@@ -62,8 +63,9 @@ export default function Footer() {
 
               {/* 3. تفعيل الإيميل ليفتح تطبيق البريد */}
               <li>
-                <a 
-                  href="mailto:info@flashtour.travel" 
+                <a
+                  href="mailto:info@flashtour.travel"
+                  onClick={() => trackEmailClick({ location: 'footer' })}
                   className="flex gap-4 items-center text-slate-300 hover:text-teal-500 transition-colors group"
                 >
                   <Mail className="w-5 h-5 text-teal-600 shrink-0 group-hover:scale-110 transition-transform" />
@@ -73,8 +75,9 @@ export default function Footer() {
 
               {/* 4. تفعيل التليفون ليفتح لوحة الاتصال */}
               <li>
-                <a 
-                  href="tel:+20226904654" 
+                <a
+                  href="tel:+20226904654"
+                  onClick={() => trackPhoneClick({ location: 'footer' })}
                   className="flex gap-4 items-center text-slate-300 hover:text-teal-500 transition-colors group"
                 >
                   <Phone className="w-5 h-5 text-teal-600 shrink-0 group-hover:scale-110 transition-transform" />
@@ -88,13 +91,15 @@ export default function Footer() {
           <div className="lg:col-span-4 space-y-6">
             <h4 className="text-white font-bold text-2xl">Partner with <span className="text-teal-500">Flash Group</span></h4>
             <div className="relative group">
-              <input 
-                type="email" 
-                placeholder="Your corporate email" 
+              <label htmlFor="footer-newsletter-email" className="sr-only">Your corporate email</label>
+              <input
+                id="footer-newsletter-email"
+                type="email"
+                placeholder="Your corporate email"
                 className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 focus:outline-none focus:border-teal-500 transition-all text-white placeholder:text-slate-500"
               />
-              <button className="absolute right-3 top-1/2 -translate-y-1/2 bg-teal-700 hover:bg-teal-600 p-3 rounded-xl transition-all shadow-lg">
-                <SendHorizontal className="w-5 h-5 text-white" />
+              <button type="button" aria-label="Subscribe" className="absolute right-3 top-1/2 -translate-y-1/2 bg-teal-700 hover:bg-teal-600 p-3 rounded-xl transition-all shadow-lg">
+                <SendHorizontal aria-hidden="true" className="w-5 h-5 text-white" />
               </button>
             </div>
             <p className="text-slate-500 text-xs leading-relaxed">

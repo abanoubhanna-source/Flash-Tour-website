@@ -1,10 +1,12 @@
 // src/app/destinations/uae/page.tsx
 'use client';
 
+import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, ChevronRight, Building2, Landmark, Mountain, Waves, Library } from 'lucide-react';
 import Image from 'next/image';
 import Footer from "@/components/Footer";
+import { trackDestinationView } from '@/lib/analytics';
 
 // الداتا الأصلية للإمارات
 const uaeData = [
@@ -68,6 +70,8 @@ const uaeData = [
 ];
 
 export default function UAEDestinationPage() {
+  useEffect(() => { trackDestinationView('UAE'); }, []);
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -86,9 +90,11 @@ export default function UAEDestinationPage() {
           <Image 
             src="/images/uae-hero.jpg" 
             alt="Luxury UAE" 
+            sizes="100vw"
             fill 
             className="object-cover opacity-50"
-            priority
+            loading="eager"
+            fetchPriority="high"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-brand-navy/70 to-white z-10"></div>
         </div>
@@ -149,7 +155,7 @@ export default function UAEDestinationPage() {
 
                   {/* Main Large Image */}
                   <motion.div initial={{ opacity: 0, x: isEven ? 40 : -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: "-100px" }} className="w-full lg:w-7/12 relative h-[400px] rounded-[1.5rem] overflow-hidden shadow-2xl group">
-                    <Image src={emirate.mainImg} alt={emirate.name} fill className="object-cover group-hover:scale-105 transition-transform duration-[1.5s]" />
+                    <Image src={emirate.mainImg} alt={emirate.name} sizes="(max-width: 1024px) 100vw, 58vw" fill className="object-cover group-hover:scale-105 transition-transform duration-[1.5s]" />
                     <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/50 to-transparent"></div>
                     <div className="absolute bottom-6 left-8 text-white font-bold font-en text-2xl flex items-center gap-3">
                       <MapPin className="text-brand-gold w-6 h-6" /> Explore {emirate.name}
@@ -162,12 +168,12 @@ export default function UAEDestinationPage() {
                   {emirate.places.map((place, pIdx) => (
                     <motion.div key={pIdx} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: pIdx * 0.1 }} className="group cursor-pointer">
                       <div className="relative h-64 w-full rounded-2xl overflow-hidden shadow-md mb-6 border border-slate-100">
-                        <Image src={place.img} alt={place.name} fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
+                        <Image src={place.img} alt={place.name} sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
                         <div className="absolute inset-0 bg-brand-navy/10 group-hover:bg-brand-navy/30 transition-colors duration-500"></div>
                       </div>
-                      <h4 className="text-2xl font-bold text-brand-teal font-en mb-3 flex items-center gap-2">
+                      <h3 className="text-2xl font-bold text-brand-teal font-en mb-3 flex items-center gap-2">
                         {place.name} <ChevronRight className="w-5 h-5 text-brand-gold opacity-0 -translate-x-3 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
-                      </h4>
+                      </h3>
                       <p className="text-slate-600 font-en text-sm leading-relaxed">{place.desc}</p>
                     </motion.div>
                   ))}

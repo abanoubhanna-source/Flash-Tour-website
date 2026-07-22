@@ -11,10 +11,10 @@ const stats = [
   { number: "5", label: "Strategic Markets" },
 ];
 
-// TODO: confirm public/images/certifications/iso-9001.png and iata.png are the final official logo files before shipping.
+// TODO: confirm public/images/certifications/iso-9001.png and iata.webp are the final official logo files before shipping.
 const certifications = [
   { name: "ISO 9001:2015", desc: "Quality Management System", logo: "/images/certifications/iso-9001.png" },
-  { name: "IATA Accredited", desc: "International Air Transport Association", logo: "/images/certifications/iata.png" },
+  { name: "IATA Accredited", desc: "International Air Transport Association", logo: "/images/certifications/iata.webp" },
 ];
 
 export default function StatsAndCerts() {
@@ -76,7 +76,7 @@ export default function StatsAndCerts() {
                 >
                   <div className="w-16 h-16 shrink-0 bg-white rounded-xl p-2 flex items-center justify-center">
                     <div className="relative w-full h-full">
-                      <Image src={cert.logo} alt={`${cert.name} certification logo`} fill className="object-contain" />
+                      <Image src={cert.logo} alt={`${cert.name} certification logo`} fill sizes="64px" className="object-contain" />
                     </div>
                   </div>
                   <div>

@@ -25,8 +25,8 @@ export default function Navbar() {
       <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
         <div className="flex justify-between items-center h-24">
           
-          <Link href="/" className="flex-shrink-0 relative w-56 h-14 cursor-pointer">
-            <Image src="/images/logo.png" alt="Flash Group" fill className="object-contain object-left" priority />
+          <Link href="/" aria-label="Flash Group — Home" className="flex-shrink-0 relative w-56 h-14 cursor-pointer">
+            <Image src="/images/logo.png" alt="Flash Group" fill sizes="224px" className="object-contain object-left" loading="eager" fetchPriority="high" />
           </Link>
 
           <div className="hidden md:flex items-center space-x-10">
@@ -67,8 +67,14 @@ export default function Navbar() {
           </div>
 
           <div className="md:hidden flex items-center">
-            <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-slate-900">
-              {isMobileMenuOpen ? <X className="w-8 h-8" /> : <Menu className="w-8 h-8" />}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-nav-menu"
+              className="text-slate-900"
+            >
+              {isMobileMenuOpen ? <X className="w-8 h-8" aria-hidden="true" /> : <Menu className="w-8 h-8" aria-hidden="true" />}
             </button>
           </div>
         </div>
@@ -76,7 +82,7 @@ export default function Navbar() {
 
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="md:hidden bg-white border-b border-slate-100 px-6 py-6 flex flex-col space-y-4">
+          <motion.div id="mobile-nav-menu" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="md:hidden bg-white border-b border-slate-100 px-6 py-6 flex flex-col space-y-4">
             <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="text-slate-800 font-medium">Home</Link>
             <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className="text-slate-800 font-medium">The Group</Link>
             {/* تم إضافة Hospitality وتعديل المسميات لتطابق نسخة الديسكتوب */}

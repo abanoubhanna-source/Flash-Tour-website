@@ -1,11 +1,13 @@
 // src/app/hospitality/nile-cruises/page.tsx
 'use client';
 
+import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import Footer from "@/components/Footer";
 import { ArrowUpRight, Anchor, Ship, Waves, CheckCircle2 } from 'lucide-react';
+import { trackCruiseView } from '@/lib/analytics';
 
 const fleet = [
   { 
@@ -59,6 +61,8 @@ const fleet = [
 ];
 
 export default function NileCruisesPage() {
+  useEffect(() => { trackCruiseView('Nile Cruises'); }, []);
+
   return (
     <main className="flex min-h-screen flex-col items-center w-full bg-white overflow-hidden">
       
@@ -68,9 +72,11 @@ export default function NileCruisesPage() {
           <Image 
             src="/images/cruise-1.jpg" 
             alt="The Royal Nile Fleet" 
+            sizes="100vw"
             fill 
             className="object-cover opacity-50"
-            priority
+            loading="eager"
+            fetchPriority="high"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-brand-navy/70 to-white z-10"></div>
         </div>
@@ -169,6 +175,7 @@ export default function NileCruisesPage() {
                     <Image 
                       src={ship.img} 
                       alt={ship.name} 
+                      sizes="(max-width: 1024px) 100vw, 58vw"
                       fill 
                       className="object-cover group-hover:scale-105 transition-transform duration-[2s] ease-out" 
                     />

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 
@@ -14,6 +15,11 @@ export const metadata: Metadata = {
     "An Egyptian International company offering full-fledged services in tourism and hospitality.",
 };
 
+// GA4 measurement ID is public by design; only ever loaded in production
+// builds, and only when the env var is actually configured.
+const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+const shouldLoadAnalytics = process.env.NODE_ENV === "production" && !!gaMeasurementId;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -25,6 +31,7 @@ export default function RootLayout({
         <Navbar />
         {children}
       </body>
+      {shouldLoadAnalytics && <GoogleAnalytics gaId={gaMeasurementId} />}
     </html>
   );
 }

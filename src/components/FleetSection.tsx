@@ -82,10 +82,11 @@ export default function FleetSection() {
             className="relative h-[500px] w-full"
           >
             <div className="absolute inset-0 bg-gradient-to-tr from-brand-teal/20 to-transparent rounded-[1.5rem] border border-white/10 overflow-hidden">
-              <Image 
-                src={fleetData.fleet_image} 
-                alt="Flash Group VIP Fleet" 
-                fill 
+              <Image
+                src={fleetData.fleet_image}
+                alt="Flash Group VIP Fleet"
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover opacity-90 mix-blend-luminosity hover:mix-blend-normal transition-all duration-700"
               />
               <div className="absolute bottom-8 -left-6 bg-white p-6 rounded-3xl shadow-2xl flex items-center gap-4">

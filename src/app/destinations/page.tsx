@@ -60,7 +60,8 @@ const fallbackDestinations = [
     subtitle: "The Gateway to Africa",
     description: "Immerse yourself in the vibrant colors and rich traditions of Morocco. From the bustling souks of Marrakech to the serene Atlas Mountains, our operations deliver an authentic and luxurious North African experience.",
     highlights: ["Luxury Riads in Marrakech", "Atlas Mountains Excursions", "Sahara Desert Glamping", "Premium Airport Transfers"],
-    image: "/images/morocco-bg.jpg",
+    // TODO: no Morocco destination photograph exists in public/images yet — add one and set this field once available.
+    image: "",
     icon: "Compass"
   }
 ];
@@ -76,7 +77,7 @@ export default function DestinationsPage() {
           setDestinations(data);
         }
       })
-      .catch(err => console.log("Failed to fetch destinations, using fallback data."));
+      .catch(() => console.log("Failed to fetch destinations, using fallback data."));
   }, []);
 
   return (
@@ -85,10 +86,11 @@ export default function DestinationsPage() {
       {/* 1. Hero Section */}
       <section className="relative w-full h-[60vh] flex items-center justify-center bg-slate-900">
         <div className="absolute inset-0 z-0">
-          <Image 
-            src="/images/world-map-clean.png" 
-            alt="Global Destinations" 
-            fill 
+          <Image
+            src="/images/map.png"
+            alt="Global Destinations"
+            fill
+            sizes="100vw"
             className="object-cover opacity-20"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-slate-900"></div>
@@ -122,12 +124,18 @@ export default function DestinationsPage() {
               
               <div className="absolute inset-0 z-0 overflow-hidden">
                 <div className="absolute inset-0 transform group-hover:scale-105 transition-transform duration-[2s] ease-out">
-                  <Image 
-                    src={dest.image || "/images/world-map-clean.png"} 
-                    alt={dest.name} 
-                    fill 
-                    className="object-cover"
-                  />
+                  {dest.image ? (
+                    <Image
+                      src={dest.image}
+                      alt={dest.name}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      className="object-cover"
+                    />
+                  ) : (
+                    // TODO: no photograph asset exists for this destination yet — replace with a real photo once available.
+                    <div className="absolute inset-0 bg-brand-navy-deep" />
+                  )}
                 </div>
                 <div className={`absolute inset-0 bg-gradient-to-r ${isEven ? 'from-brand-navy-deep/95 via-brand-navy-deep/80 to-transparent' : 'from-transparent via-brand-navy-deep/80 to-brand-navy-deep/95'}`}></div>
               </div>
