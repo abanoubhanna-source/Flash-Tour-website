@@ -2,7 +2,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Award, Shield, CheckCircle2, Globe2 } from 'lucide-react';
+import Image from 'next/image';
 
 const stats = [
   { number: "40+", label: "Years of Excellence" },
@@ -11,11 +11,10 @@ const stats = [
   { number: "5", label: "Strategic Markets" },
 ];
 
+// TODO: confirm public/images/certifications/iso-9001.png and iata.png are the final official logo files before shipping.
 const certifications = [
-  { name: "ISO 9001:2015", desc: "Quality Management", icon: Award },
-  { name: "IATA Accredited", desc: "Global Travel Standards", icon: Globe2 },
-  { name: "Ministry of Tourism", desc: "Class A License", icon: Shield },
-  { name: "WTTC Safe Travels", desc: "Health & Safety Assured", icon: CheckCircle2 }
+  { name: "ISO 9001:2015", desc: "Quality Management System", logo: "/images/certifications/iso-9001.png" },
+  { name: "IATA Accredited", desc: "International Air Transport Association", logo: "/images/certifications/iata.png" },
 ];
 
 export default function StatsAndCerts() {
@@ -75,8 +74,10 @@ export default function StatsAndCerts() {
                   transition={{ delay: idx * 0.1 }} 
                   className="flex items-start gap-4 bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors"
                 >
-                  <div className="p-3 bg-white/10 rounded-xl">
-                    <cert.icon className="w-6 h-6 text-brand-gold" />
+                  <div className="w-16 h-16 shrink-0 bg-white rounded-xl p-2 flex items-center justify-center">
+                    <div className="relative w-full h-full">
+                      <Image src={cert.logo} alt={`${cert.name} certification logo`} fill className="object-contain" />
+                    </div>
                   </div>
                   <div>
                     <h4 className="font-bold text-white font-en mb-1">{cert.name}</h4>
