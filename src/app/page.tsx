@@ -6,12 +6,27 @@ import HospitalityBrands from "@/components/HospitalityBrands";
 import B2BSolutions from "@/components/B2BSolutions";
 import FleetSection from "@/components/FleetSection";
 import Footer from "@/components/Footer";
+import type { Metadata } from "next";
+import { getPublishedPageContent } from "@/lib/cms/pages/public";
 
-export default function Home() {
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPublishedPageContent("/");
+  return {
+    title: content?.seo?.title || "Flash Group | Crafting Hospitality Since 1985",
+    description:
+      content?.seo?.description ||
+      "An Egyptian International company offering full-fledged services in tourism and hospitality.",
+    alternates: content?.seo?.canonicalPath ? { canonical: content.seo.canonicalPath } : undefined,
+    openGraph: content?.seo?.ogImage ? { images: [content.seo.ogImage] } : undefined,
+  };
+}
+
+export default async function Home() {
+  const content = await getPublishedPageContent("/");
   return (
     <main className="flex min-h-screen flex-col items-center justify-between w-full overflow-hidden bg-white">
       {/* 1. Hero */}
-      <HeroSection />
+      <HeroSection content={content?.hero} />
 
       {/* 3. Scale + Certifications */}
       <StatsAndCerts />

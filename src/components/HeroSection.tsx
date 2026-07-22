@@ -6,6 +6,7 @@ import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-mo
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import type { PageHeroData } from '@/lib/cms/pages/schema';
 
 const showcases = [
   {
@@ -15,6 +16,7 @@ const showcases = [
     title: 'Crafting Hospitality Since 1985',
     desc: 'An Egyptian-born tourism and hospitality group owning Nile cruises, resorts, restaurants, yachts, and premium mobility assets across strategic destinations.',
     bg: '/images/egypt-bg.jpg',
+    alt: 'FLASH GROUP',
   },
   {
     id: 'cruises',
@@ -23,6 +25,7 @@ const showcases = [
     title: 'Luxury Journeys on the Nile',
     desc: 'A curated fleet of Nile vessels delivering controlled quality, seamless logistics, and unforgettable river experiences for global partners.',
     bg: '/images/hospitality-cruise.jpg',
+    alt: 'Luxury Nile cruise',
   },
   {
     id: 'hospitality',
@@ -31,6 +34,7 @@ const showcases = [
     title: 'Assets That Shape the Experience',
     desc: 'From Red Sea sanctuaries and boutique heritage hotels to international resorts and restaurants, Flash Group owns the journey end-to-end.',
     bg: '/images/zanzibar-bg.jpg',
+    alt: 'Flash Group hospitality',
   },
   {
     id: 'mobility',
@@ -39,11 +43,26 @@ const showcases = [
     title: 'Precision on Every Route',
     desc: 'A premium fleet, trained chauffeurs, and operational control built for B2B travel, MICE, VIP transfers, and large-scale movements.',
     bg: '/images/fleet-showcase.jpg',
+    alt: 'Flash Group executive mobility',
   },
 ];
 
-export default function HeroSection() {
-  const [selected, setSelected] = useState(showcases[0]);
+type HeroSectionProps = {
+  content?: PageHeroData;
+};
+
+export default function HeroSection({ content }: HeroSectionProps) {
+  const cmsShowcases = content
+    ? showcases.map((showcase, index) => index === 0 ? {
+        ...showcase,
+        eyebrow: content.eyebrow,
+        title: content.title,
+        desc: content.subtitle,
+        bg: content.image.url || showcase.bg,
+        alt: content.image.alt || showcase.alt,
+      } : showcase)
+    : showcases;
+  const [selected, setSelected] = useState(cmsShowcases[0]);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -70,7 +89,7 @@ export default function HeroSection() {
           style={{ x: bgX, y: bgY }}
           className="absolute inset-0 z-0"
         >
-          <Image src={selected.bg} alt={selected.name} fill loading="eager" fetchPriority="high" sizes="100vw" className="object-cover" />
+          <Image src={selected.bg} alt={selected.alt || selected.name} fill loading="eager" fetchPriority="high" sizes="100vw" className="object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/80 via-brand-navy/35 to-white/5" />
           <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/70 via-transparent to-white/10" />
         </motion.div>
@@ -99,19 +118,19 @@ export default function HeroSection() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/contact" className="group inline-flex items-center justify-center gap-3 bg-brand-navy text-white px-8 py-4 rounded-full text-base font-bold font-en hover:bg-brand-teal transition-all duration-300 shadow-xl">
-                Partner With Flash Group
+              <Link href={content?.primaryCta.href || "/contact"} className="group inline-flex items-center justify-center gap-3 bg-brand-navy text-white px-8 py-4 rounded-full text-base font-bold font-en hover:bg-brand-teal transition-all duration-300 shadow-xl">
+                {content?.primaryCta.label || "Partner With Flash Group"}
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
-              <Link href="/brands" className="inline-flex items-center justify-center gap-3 bg-white/15 text-white border border-white/25 px-8 py-4 rounded-full text-base font-bold font-en hover:bg-white/25 transition-all duration-300">
-                Explore Portfolio
+              <Link href={content?.secondaryCta.href || "/brands"} className="inline-flex items-center justify-center gap-3 bg-white/15 text-white border border-white/25 px-8 py-4 rounded-full text-base font-bold font-en hover:bg-white/25 transition-all duration-300">
+                {content?.secondaryCta.label || "Explore Portfolio"}
               </Link>
             </div>
           </motion.div>
         </AnimatePresence>
 
         <div className="absolute bottom-10 left-0 w-full flex justify-center gap-3 md:gap-5 z-20 px-4 flex-wrap">
-          {showcases.map((item) => (
+          {cmsShowcases.map((item) => (
             <button
               key={item.id}
               onClick={() => setSelected(item)}

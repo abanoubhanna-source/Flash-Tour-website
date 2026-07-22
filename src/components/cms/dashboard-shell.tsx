@@ -61,11 +61,16 @@ function isCurrentRoute(pathname: string, href: string) {
   return href === "/dashboard" ? pathname === href : pathname.startsWith(href);
 }
 
+function getRouteDetails(pathname: string) {
+  if (pathname.startsWith("/dashboard/pages/")) return routeTitles["/dashboard/pages"];
+  return routeTitles[pathname] ?? routeTitles["/dashboard"];
+}
+
 export function DashboardShell({ user, navigation, children }: DashboardShellProps) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
-  const pageDetails = routeTitles[pathname] ?? routeTitles["/dashboard"];
+  const pageDetails = getRouteDetails(pathname);
 
   const sidebar = (
     <div className="flex h-full flex-col">

@@ -1,7 +1,7 @@
 begin;
 
 create extension if not exists pgtap with schema extensions;
-select plan(25);
+select plan(37);
 
 select is((select count(*)::integer from public.roles), 4, 'four system roles are seeded');
 select is((select count(*)::integer from public.permissions), 22, 'the permission catalog is seeded');
@@ -60,6 +60,20 @@ select throws_ok(
   'permission denied for table content_entries',
   'anonymous visitors cannot read the draft table'
 );
+select is(
+  (select count(*)::integer from public.published_pages where path = '/'),
+  1,
+  'the seeded home page is publicly visible'
+);
+select is(
+  (
+    select data ->> 'title'
+    from public.published_page_sections
+    where page_id = '31000000-0000-0000-0000-000000000001' and key = 'hero'
+  ),
+  'Crafting Hospitality Since 1985',
+  'the seeded public hero matches the frozen website copy'
+);
 
 reset role;
 set local role authenticated;
@@ -97,6 +111,54 @@ select lives_ok(
   $$ insert into public.content_entries (content_type, slug, title, created_by) values ('service', 'editor-draft', 'Allowed', '10000000-0000-0000-0000-000000000002') $$,
   'editor can create a draft'
 );
+select lives_ok(
+  $$
+    select public.cms_create_page(
+      'Test Page',
+      '/test-page',
+      'test_page',
+      'en',
+      '{"title":"Test Page","subtitle":"Draft","eyebrow":"","primaryCta":{"label":"","href":""},"secondaryCta":{"label":"","href":""},"image":{"assetId":null,"url":"/images/egypt-bg.jpg","alt":""}}',
+      '{"title":"Test Page","description":"Draft","canonicalPath":"/test-page","ogImage":""}'
+    )
+  $$,
+  'editor can create a complete page draft'
+);
+select is(
+  (select enabled from public.pages where key = 'test_page'),
+  false,
+  'new CMS pages start as drafts'
+);
+select lives_ok(
+  $$
+    select public.cms_save_page_draft(
+      (select id from public.pages where key = 'test_page'),
+      1,
+      '{"title":"Updated Draft","subtitle":"Draft","eyebrow":"","primaryCta":{"label":"","href":""},"secondaryCta":{"label":"","href":""},"image":{"assetId":null,"url":"/images/egypt-bg.jpg","alt":""}}',
+      '{"title":"Updated Draft","description":"Draft","canonicalPath":"/test-page","ogImage":""}',
+      true
+    )
+  $$,
+  'editor can autosave page and SEO drafts atomically'
+);
+select is(
+  (select draft_data ->> 'title' from public.page_sections where page_id = (select id from public.pages where key = 'test_page') and key = 'hero'),
+  'Updated Draft',
+  'autosave updates only the page draft'
+);
+select throws_ok(
+  $$
+    select public.cms_publish_page(
+      (select id from public.pages where key = 'test_page'),
+      2,
+      (select draft_data from public.page_sections where page_id = (select id from public.pages where key = 'test_page') and key = 'hero'),
+      (select draft_data from public.seo_entries where page_id = (select id from public.pages where key = 'test_page'))
+    )
+  $$,
+  '42501',
+  'Publishing requires an authorized MFA session.',
+  'editor cannot publish a page'
+);
 select throws_ok(
   $$ update public.content_entries set published_data = '{"description":"unauthorized"}' where id = '20000000-0000-0000-0000-000000000001' $$,
   '42501',
@@ -127,6 +189,55 @@ select ok(public.current_user_has_permission('users.manage'), 'AAL2 administrato
 select lives_ok(
   $$ update public.content_entries set published_data = '{"description":"authorized update"}' where id = '20000000-0000-0000-0000-000000000001' $$,
   'AAL2 administrator can update published content'
+);
+select lives_ok(
+  $$
+    select public.cms_publish_page(
+      (select id from public.pages where key = 'test_page'),
+      2,
+      (select draft_data from public.page_sections where page_id = (select id from public.pages where key = 'test_page') and key = 'hero'),
+      (select draft_data from public.seo_entries where page_id = (select id from public.pages where key = 'test_page'))
+    )
+  $$,
+  'AAL2 administrator can publish a page draft'
+);
+select is(
+  (
+    select data ->> 'title'
+    from public.published_page_sections
+    where page_id = (select id from public.pages where key = 'test_page') and key = 'hero'
+  ),
+  'Updated Draft',
+  'publishing copies the draft into the public projection'
+);
+select is(
+  (
+    select count(*)::integer
+    from public.content_revisions
+    where resource_type = 'page' and resource_id = (select id from public.pages where key = 'test_page')
+  ),
+  3,
+  'create, manual save, and publish produce basic version history'
+);
+select lives_ok(
+  $$
+    select public.cms_restore_page_revision(
+      (select id from public.pages where key = 'test_page'),
+      (
+        select id from public.content_revisions
+        where resource_type = 'page'
+          and resource_id = (select id from public.pages where key = 'test_page')
+          and version = 1
+      ),
+      3
+    )
+  $$,
+  'an authorized editor can restore a previous page version to draft'
+);
+select is(
+  (select draft_data ->> 'title' from public.page_sections where page_id = (select id from public.pages where key = 'test_page') and key = 'hero'),
+  'Test Page',
+  'restoring history changes the draft without republishing'
 );
 select is(
   (select lock_version from public.content_entries where id = '20000000-0000-0000-0000-000000000001'),

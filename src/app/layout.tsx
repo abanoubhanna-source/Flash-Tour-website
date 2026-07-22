@@ -10,6 +10,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   title: "Flash Group | Crafting Hospitality Since 1985",
   description:
     "An Egyptian International company offering full-fledged services in tourism and hospitality.",

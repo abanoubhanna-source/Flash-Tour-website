@@ -16,13 +16,22 @@ import type { NextConfig } from "next";
 //   mode uses eval() for its debugging/HMR tooling, but never in production,
 //   so the real production policy stays without it.
 const isDev = process.env.NODE_ENV !== "production";
+const supabaseOrigin = (() => {
+  try {
+    return process.env.NEXT_PUBLIC_SUPABASE_URL
+      ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).origin
+      : null;
+  } catch {
+    return null;
+  }
+})();
 const cspDirectives = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://www.googletagmanager.com`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com",
+  `img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com${supabaseOrigin ? ` ${supabaseOrigin}` : ""}`,
   "font-src 'self' data:",
-  "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://region1.google-analytics.com",
+  `connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://region1.google-analytics.com${supabaseOrigin ? ` ${supabaseOrigin}` : ""}`,
   "frame-ancestors 'none'",
   "object-src 'none'",
   "base-uri 'self'",
@@ -30,6 +39,18 @@ const cspDirectives = [
 ];
 
 const nextConfig: NextConfig = {
+  images: supabaseOrigin
+    ? {
+        remotePatterns: [
+          {
+            protocol: new URL(supabaseOrigin).protocol.replace(":", "") as "http" | "https",
+            hostname: new URL(supabaseOrigin).hostname,
+            port: new URL(supabaseOrigin).port,
+            pathname: "/storage/v1/object/public/site-media/**",
+          },
+        ],
+      }
+    : undefined,
   async headers() {
     return [
       {
