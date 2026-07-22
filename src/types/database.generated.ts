@@ -1119,6 +1119,7 @@ export type Database = {
       };
     };
     Functions: {
+      current_cms_context: { Args: never; Returns: Json };
       current_user_can_assign_role: {
         Args: { target_role_id: string };
         Returns: boolean;

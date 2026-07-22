@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 // تم تحديث المسميات والروابط لتوجيه المستخدم للصفحات الفرعية الصحيحة
 const operations = [
@@ -17,8 +18,21 @@ const operations = [
 ];
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isOperationsHovered, setIsOperationsHovered] = useState(false);
+
+  const isCmsRoute =
+    pathname.startsWith('/dashboard') ||
+    pathname === '/login' ||
+    pathname.startsWith('/login/') ||
+    pathname === '/forgot-password' ||
+    pathname === '/reset-password' ||
+    pathname.startsWith('/auth/');
+
+  if (isCmsRoute) {
+    return null;
+  }
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-sm border-b border-slate-100 shadow-sm">

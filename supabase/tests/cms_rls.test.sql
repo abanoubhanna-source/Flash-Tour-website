@@ -1,7 +1,7 @@
 begin;
 
 create extension if not exists pgtap with schema extensions;
-select plan(22);
+select plan(25);
 
 select is((select count(*)::integer from public.roles), 4, 'four system roles are seeded');
 select is((select count(*)::integer from public.permissions), 22, 'the permission catalog is seeded');
@@ -70,6 +70,15 @@ select set_config(
 );
 select ok(public.current_user_has_permission('cms.view'), 'viewer can access the CMS');
 select ok(not public.current_user_has_permission('content.edit'), 'viewer cannot edit content');
+select is(
+  public.current_cms_context() ->> 'display_name',
+  'Viewer',
+  'CMS context returns the active profile'
+);
+select ok(
+  public.current_cms_context() -> 'permissions' @> '["cms.view"]'::jsonb,
+  'CMS context returns effective navigation permissions'
+);
 select throws_ok(
   $$ insert into public.content_entries (content_type, slug, title) values ('service', 'viewer-write', 'Denied') $$,
   '42501',
@@ -147,6 +156,17 @@ select throws_ok(
   'The last Super Admin role assignment cannot be removed.',
   'the final Super Admin assignment is protected'
 );
+
+update public.profiles
+set status = 'suspended'
+where id = '10000000-0000-0000-0000-000000000001';
+set local role authenticated;
+select set_config(
+  'request.jwt.claims',
+  '{"sub":"10000000-0000-0000-0000-000000000001","role":"authenticated","aal":"aal1"}',
+  true
+);
+select is(public.current_cms_context(), null::jsonb, 'suspended users receive no CMS context');
 
 select * from finish();
 rollback;

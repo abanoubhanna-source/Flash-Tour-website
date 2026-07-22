@@ -1,201 +1,136 @@
-// src/app/dashboard/page.tsx
-'use client';
+import type { Metadata } from "next";
+import Link from "next/link";
+import {
+  ArrowUpRight,
+  Building2,
+  CheckCircle2,
+  FileText,
+  Globe2,
+  Images,
+  SearchCheck,
+  Settings,
+  ShieldCheck,
+  Ship,
+  Sparkles,
+  Users,
+} from "lucide-react";
+import { requireCmsUser } from "@/lib/auth/session";
+import { getNavigationForUser } from "@/lib/auth/navigation";
 
-import { motion } from 'framer-motion';
-import { 
-  Users, MousePointerClick, Clock, BarChart3, 
-  TrendingUp, Globe2, Building, Briefcase 
-} from 'lucide-react';
+export const metadata: Metadata = { title: "Dashboard" };
 
-export default function DashboardOverview() {
-  
-  // أنيميشن لدخول الكروت
-  const container = {
-    hidden: { opacity: 0 },
-    show: { opacity: 1, transition: { staggerChildren: 0.1 } }
-  };
-  const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
-  };
+const modules = [
+  { label: "Pages", href: "/dashboard/pages", icon: FileText, color: "bg-blue-50 text-blue-700" },
+  { label: "Services", href: "/dashboard/services", icon: Sparkles, color: "bg-violet-50 text-violet-700" },
+  { label: "Destinations", href: "/dashboard/destinations", icon: Globe2, color: "bg-teal-50 text-teal-700" },
+  { label: "Hospitality", href: "/dashboard/hospitality", icon: Building2, color: "bg-amber-50 text-amber-700" },
+  { label: "Cruises", href: "/dashboard/cruises", icon: Ship, color: "bg-cyan-50 text-cyan-700" },
+  { label: "Brands", href: "/dashboard/brands", icon: Building2, color: "bg-rose-50 text-rose-700" },
+  { label: "Media Library", href: "/dashboard/media", icon: Images, color: "bg-emerald-50 text-emerald-700" },
+  { label: "SEO", href: "/dashboard/seo", icon: SearchCheck, color: "bg-indigo-50 text-indigo-700" },
+  { label: "Settings", href: "/dashboard/settings", icon: Settings, color: "bg-slate-100 text-slate-700" },
+];
+
+export default async function DashboardPage() {
+  const user = await requireCmsUser();
+  const allowedLinks = new Set(getNavigationForUser(user).flatMap((group) => group.items.map((item) => item.href)));
+  const visibleModules = modules.filter((module) => allowedLinks.has(module.href));
 
   return (
-    <motion.div variants={container} initial="hidden" animate="show" className="space-y-8">
-      
-      {/* 1. Top Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        
-        {/* Visitors Card */}
-        <motion.div variants={item} className="bg-white p-6 rounded-3xl shadow-[0_2px_20px_rgba(0,0,0,0.04)] border border-slate-100 relative overflow-hidden group">
-          <div className="absolute -right-10 -top-10 w-32 h-32 bg-[#157670]/5 rounded-full group-hover:scale-150 transition-transform duration-700"></div>
-          <div className="relative z-10">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-slate-50 text-slate-400 rounded-full flex items-center justify-center">
-                <Users className="w-5 h-5" />
-              </div>
+    <div className="space-y-6 sm:space-y-8">
+      <section className="relative overflow-hidden rounded-[2rem] bg-[#0f172a] px-6 py-8 text-white shadow-xl shadow-slate-900/8 sm:px-9 sm:py-10">
+        <div className="absolute inset-0 opacity-[0.06] [background-image:radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px]" />
+        <div className="absolute -right-20 -top-28 h-72 w-72 rounded-full bg-[#157670]/30 blur-3xl" />
+        <div className="relative grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
+          <div>
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-[#65c3bb]">
+              <ShieldCheck className="h-3.5 w-3.5" /> Secure CMS Workspace
             </div>
-            <h3 className="text-slate-500 font-bold text-xs uppercase tracking-widest mb-2">Total Visitors</h3>
-            <div className="flex items-end gap-3">
-              <span className="text-3xl font-black text-[#0F162A]">24,592</span>
-              <span className="text-emerald-600 text-xs font-black flex items-center mb-1.5">
-                <TrendingUp className="w-3 h-3 mr-1" /> +12%
-              </span>
-            </div>
+            <h2 className="max-w-3xl text-3xl font-semibold tracking-[-0.035em] sm:text-4xl">
+              Welcome back, {user.displayName.split(" ")[0]}.
+            </h2>
+            <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">
+              The dashboard foundation is ready. Content modules are visible according to your role;
+              editing and publishing controls will be activated incrementally in later phases.
+            </p>
           </div>
-        </motion.div>
-
-        {/* Page Views Card */}
-        <motion.div variants={item} className="bg-white p-6 rounded-3xl shadow-[0_2px_20px_rgba(0,0,0,0.04)] border border-slate-100 relative overflow-hidden group">
-          <div className="absolute -right-10 -top-10 w-32 h-32 bg-[#F1B820]/5 rounded-full group-hover:scale-150 transition-transform duration-700"></div>
-          <div className="relative z-10">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-slate-50 text-slate-400 rounded-full flex items-center justify-center">
-                <MousePointerClick className="w-5 h-5" />
-              </div>
+          <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.06] p-4 backdrop-blur-sm">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#157670] text-sm font-black">
+              {user.initials}
             </div>
-            <h3 className="text-slate-500 font-bold text-xs uppercase tracking-widest mb-2">Page Views</h3>
-            <div className="flex items-end gap-3">
-              <span className="text-3xl font-black text-[#0F162A]">89,201</span>
-              <span className="text-emerald-600 text-xs font-black flex items-center mb-1.5">
-                <TrendingUp className="w-3 h-3 mr-1" /> +8%
-              </span>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Session Card */}
-        <motion.div variants={item} className="bg-white p-6 rounded-3xl shadow-[0_2px_20px_rgba(0,0,0,0.04)] border border-slate-100 relative overflow-hidden group">
-          <div className="absolute -right-10 -top-10 w-32 h-32 bg-blue-50 rounded-full group-hover:scale-150 transition-transform duration-700"></div>
-          <div className="relative z-10">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-slate-50 text-slate-400 rounded-full flex items-center justify-center">
-                <Clock className="w-5 h-5" />
-              </div>
-            </div>
-            <h3 className="text-slate-500 font-bold text-xs uppercase tracking-widest mb-2">Avg. Session</h3>
-            <div className="flex items-end gap-3">
-              <span className="text-3xl font-black text-[#0F162A]">4m 12s</span>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* System Records Card (Dark) */}
-        <motion.div variants={item} className="bg-[#1c2331] text-white p-6 rounded-3xl shadow-xl relative overflow-hidden group">
-          <div className="absolute inset-0 opacity-20 bg-[url('/images/pattern.png')] bg-repeat mix-blend-overlay"></div>
-          <div className="relative z-10 flex flex-col h-full justify-between">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-white/10 text-[#F1B820] rounded-full flex items-center justify-center backdrop-blur-sm">
-                <BarChart3 className="w-5 h-5" />
-              </div>
-            </div>
-            <h3 className="text-slate-300 font-bold text-xs uppercase tracking-widest mb-4">System Records</h3>
-            
-            <div className="flex items-center justify-between">
-              <div className="text-center">
-                <span className="block text-2xl font-black">4</span>
-                <span className="text-[9px] text-slate-400 uppercase tracking-widest mt-1 flex justify-center gap-1"><Building className="w-3 h-3" /> Brands</span>
-              </div>
-              <div className="w-px h-8 bg-white/10"></div>
-              <div className="text-center">
-                <span className="block text-2xl font-black">4</span>
-                <span className="text-[9px] text-slate-400 uppercase tracking-widest mt-1 flex justify-center gap-1"><Globe2 className="w-3 h-3" /> Dests</span>
-              </div>
-              <div className="w-px h-8 bg-white/10"></div>
-              <div className="text-center">
-                <span className="block text-2xl font-black">13</span>
-                <span className="text-[9px] text-slate-400 uppercase tracking-widest mt-1 flex justify-center gap-1"><Briefcase className="w-3 h-3" /> Servs</span>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      </div>
-
-      {/* 2. Charts & Lists Area */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
-        {/* Traffic By Region */}
-        <motion.div variants={item} className="col-span-2 bg-white p-8 rounded-3xl shadow-[0_2px_20px_rgba(0,0,0,0.04)] border border-slate-100">
-          <h3 className="text-sm font-black text-[#0F162A] uppercase tracking-widest mb-8 flex items-center gap-2">
-            <Globe2 className="w-4 h-4 text-[#157670]" /> Traffic By Region
-          </h3>
-          <div className="space-y-8">
-            {/* Europe */}
             <div>
-              <div className="flex justify-between text-xs font-black text-[#0F162A] mb-3">
-                <span>Europe <span className="text-slate-400 font-medium">(Germany, Italy, UK)</span></span>
-                <span>45%</span>
-              </div>
-              <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
-                <div className="bg-[#157670] h-full rounded-full" style={{ width: '45%' }}></div>
-              </div>
-            </div>
-            {/* Middle East */}
-            <div>
-              <div className="flex justify-between text-xs font-black text-[#0F162A] mb-3">
-                <span>Middle East <span className="text-slate-400 font-medium">(UAE, KSA)</span></span>
-                <span>30%</span>
-              </div>
-              <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
-                <div className="bg-[#F1B820] h-full rounded-full" style={{ width: '30%' }}></div>
-              </div>
-            </div>
-            {/* Asia */}
-            <div>
-              <div className="flex justify-between text-xs font-black text-[#0F162A] mb-3">
-                <span>Asia <span className="text-slate-400 font-medium">(India, China)</span></span>
-                <span>15%</span>
-              </div>
-              <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
-                <div className="bg-blue-500 h-full rounded-full" style={{ width: '15%' }}></div>
-              </div>
-            </div>
-            {/* Others */}
-            <div>
-              <div className="flex justify-between text-xs font-black text-[#0F162A] mb-3">
-                <span>Others</span>
-                <span>10%</span>
-              </div>
-              <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
-                <div className="bg-slate-300 h-full rounded-full" style={{ width: '10%' }}></div>
-              </div>
+              <p className="text-xs text-slate-400">Current access</p>
+              <p className="text-sm font-bold text-white">{user.primaryRole.name}</p>
             </div>
           </div>
-        </motion.div>
+        </div>
+      </section>
 
-        {/* Top Pages */}
-        <motion.div variants={item} className="bg-white p-8 rounded-3xl shadow-[0_2px_20px_rgba(0,0,0,0.04)] border border-slate-100 flex flex-col">
-          <h3 className="text-sm font-black text-[#0F162A] uppercase tracking-widest mb-8 flex items-center gap-2">
-            <MousePointerClick className="w-4 h-4 text-[#F1B820]" /> Top Pages
-          </h3>
-          <div className="space-y-3 flex-1">
-            <div className="flex items-center justify-between p-4 bg-slate-50/50 rounded-2xl border border-slate-100">
-              <div className="flex items-center gap-4">
-                <div className="w-6 h-6 rounded-full bg-[#157670]/10 text-[#157670] flex items-center justify-center font-black text-[10px]">1</div>
-                <span className="font-bold text-[#0F162A] text-xs">/brands</span>
-              </div>
-              <span className="text-xs font-black text-[#157670]">12.4k</span>
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="rounded-[1.5rem] border border-slate-200/80 bg-white p-5 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
+              <CheckCircle2 className="h-5 w-5" />
             </div>
-            <div className="flex items-center justify-between p-4 bg-slate-50/50 rounded-2xl border border-slate-100">
-              <div className="flex items-center gap-4">
-                <div className="w-6 h-6 rounded-full bg-[#F1B820]/10 text-[#F1B820] flex items-center justify-center font-black text-[10px]">2</div>
-                <span className="font-bold text-[#0F162A] text-xs">/destinations</span>
-              </div>
-              <span className="text-xs font-black text-[#157670]">8.2k</span>
-            </div>
-            <div className="flex items-center justify-between p-4 bg-slate-50/50 rounded-2xl border border-slate-100">
-              <div className="flex items-center gap-4">
-                <div className="w-6 h-6 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center font-black text-[10px]">3</div>
-                <span className="font-bold text-[#0F162A] text-xs">/services</span>
-              </div>
-              <span className="text-xs font-black text-[#157670]">5.1k</span>
-            </div>
+            <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-emerald-600">Operational</span>
           </div>
-          <p className="text-[9px] uppercase tracking-[0.2em] text-slate-400 mt-6 text-center font-bold">
-            * Google Analytics Integration Pending
+          <p className="mt-5 text-xs font-semibold text-slate-500">Authentication</p>
+          <p className="mt-1 text-xl font-semibold tracking-tight text-[#0f172a]">Session protected</p>
+        </div>
+        <div className="rounded-[1.5rem] border border-slate-200/80 bg-white p-5 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+              <ShieldCheck className="h-5 w-5" />
+            </div>
+            <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-blue-600">Role based</span>
+          </div>
+          <p className="mt-5 text-xs font-semibold text-slate-500">Permissions</p>
+          <p className="mt-1 text-xl font-semibold tracking-tight text-[#0f172a]">
+            {user.permissions.length} capabilities
           </p>
-        </motion.div>
+        </div>
+        <div className="rounded-[1.5rem] border border-slate-200/80 bg-white p-5 shadow-sm sm:col-span-2 xl:col-span-1">
+          <div className="flex items-center justify-between">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-700">
+              <Users className="h-5 w-5" />
+            </div>
+            <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-amber-700">Active</span>
+          </div>
+          <p className="mt-5 text-xs font-semibold text-slate-500">Assigned roles</p>
+          <p className="mt-1 text-xl font-semibold tracking-tight text-[#0f172a]">
+            {user.roles.map((role) => role.name).join(", ")}
+          </p>
+        </div>
+      </section>
 
-      </div>
-    </motion.div>
+      <section className="rounded-[2rem] border border-slate-200/80 bg-white p-5 shadow-sm sm:p-7">
+        <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#157670]">CMS navigation</p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-[-0.025em] text-[#0f172a]">Website modules</h2>
+          </div>
+          <p className="text-xs text-slate-500">Only modules allowed by your role are shown.</p>
+        </div>
+
+        <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {visibleModules.map((module) => (
+            <Link
+              key={module.href}
+              href={module.href}
+              className="group flex items-center gap-4 rounded-2xl border border-slate-200/80 p-4 transition hover:-translate-y-0.5 hover:border-[#157670]/30 hover:shadow-lg hover:shadow-[#157670]/5"
+            >
+              <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${module.color}`}>
+                <module.icon className="h-5 w-5" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="font-semibold text-[#0f172a]">{module.label}</p>
+                <p className="mt-0.5 text-xs text-slate-500">Module shell ready</p>
+              </div>
+              <ArrowUpRight className="h-4 w-4 text-slate-300 transition group-hover:text-[#157670]" />
+            </Link>
+          ))}
+        </div>
+      </section>
+    </div>
   );
 }
