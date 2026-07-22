@@ -2,7 +2,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Briefcase, Building2, Mail, Phone, MapPin, Send, ShieldCheck, Star } from 'lucide-react';
+import { Briefcase, Building2, Mail, Phone, MapPin, Send, ShieldCheck, UserCheck } from 'lucide-react';
 import Footer from "@/components/Footer";
 
 export default function PartnerPortal() {
@@ -57,7 +57,7 @@ export default function PartnerPortal() {
                     </div>
                   </li>
                   <li className="flex items-start gap-4">
-                    <div className="bg-brand-navy/5 p-3 rounded-xl mt-1"><Star className="w-6 h-6 text-brand-navy" /></div>
+                    <div className="bg-brand-navy/5 p-3 rounded-xl mt-1"><UserCheck className="w-6 h-6 text-brand-navy" /></div>
                     <div>
                       <h4 className="font-bold text-brand-navy font-en text-lg">Dedicated Account Manager</h4>
                       <p className="text-slate-500 text-sm font-en mt-1">A single point of contact available 24/7 to manage your VIP clients and MICE events.</p>

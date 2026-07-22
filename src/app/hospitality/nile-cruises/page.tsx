@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import Footer from "@/components/Footer";
-import { ArrowUpRight, Anchor, Ship, Waves, CheckCircle2, Star } from 'lucide-react';
+import { ArrowUpRight, Anchor, Ship, Waves, CheckCircle2 } from 'lucide-react';
 
 const fleet = [
   { 
@@ -180,7 +180,7 @@ export default function NileCruisesPage() {
                     </div>
 
                     <div className="absolute bottom-8 left-8 text-white font-bold font-en text-xl flex items-center gap-3">
-                      <Star className="text-brand-gold w-6 h-6 fill-brand-gold" /> Discover {ship.name}
+                      Discover {ship.name}
                     </div>
                   </motion.div>
 

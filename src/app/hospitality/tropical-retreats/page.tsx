@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import Footer from "@/components/Footer";
-import { ArrowUpRight, CheckCircle2, Star, Building2, Sun, Trees, Briefcase, Palmtree } from 'lucide-react';
+import { ArrowUpRight, CheckCircle2, Building2, Sun, Trees, Briefcase, Palmtree } from 'lucide-react';
 
 const tropicalData = [
   { 
@@ -168,7 +168,7 @@ export default function TropicalRetreatsPage() {
                     </div>
 
                     <div className="absolute bottom-8 left-8 text-white font-bold font-en text-xl flex items-center gap-3">
-                      <Star className="text-brand-gold w-6 h-6 fill-brand-gold" /> Discover {item.name}
+                      Discover {item.name}
                     </div>
                   </motion.div>
 

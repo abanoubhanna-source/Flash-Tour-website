@@ -3,14 +3,13 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Ship, Building2, Star, Anchor, Palmtree, Building } from 'lucide-react';
+import { MapPin, Ship, Building2, Anchor, Palmtree, Building } from 'lucide-react';
 
 const iconMap: { [key: string]: any } = {
   Anchor: Anchor,
   Palmtree: Palmtree,
   Building: Building,
   Ship: Ship,
-  Star: Star,
   Building2: Building2
 };
 
@@ -49,7 +48,7 @@ export default function HospitalityBrands() {
         {displayBrands.length > 0 && (
           <div className="grid grid-cols-1 lg:grid-cols-3 lg:auto-rows-[210px] gap-8">
             {displayBrands.map((asset, idx) => {
-              const IconComp = iconMap[asset.icon] || Star;
+              const IconComp = iconMap[asset.icon] || Building2;
               const isFeatured = idx === 0;
               return (
                 <motion.div

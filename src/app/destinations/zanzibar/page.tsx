@@ -2,7 +2,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Star, MapPin, ChevronRight, Compass, Trees, Sun } from 'lucide-react';
+import { MapPin, ChevronRight, Compass, Trees, Sun } from 'lucide-react';
 import Image from 'next/image';
 import Footer from "@/components/Footer";
 
@@ -63,7 +63,7 @@ export default function ZanzibarDestinationPage() {
         <div className="relative z-20 text-center px-6 mt-16 max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <span className="text-brand-gold font-bold tracking-[0.25em] uppercase text-xs md:text-sm block mb-6 font-en flex items-center justify-center gap-2">
-              <Star className="w-4 h-4 fill-brand-gold" /> EXOTIC ESCAPES & WILDLIFE <Star className="w-4 h-4 fill-brand-gold" />
+              <span className="h-px w-8 bg-brand-gold/70" /> EXOTIC ESCAPES & WILDLIFE <span className="h-px w-8 bg-brand-gold/70" />
             </span>
             <h1 className="text-6xl md:text-8xl font-bold text-white font-en mb-6 tracking-tight drop-shadow-2xl">
               Exotic <span className="text-brand-gold">ZANZIBAR</span>
