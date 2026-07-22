@@ -1,0 +1,2 @@
+-- Production-critical roles and permissions are seeded in the versioned migration.
+-- Local content and test users will be added by later implementation phases.
