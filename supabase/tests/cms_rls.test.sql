@@ -1,7 +1,7 @@
 begin;
 
 create extension if not exists pgtap with schema extensions;
-select plan(48);
+select plan(59);
 
 select is((select count(*)::integer from public.roles), 4, 'four system roles are seeded');
 select is((select count(*)::integer from public.permissions), 22, 'the permission catalog is seeded');
@@ -46,7 +46,7 @@ insert into public.content_entries (
 set local role anon;
 select is(
   (select count(*)::integer from public.published_content_entries),
-  14,
+  19,
   'anonymous visitors see all and only published entries'
 );
 select is(
@@ -59,6 +59,7 @@ select is(
   13,
   'the existing public services are migrated without omissions'
 );
+select is((select count(*)::integer from public.published_content_entries where content_type='destination'),5,'five JSON destinations are migrated as published content');
 select throws_ok(
   $$ select draft_data from public.content_entries $$,
   '42501',
@@ -213,6 +214,11 @@ select throws_ok(
   'Publishing permission is required to change published content.',
   'editor cannot change published content'
 );
+select lives_ok($$select public.cms_create_destination('Test Destination','test-destination','en','{"name":"Test Destination","slug":"test-destination","subtitle":"Draft","description":"Draft destination","iconKey":"Compass","sortOrder":0,"hero":{"eyebrow":"Test","title":"Test","accentTitle":"Destination","subtitle":"Draft hero","image":{"assetId":null,"url":"/images/egypt-bg.jpg","alt":"Test"}},"country":{"code":"TT","region":"Test","officeLabel":"Test office"},"highlights":[],"gallery":[]}','{"title":"Test Destination","description":"Draft","keywords":["test"],"canonicalUrl":"/destinations/test-destination","openGraph":{"title":"Test","description":"Draft","image":""}}')$$,'editor can create a destination draft');
+select is((select status from public.content_entries where slug='test-destination'),'draft'::public.content_status,'new destinations start as drafts');
+select lives_ok($$select public.cms_save_destination_draft((select id from public.content_entries where slug='test-destination'),1,(select draft_data||'{"description":"Updated destination draft"}'::jsonb from public.content_entries where slug='test-destination'),(select draft_data from public.seo_entries where content_entry_id=(select id from public.content_entries where slug='test-destination')),true)$$,'editor can autosave destination and SEO');
+select is((select draft_data->>'description' from public.content_entries where slug='test-destination'),'Updated destination draft','destination autosave updates draft only');
+select throws_ok($$select public.cms_publish_destination((select id from public.content_entries where slug='test-destination'),2,(select draft_data from public.content_entries where slug='test-destination'),(select draft_data from public.seo_entries where content_entry_id=(select id from public.content_entries where slug='test-destination')))$$,'42501','Publishing requires an authorized MFA session.','editor cannot publish a destination');
 select throws_ok(
   $$ insert into public.content_entries (content_type, slug, title, status, published_data) values ('service', 'editor-published', 'Denied', 'published', '{}') $$,
   '42501',
@@ -264,6 +270,11 @@ select is(
   'Updated draft copy',
   'service publishing exposes the validated draft projection'
 );
+select lives_ok($$select public.cms_publish_destination((select id from public.content_entries where slug='test-destination'),2,(select draft_data from public.content_entries where slug='test-destination'),(select draft_data from public.seo_entries where content_entry_id=(select id from public.content_entries where slug='test-destination')))$$,'AAL2 administrator can publish a destination');
+select is((select data->>'description' from public.published_content_entries where slug='test-destination'),'Updated destination draft','published destination projection exposes validated data');
+select lives_ok($$select public.cms_archive_destination((select id from public.content_entries where slug='test-destination'),3)$$,'authorized editor can soft delete a destination');
+select is((select count(*)::integer from public.published_content_entries where slug='test-destination'),0,'soft-deleted destinations disappear publicly');
+select is((select count(*)::integer from public.content_entries where slug='test-destination' and status='archived'),1,'soft delete preserves the destination record');
 select lives_ok(
   $$
     select public.cms_restore_service_revision(

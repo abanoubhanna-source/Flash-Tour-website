@@ -7,9 +7,11 @@ import { Compass, MapPin, Sun, Building, ArrowRight, Globe2 } from 'lucide-react
 import Image from 'next/image';
 import Link from 'next/link';
 import Footer from "@/components/Footer";
+import { RichText } from "@/components/content/rich-text";
+type PublicDestination={id:string;name:string;subtitle:string;description:string;highlights:string[];image:string;icon:string};
 
 // قاموس الأيقونات
-const iconMap: { [key: string]: any } = {
+const iconMap: Record<string, React.ComponentType<{className?:string}>> = {
   Compass: Compass,
   Building: Building,
   Sun: Sun,
@@ -67,7 +69,7 @@ const fallbackDestinations = [
 ];
 
 export default function DestinationsPage() {
-  const [destinations, setDestinations] = useState<any[]>(fallbackDestinations);
+  const [destinations, setDestinations] = useState<PublicDestination[]>(fallbackDestinations);
 
   useEffect(() => {
     fetch('/api/destinations')
@@ -115,7 +117,7 @@ export default function DestinationsPage() {
 
       {/* 2. Alternating Destinations Sections */}
       <section className="w-full">
-        {destinations.map((dest: any, index: number) => {
+        {destinations.map((dest, index) => {
           const isEven = index % 2 === 0;
           const IconComponent = iconMap[dest.icon] || Globe2; 
 
@@ -158,9 +160,7 @@ export default function DestinationsPage() {
                   <h2 className="text-5xl font-bold text-white font-en mb-2 tracking-tight group-hover:text-slate-100 transition-colors">{dest.name}</h2>
                   <h3 className="text-xl text-brand-teal font-en mb-6 font-semibold">{dest.subtitle}</h3>
                   
-                  <p className="text-lg text-slate-300 font-en leading-relaxed mb-8">
-                    {dest.description}
-                  </p>
+                  <RichText value={dest.description} className="space-y-2 text-lg text-slate-300 font-en leading-relaxed mb-8" />
 
                   <div className="space-y-3 mb-10">
                     <p className="text-white font-bold font-en uppercase tracking-wider text-sm mb-4 border-b border-white/10 pb-2">Flash Infrastructure Highlights</p>

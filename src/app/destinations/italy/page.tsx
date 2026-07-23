@@ -7,6 +7,7 @@ import { MapPin, ChevronRight, Wine, Sun } from 'lucide-react';
 import Image from 'next/image';
 import Footer from "@/components/Footer";
 import { trackDestinationView } from '@/lib/analytics';
+import { usePublishedDestination } from '@/lib/cms/destinations/use-published-destination';
 
 // الداتا الموحدة لإيطاليا
 const italyData = [
@@ -37,6 +38,7 @@ const italyData = [
 ];
 
 export default function ItalyDestinationPage() {
+  const cms = usePublishedDestination('italy');
   useEffect(() => { trackDestinationView('Italy'); }, []);
 
   const scrollToSection = (id: string) => {
@@ -55,8 +57,8 @@ export default function ItalyDestinationPage() {
       <section className="relative w-full h-[85vh] flex flex-col items-center justify-center bg-brand-navy">
         <div className="absolute inset-0 z-0">
           <Image 
-            src="/images/italy-hero.jpg" 
-            alt="Classic Italy" 
+            src={cms?.hero?.image.url || "/images/italy-hero.jpg"}
+            alt={cms?.hero?.image.alt || "Classic Italy"}
             sizes="100vw"
             fill 
             className="object-cover opacity-50"
@@ -69,13 +71,13 @@ export default function ItalyDestinationPage() {
         <div className="relative z-20 text-center px-6 mt-16 max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <span className="text-brand-gold font-bold tracking-[0.25em] uppercase text-xs md:text-sm block mb-6 font-en flex items-center justify-center gap-2">
-              <span className="h-px w-8 bg-brand-gold/70" /> DOLCE FAR NIENTE <span className="h-px w-8 bg-brand-gold/70" />
+              <span className="h-px w-8 bg-brand-gold/70" /> {cms?.hero?.eyebrow || "DOLCE FAR NIENTE"} <span className="h-px w-8 bg-brand-gold/70" />
             </span>
             <h1 className="text-6xl md:text-8xl font-bold text-white font-en mb-6 tracking-tight drop-shadow-2xl">
-              Classic <span className="text-brand-gold">ITALY</span>
+              {cms?.hero?.title || "Classic"} <span className="text-brand-gold">{cms?.hero?.accentTitle || "ITALY"}</span>
             </h1>
             <p className="text-lg md:text-xl text-brand-navy font-en leading-relaxed max-w-2xl mx-auto font-bold bg-white/60 backdrop-blur-md py-3 px-8 rounded-full shadow-lg">
-              With a warm and friendly nature, a Dolce Vita lifestyle, and a passion for fine cuisine. Unparalleled Mediterranean luxury.
+              {cms?.hero?.subtitle || "With a warm and friendly nature, a Dolce Vita lifestyle, and a passion for fine cuisine. Unparalleled Mediterranean luxury."}
             </p>
           </motion.div>
         </div>

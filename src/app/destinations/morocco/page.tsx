@@ -7,6 +7,7 @@ import { MapPin, ChevronRight, Compass, Mountain, Building2 } from 'lucide-react
 import Image from 'next/image';
 import Footer from "@/components/Footer";
 import { trackDestinationView } from '@/lib/analytics';
+import { usePublishedDestination } from '@/lib/cms/destinations/use-published-destination';
 
 // الداتا الموحدة للمغرب (بأسلوب B2B فخم)
 const moroccoData = [
@@ -49,6 +50,7 @@ const moroccoData = [
 ];
 
 export default function MoroccoDestinationPage() {
+  const cms = usePublishedDestination('morocco');
   useEffect(() => { trackDestinationView('Morocco'); }, []);
 
   const scrollToSection = (id: string) => {
@@ -66,28 +68,33 @@ export default function MoroccoDestinationPage() {
       {/* 1. Epic Hero Section */}
       <section className="relative w-full h-[85vh] flex flex-col items-center justify-center bg-brand-navy">
         <div className="absolute inset-0 z-0">
-          <Image 
-            src="/images/morocco-hero.jpg" 
-            alt="Enchanting Morocco" 
-            sizes="100vw"
-            fill 
-            className="object-cover opacity-50"
-            loading="eager"
-            fetchPriority="high"
-          />
+          {cms?.hero?.image.url ? (
+            <Image
+              src={cms.hero.image.url}
+              alt={cms.hero.image.alt || "Enchanting Morocco"}
+              sizes="100vw"
+              fill
+              className="object-cover opacity-50"
+              loading="eager"
+              fetchPriority="high"
+            />
+          ) : (
+            // TODO: no photograph asset exists for Morocco's hero yet — replace with a real photo once available.
+            <div className="absolute inset-0 bg-brand-navy" />
+          )}
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-brand-navy/70 to-white z-10"></div>
         </div>
         
         <div className="relative z-20 text-center px-6 mt-16 max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <span className="text-brand-gold font-bold tracking-[0.25em] uppercase text-xs md:text-sm block mb-6 font-en flex items-center justify-center gap-2">
-              <span className="h-px w-8 bg-brand-gold/70" /> THE GATEWAY TO AFRICA <span className="h-px w-8 bg-brand-gold/70" />
+              <span className="h-px w-8 bg-brand-gold/70" /> {cms?.hero?.eyebrow || "THE GATEWAY TO AFRICA"} <span className="h-px w-8 bg-brand-gold/70" />
             </span>
             <h1 className="text-6xl md:text-8xl font-bold text-white font-en mb-6 tracking-tight drop-shadow-2xl uppercase">
-              Enchanting <br/> <span className="text-brand-gold">Morocco</span>
+              {cms?.hero?.title || "Enchanting"} <br/> <span className="text-brand-gold">{cms?.hero?.accentTitle || "Morocco"}</span>
             </h1>
             <p className="text-lg md:text-xl text-brand-navy font-en leading-relaxed max-w-2xl mx-auto font-bold bg-white/60 backdrop-blur-md py-3 px-8 rounded-full shadow-lg">
-              Immerse yourself in vibrant colors, rich traditions, and unparalleled North African luxury.
+              {cms?.hero?.subtitle || "Immerse yourself in vibrant colors, rich traditions, and unparalleled North African luxury."}
             </p>
           </motion.div>
         </div>

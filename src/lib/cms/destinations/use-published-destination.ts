@@ -1,0 +1,2 @@
+"use client";import{useEffect,useState}from"react";import type{DestinationContentData}from"./schema";
+type PublicDestination={hero?:DestinationContentData["hero"]};export function usePublishedDestination(slug:string){const[data,setData]=useState<PublicDestination|null>(null);useEffect(()=>{const controller=new AbortController();fetch(`/api/destinations?slug=${encodeURIComponent(slug)}`,{signal:controller.signal}).then(r=>r.ok?r.json():null).then(x=>setData(x)).catch(()=>undefined);return()=>controller.abort()},[slug]);return data}

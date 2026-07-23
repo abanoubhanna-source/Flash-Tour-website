@@ -1,25 +1,11 @@
 // src/app/api/destinations/route.ts
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import fallback from '@/data/destinations.json';import{createSupabaseServerClient}from'@/lib/supabase/server';import{parseDestinationContent}from'@/lib/cms/destinations/schema';
 
-const dataFilePath = path.join(process.cwd(), 'src/data/destinations.json');
-
-export async function GET() {
+export async function GET(request:Request) {
   try {
-    const fileData = fs.readFileSync(dataFilePath, 'utf8');
-    return NextResponse.json(JSON.parse(fileData));
-  } catch (error) {
-    return NextResponse.json({ error: 'Failed to read data' }, { status: 500 });
-  }
-}
-
-export async function POST(req: Request) {
-  try {
-    const newData = await req.json();
-    fs.writeFileSync(dataFilePath, JSON.stringify(newData, null, 2), 'utf8');
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    return NextResponse.json({ error: 'Failed to save data' }, { status: 500 });
+    const slug=new URL(request.url).searchParams.get('slug');const s=await createSupabaseServerClient();let query=s.from('published_content_entries').select('slug,title,sort_order,data').eq('content_type','destination').order('sort_order');if(slug)query=query.eq('slug',slug);const{data,error}=await query;if(error||!data?.length){const rows=slug?fallback.filter(x=>x.id===slug):fallback;return NextResponse.json(slug?rows[0]??null:rows)}const rows=data.map(x=>{const c=parseDestinationContent(x.data);return{id:c.slug,name:c.name,subtitle:c.subtitle,description:c.description,highlights:c.highlights.map(h=>h.title),image:c.gallery[0]?.image.url??'',icon:c.iconKey,hero:c.hero,country:c.country,gallery:c.gallery}});return NextResponse.json(slug?rows[0]:rows);
+  } catch {
+    const slug=new URL(request.url).searchParams.get('slug');const rows=slug?fallback.filter(x=>x.id===slug):fallback;return NextResponse.json(slug?rows[0]??null:rows);
   }
 }

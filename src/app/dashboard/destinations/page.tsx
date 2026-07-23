@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { ModulePlaceholder } from "@/components/cms/module-placeholder";
+import { requireCmsUser } from "@/lib/auth/session";import{getCmsDestinations}from"@/lib/cms/destinations/queries";import{DestinationsList}from"@/components/cms/destinations/destinations-list";
 
 export const metadata: Metadata = { title: "Destinations" };
 
-export default function DestinationsModulePage() {
-  return <ModulePlaceholder title="Destinations" description="Destination content editing is not part of the dashboard-shell phase." />;
+export default async function DestinationsModulePage() {
+  const[user,destinations]=await Promise.all([requireCmsUser(),getCmsDestinations()]);return <DestinationsList destinations={destinations} canCreate={user.permissions.includes("content.create")} canEdit={user.permissions.includes("content.edit")} canArchive={user.permissions.includes("content.archive")} canDelete={user.permissions.includes("content.purge")}/>;
 }

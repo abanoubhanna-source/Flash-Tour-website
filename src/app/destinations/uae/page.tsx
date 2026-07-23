@@ -7,6 +7,7 @@ import { MapPin, ChevronRight, Building2, Landmark, Mountain, Waves, Library } f
 import Image from 'next/image';
 import Footer from "@/components/Footer";
 import { trackDestinationView } from '@/lib/analytics';
+import { usePublishedDestination } from '@/lib/cms/destinations/use-published-destination';
 
 // الداتا الأصلية للإمارات
 const uaeData = [
@@ -70,6 +71,7 @@ const uaeData = [
 ];
 
 export default function UAEDestinationPage() {
+  const cms = usePublishedDestination('uae');
   useEffect(() => { trackDestinationView('UAE'); }, []);
 
   const scrollToSection = (id: string) => {
@@ -88,8 +90,8 @@ export default function UAEDestinationPage() {
       <section className="relative w-full h-[85vh] flex flex-col items-center justify-center bg-brand-navy">
         <div className="absolute inset-0 z-0">
           <Image 
-            src="/images/uae-hero.jpg" 
-            alt="Luxury UAE" 
+            src={cms?.hero?.image.url || "/images/uae-hero.jpg"}
+            alt={cms?.hero?.image.alt || "Luxury UAE"}
             sizes="100vw"
             fill 
             className="object-cover opacity-50"
@@ -102,13 +104,13 @@ export default function UAEDestinationPage() {
         <div className="relative z-20 text-center px-6 mt-16 max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <span className="text-brand-gold font-bold tracking-[0.25em] uppercase text-xs md:text-sm block mb-6 font-en flex items-center justify-center gap-2">
-              <span className="h-px w-8 bg-brand-gold/70" /> 5-STAR CORPORATE & LEISURE <span className="h-px w-8 bg-brand-gold/70" />
+              <span className="h-px w-8 bg-brand-gold/70" /> {cms?.hero?.eyebrow || "5-STAR CORPORATE & LEISURE"} <span className="h-px w-8 bg-brand-gold/70" />
             </span>
             <h1 className="text-6xl md:text-8xl font-bold text-white font-en mb-6 tracking-tight drop-shadow-2xl">
-              Luxury <span className="text-brand-gold">UAE</span>
+              {cms?.hero?.title || "Luxury"} <span className="text-brand-gold">{cms?.hero?.accentTitle || "UAE"}</span>
             </h1>
             <p className="text-lg md:text-xl text-brand-navy font-en leading-relaxed max-w-2xl mx-auto font-bold bg-white/60 backdrop-blur-md py-3 px-8 rounded-full shadow-lg">
-              Where luxury comes directly to you. Elevating corporate travel, VIP mobility, and elite leisure across the Emirates.
+              {cms?.hero?.subtitle || "Where luxury comes directly to you. Elevating corporate travel, VIP mobility, and elite leisure across the Emirates."}
             </p>
           </motion.div>
         </div>

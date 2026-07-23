@@ -7,6 +7,7 @@ import { MapPin, ChevronRight, Palmtree, Waves, Fish, Landmark, Ship } from 'luc
 import Image from 'next/image';
 import Footer from "@/components/Footer";
 import { trackDestinationView } from '@/lib/analytics';
+import { usePublishedDestination } from '@/lib/cms/destinations/use-published-destination';
 
 // الداتا الأصلية لمصر مع إضافة الأيقونات المخصصة لكل مدينة
 const egyptData = [
@@ -73,6 +74,7 @@ const egyptData = [
 ];
 
 export default function EgyptComprehensivePage() {
+  const cms = usePublishedDestination('egypt');
   useEffect(() => { trackDestinationView('Egypt'); }, []);
 
   const scrollToSection = (id: string) => {
@@ -91,8 +93,8 @@ export default function EgyptComprehensivePage() {
       <section className="relative w-full h-[85vh] flex flex-col items-center justify-center bg-brand-navy">
         <div className="absolute inset-0 z-0">
           <Image 
-            src="/images/egypt-hospitality-bg.jpg" 
-            alt="Mystical Egypt" 
+            src={cms?.hero?.image.url || "/images/egypt-hospitality-bg.jpg"}
+            alt={cms?.hero?.image.alt || "Mystical Egypt"}
             sizes="100vw"
             fill 
             className="object-cover opacity-50"
@@ -105,13 +107,13 @@ export default function EgyptComprehensivePage() {
         <div className="relative z-20 text-center px-6 mt-16 max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <span className="text-brand-gold font-bold tracking-[0.25em] uppercase text-xs md:text-sm block mb-6 font-en flex items-center justify-center gap-2">
-              <span className="h-px w-8 bg-brand-gold/70" /> THE HEART OF THE EMPIRE <span className="h-px w-8 bg-brand-gold/70" />
+              <span className="h-px w-8 bg-brand-gold/70" /> {cms?.hero?.eyebrow || "THE HEART OF THE EMPIRE"} <span className="h-px w-8 bg-brand-gold/70" />
             </span>
             <h1 className="text-6xl md:text-8xl font-bold text-white font-en mb-6 tracking-tight drop-shadow-2xl">
-              Mystical <span className="text-brand-gold">EGYPT</span>
+              {cms?.hero?.title || "Mystical"} <span className="text-brand-gold">{cms?.hero?.accentTitle || "EGYPT"}</span>
             </h1>
             <p className="text-lg md:text-xl text-brand-navy font-en leading-relaxed max-w-2xl mx-auto font-bold bg-white/60 backdrop-blur-md py-3 px-8 rounded-full shadow-lg">
-              We do not just organize your journey; we own every aspect of it. Unparalleled destinations crafted for the elite.
+              {cms?.hero?.subtitle || "We do not just organize your journey; we own every aspect of it. Unparalleled destinations crafted for the elite."}
             </p>
           </motion.div>
         </div>

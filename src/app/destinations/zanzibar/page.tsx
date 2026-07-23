@@ -7,6 +7,7 @@ import { MapPin, ChevronRight, Trees, Sun } from 'lucide-react';
 import Image from 'next/image';
 import Footer from "@/components/Footer";
 import { trackDestinationView } from '@/lib/analytics';
+import { usePublishedDestination } from '@/lib/cms/destinations/use-published-destination';
 
 // الداتا الموحدة لزنجبار والسفاري
 const zanzibarData = [
@@ -37,6 +38,7 @@ const zanzibarData = [
 ];
 
 export default function ZanzibarDestinationPage() {
+  const cms = usePublishedDestination('zanzibar');
   useEffect(() => { trackDestinationView('Zanzibar'); }, []);
 
   const scrollToSection = (id: string) => {
@@ -55,8 +57,8 @@ export default function ZanzibarDestinationPage() {
       <section className="relative w-full h-[85vh] flex flex-col items-center justify-center bg-brand-navy">
         <div className="absolute inset-0 z-0">
           <Image 
-            src="/images/zanzibar-hero.jpg" 
-            alt="Exotic Zanzibar & Safari" 
+            src={cms?.hero?.image.url || "/images/zanzibar-hero.jpg"}
+            alt={cms?.hero?.image.alt || "Exotic Zanzibar & Safari"}
             sizes="100vw"
             fill 
             className="object-cover opacity-50"
@@ -69,13 +71,13 @@ export default function ZanzibarDestinationPage() {
         <div className="relative z-20 text-center px-6 mt-16 max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <span className="text-brand-gold font-bold tracking-[0.25em] uppercase text-xs md:text-sm block mb-6 font-en flex items-center justify-center gap-2">
-              <span className="h-px w-8 bg-brand-gold/70" /> EXOTIC ESCAPES & WILDLIFE <span className="h-px w-8 bg-brand-gold/70" />
+              <span className="h-px w-8 bg-brand-gold/70" /> {cms?.hero?.eyebrow || "EXOTIC ESCAPES & WILDLIFE"} <span className="h-px w-8 bg-brand-gold/70" />
             </span>
             <h1 className="text-6xl md:text-8xl font-bold text-white font-en mb-6 tracking-tight drop-shadow-2xl">
-              Exotic <span className="text-brand-gold">ZANZIBAR</span>
+              {cms?.hero?.title || "Exotic"} <span className="text-brand-gold">{cms?.hero?.accentTitle || "ZANZIBAR"}</span>
             </h1>
             <p className="text-lg md:text-xl text-brand-navy font-en leading-relaxed max-w-2xl mx-auto font-bold bg-white/60 backdrop-blur-md py-3 px-8 rounded-full shadow-lg">
-              Africa, the land of the wildlife. Enjoy the best of both worlds with pristine beaches and unforgettable Savanna Safaris.
+              {cms?.hero?.subtitle || "Africa, the land of the wildlife. Enjoy the best of both worlds with pristine beaches and unforgettable Savanna Safaris."}
             </p>
           </motion.div>
         </div>
