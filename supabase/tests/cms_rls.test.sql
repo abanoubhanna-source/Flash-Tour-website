@@ -1,7 +1,7 @@
 begin;
 
 create extension if not exists pgtap with schema extensions;
-select plan(59);
+select plan(62);
 
 select is((select count(*)::integer from public.roles), 4, 'four system roles are seeded');
 select is((select count(*)::integer from public.permissions), 22, 'the permission catalog is seeded');
@@ -41,6 +41,16 @@ insert into public.content_entries (
   '{"description":"draft only"}',
   null,
   null
+);
+
+select is(
+  (
+    select count(*)::integer from public.content_entries
+    where content_type = 'service'
+      and id::text ~ '^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
+  ),
+  13,
+  'the pre-seeded services use RFC-4122-valid ids (correct version/variant nibbles), as required by z.uuid() in actions.ts'
 );
 
 set local role anon;
@@ -147,6 +157,22 @@ select is(
   (select draft_data ->> 'description' from public.content_entries where slug = 'cms-test-service'),
   'Updated draft copy',
   'service autosave changes only the draft content'
+);
+select lives_ok(
+  $$
+    select public.cms_save_service_draft(
+      (select id from public.content_entries where slug = 'airport-services'), 1,
+      (select draft_data || '{"description":"Updated airport services copy."}'::jsonb from public.content_entries where slug = 'airport-services'),
+      (select draft_data from public.seo_entries where content_entry_id = (select id from public.content_entries where slug = 'airport-services')),
+      false
+    )
+  $$,
+  'editor can autosave a pre-seeded, JSON-migrated service (regression: seed ids must be valid RFC-4122 UUIDs, not just freshly-created ones)'
+);
+select is(
+  (select draft_data ->> 'description' from public.content_entries where slug = 'airport-services'),
+  'Updated airport services copy.',
+  'autosave on the pre-seeded, JSON-migrated service updates draft content'
 );
 select throws_ok(
   $$
