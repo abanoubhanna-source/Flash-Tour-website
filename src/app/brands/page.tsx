@@ -3,26 +3,37 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Anchor, Palmtree, Building, Ship, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Anchor, Palmtree, Building, Ship, ArrowRight, CheckCircle2, type LucideIcon } from 'lucide-react';
 import Image from 'next/image';
 import Footer from "@/components/Footer";
 
 // قاموس الأيقونات
-const iconMap: { [key: string]: any } = {
+const iconMap: Record<string, LucideIcon> = {
   Anchor: Anchor,
   Palmtree: Palmtree,
   Building: Building,
   Ship: Ship,
 };
 
+type Brand = {
+  id: string;
+  name: string;
+  subtitle: string;
+  description: string;
+  image: string;
+  features?: string[];
+  icon?: string;
+  color?: string;
+};
+
 export default function BrandsPage() {
-  const [brands, setBrands] = useState<any[]>([]);
+  const [brands, setBrands] = useState<Brand[]>([]);
 
   useEffect(() => {
     fetch('/api/brands')
       .then(res => res.json())
-      .then(data => {
-        if(data && !data.error) setBrands(data);
+      .then((data: Brand[] | { error?: unknown }) => {
+        if (Array.isArray(data)) setBrands(data);
       });
   }, []);
 
@@ -57,8 +68,9 @@ export default function BrandsPage() {
 
       {/* 2. The Brands Showcase (Zig-Zag Layout) */}
       <section className="w-full py-12">
-        {brands.map((brand: any, index: number) => {
+        {brands.map((brand, index) => {
           const isEven = index % 2 === 0;
+          const Icon = brand.icon ? iconMap[brand.icon] : undefined;
           return (
             <div key={brand.id} className={`w-full py-24 ${isEven ? 'bg-white' : 'bg-slate-50'}`}>
               <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
@@ -84,7 +96,7 @@ export default function BrandsPage() {
                       
                       {/* Floating Icon Badge */}
                       <div className="absolute top-8 left-8 w-16 h-16 bg-white/90 backdrop-blur-md rounded-2xl flex items-center justify-center shadow-lg">
-                        {iconMap[brand.icon] && React.createElement(iconMap[brand.icon], { className: `w-8 h-8 text-${brand.color}-600` })}
+                        {Icon && React.createElement(Icon, { className: `w-8 h-8 text-${brand.color}-600` })}
                       </div>
                     </div>
                   </motion.div>

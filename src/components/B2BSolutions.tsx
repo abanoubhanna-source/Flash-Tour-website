@@ -6,14 +6,19 @@ import { motion } from 'framer-motion';
 import { Building2, Globe2, Car, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
+type ServiceSummary = {
+  title: string;
+  desc: string;
+};
+
 export default function B2BSolutions() {
-  const [services, setServices] = useState<any[]>([]);
+  const [services, setServices] = useState<ServiceSummary[]>([]);
 
   useEffect(() => {
     fetch('/api/services')
       .then(res => res.json())
-      .then(data => {
-        if(data && !data.error) setServices(data);
+      .then((data: ServiceSummary[] | { error?: unknown }) => {
+        if (Array.isArray(data)) setServices(data);
       });
   }, []);
 

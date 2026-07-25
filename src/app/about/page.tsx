@@ -8,15 +8,38 @@ import Image from 'next/image';
 import Footer from "@/components/Footer";
 import FlawlessProcess from '@/components/FlawlessProcess';
 
+type AboutTimelineEntry = {
+  year: string;
+  title: string;
+  desc: string;
+};
+
+type AboutContent = {
+  hero: {
+    tag: string;
+    title_part1: string;
+    title_part2: string;
+    desc: string;
+  };
+  vision: string;
+  mission: string;
+  ceo_message: string;
+  director_name: string;
+  director_title: string;
+  signature_img?: string;
+  team_stats: string;
+  timeline: AboutTimelineEntry[];
+};
+
 export default function AboutPage() {
-  const [aboutData, setAboutData] = useState<any>(null);
+  const [aboutData, setAboutData] = useState<AboutContent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   // جلب البيانات ديناميكياً من الـ API
   useEffect(() => {
     fetch('/api/about')
       .then(res => res.ok ? res.json() : null)
-      .then(data => {
+      .then((data: AboutContent | null) => {
         if (data) setAboutData(data);
         setIsLoading(false);
       })
@@ -93,7 +116,7 @@ export default function AboutPage() {
         <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-              <h2 className="text-4xl font-bold text-slate-900 font-en mb-6">We Don't Just Plan Trips.<br/>We Own The Experience.</h2>
+              <h2 className="text-4xl font-bold text-slate-900 font-en mb-6">We Don&apos;t Just Plan Trips.<br/>We Own The Experience.</h2>
               <p className="text-lg text-slate-600 font-en leading-relaxed mb-8">
                 What sets Flash Group apart is our massive infrastructure. We own and operate our fleet, our cruises, and our hotels. This absolute control over the supply chain guarantees uncompromised 5-star quality at every touchpoint.
               </p>
@@ -141,7 +164,7 @@ export default function AboutPage() {
           </div>
 
           <div className="space-y-32 relative z-10">
-            {aboutData.timeline.map((item: any, index: number) => {
+            {aboutData.timeline.map((item, index) => {
               const isEven = index % 2 === 0;
               return (
                 <div key={item.year} className={`flex flex-col md:flex-row items-center justify-between w-full ${isEven ? 'md:flex-row-reverse' : ''}`}>
@@ -227,7 +250,7 @@ export default function AboutPage() {
               <Quote className="w-12 h-12 text-teal-500 mb-8 opacity-50" />
               <h2 className="text-4xl font-bold font-en mb-6">Message From The <span className="text-teal-500">CEO</span></h2>
               <p className="text-slate-300 font-en leading-relaxed text-lg italic mb-8 border-l-4 border-teal-500 pl-6">
-                "{aboutData.ceo_message}"
+                &quot;{aboutData.ceo_message}&quot;
               </p>
 
               {/* Director Info & Signature */}

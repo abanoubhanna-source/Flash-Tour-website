@@ -24,6 +24,8 @@ const cruises = [
   }
 ];
 
+type Cruise = (typeof cruises)[number];
+
 export default function CruisesPage() {
   return (
     <div className="bg-white">
@@ -59,7 +61,7 @@ export default function CruisesPage() {
   );
 }
 
-function CruiseRow({ cruise, reverse }: { cruise: any, reverse: boolean }) {
+function CruiseRow({ cruise, reverse }: { cruise: Cruise; reverse: boolean }) {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,

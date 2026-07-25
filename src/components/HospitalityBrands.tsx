@@ -3,9 +3,9 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Ship, Building2, Anchor, Palmtree, Building } from 'lucide-react';
+import { MapPin, Ship, Building2, Anchor, Palmtree, Building, type LucideIcon } from 'lucide-react';
 
-const iconMap: { [key: string]: any } = {
+const iconMap: Record<string, LucideIcon> = {
   Anchor: Anchor,
   Palmtree: Palmtree,
   Building: Building,
@@ -13,14 +13,23 @@ const iconMap: { [key: string]: any } = {
   Building2: Building2
 };
 
+type HospitalityBrand = {
+  id?: string;
+  icon?: string;
+  image?: string;
+  name: string;
+  subtitle: string;
+  description: string;
+};
+
 export default function HospitalityBrands() {
-  const [brands, setBrands] = useState<any[]>([]);
+  const [brands, setBrands] = useState<HospitalityBrand[]>([]);
 
   useEffect(() => {
     fetch('/api/brands')
       .then(res => res.json())
-      .then(data => {
-        if(data && !data.error) setBrands(data);
+      .then((data: HospitalityBrand[] | { error?: unknown }) => {
+        if (Array.isArray(data)) setBrands(data);
       });
   }, []);
 
@@ -48,7 +57,7 @@ export default function HospitalityBrands() {
         {displayBrands.length > 0 && (
           <div className="grid grid-cols-1 lg:grid-cols-3 lg:auto-rows-[210px] gap-8">
             {displayBrands.map((asset, idx) => {
-              const IconComp = iconMap[asset.icon] || Building2;
+              const IconComp = asset.icon ? iconMap[asset.icon] || Building2 : Building2;
               const isFeatured = idx === 0;
               return (
                 <motion.div

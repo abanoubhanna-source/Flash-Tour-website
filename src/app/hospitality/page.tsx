@@ -8,6 +8,18 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Footer from "@/components/Footer";
 
+type HospitalityRegion = {
+  id: string;
+  tag: string;
+  title: string;
+  subtitle: string;
+  desc: string;
+  icon: string;
+  img: string;
+  link: string;
+  features: string[];
+};
+
 // دالة لمعالجة الأيقونات من الداتا
 const renderIcon = (iconName: string, className: string) => {
   switch (iconName) {
@@ -21,13 +33,13 @@ const renderIcon = (iconName: string, className: string) => {
 };
 
 export default function HospitalityPage() {
-  const [regions, setRegions] = useState<any[]>([]);
+  const [regions, setRegions] = useState<HospitalityRegion[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetch('/api/hospitality')
       .then(res => res.ok ? res.json() : [])
-      .then(data => {
+      .then((data: HospitalityRegion[] | unknown) => {
         setRegions(Array.isArray(data) ? data : []);
         setIsLoading(false);
       })

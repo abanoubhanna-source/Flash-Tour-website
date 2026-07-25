@@ -9,7 +9,6 @@ import {
 } from 'lucide-react';
 
 export default function DashboardOverview() {
-  const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({ brands: 0, destinations: 0, services: 0 });
 
   // جلب أعداد الداتا عشان نعرضها في الإحصائيات زي ما كان في كودك
@@ -24,8 +23,7 @@ export default function DashboardOverview() {
         destinations: destRes.length || 0,
         brands: brandsRes.length || 0
       });
-      setIsLoading(false);
-    }).catch(() => setIsLoading(false)); // عشان لو الـ API لسه مش شغال ميعملش كراش
+    }).catch(() => undefined); // عشان لو الـ API لسه مش شغال ميعملش كراش
   }, []);
 
   const containerVariants = {
