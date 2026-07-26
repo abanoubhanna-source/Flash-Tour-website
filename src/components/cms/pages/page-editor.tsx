@@ -6,6 +6,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import {
   AlertTriangle,
   ArrowLeft,
+  ArrowDown,
+  ArrowUp,
   Check,
   ChevronDown,
   Clock3,
@@ -33,7 +35,7 @@ import {
   unpublishPage,
 } from "@/app/dashboard/pages/actions";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
-import type { PageDraftData, PageHeroData, PageSeoData } from "@/lib/cms/pages/schema";
+import type { PageDraftData, PageHeroData, PageHeroSlideData, PageSeoData } from "@/lib/cms/pages/schema";
 import type { CmsPageEditorData } from "@/lib/cms/pages/types";
 import { PageLivePreview } from "./page-live-preview";
 
@@ -47,8 +49,21 @@ type PageEditorProps = {
   canUpload: boolean;
 };
 
+const homeSlideDefaults: PageHeroSlideData[] = [
+  { id: "group", name: "Flash Group", eyebrow: "A 40-Year Hospitality Legacy", title: "Crafting Hospitality Since 1985", subtitle: "An Egyptian-born tourism and hospitality group owning Nile cruises, resorts, restaurants, yachts, and premium mobility assets across strategic destinations.", primaryCta: { label: "Partner With Flash Group", href: "/contact" }, secondaryCta: { label: "Explore Portfolio", href: "/brands" }, image: { assetId: null, url: "/images/egypt-bg.jpg", alt: "Flash Group" }, enabled: true },
+  { id: "cruises", name: "Cruises", eyebrow: "Owned Nile Cruise Fleet", title: "Luxury Journeys on the Nile", subtitle: "A curated fleet of Nile vessels delivering controlled quality, seamless logistics, and unforgettable river experiences for global partners.", primaryCta: { label: "Discover Cruises", href: "/cruises" }, secondaryCta: { label: "Contact us", href: "/contact" }, image: { assetId: null, url: "/images/hospitality-cruise.jpg", alt: "Luxury Nile cruise" }, enabled: true },
+  { id: "hospitality", name: "Hospitality", eyebrow: "Hotels, Resorts & Fine Dining", title: "Assets That Shape the Experience", subtitle: "From Red Sea sanctuaries and boutique heritage hotels to international resorts and restaurants, Flash Group owns the journey end-to-end.", primaryCta: { label: "Explore Hospitality", href: "/hospitality" }, secondaryCta: { label: "Contact us", href: "/contact" }, image: { assetId: null, url: "/images/zanzibar-bg.jpg", alt: "Flash Group hospitality" }, enabled: true },
+  { id: "mobility", name: "Mobility", eyebrow: "Executive Transport Infrastructure", title: "Precision on Every Route", subtitle: "A premium fleet, trained chauffeurs, and operational control built for B2B travel, MICE, VIP transfers, and large-scale movements.", primaryCta: { label: "Our services", href: "/services" }, secondaryCta: { label: "Contact us", href: "/contact" }, image: { assetId: null, url: "/images/fleet-showcase.jpg", alt: "Flash Group executive mobility" }, enabled: true },
+];
+
 function draftSignature(draft: PageDraftData) {
   return JSON.stringify(draft);
+}
+
+function HomeSlidesEditor({ slides, onChange }: { slides: PageHeroSlideData[]; onChange: (slides: PageHeroSlideData[]) => void }) {
+  const move = (index: number, direction: -1 | 1) => { const next = index + direction; if (next < 0 || next >= slides.length) return; const reordered = [...slides]; [reordered[index], reordered[next]] = [reordered[next], reordered[index]]; onChange(reordered); };
+  const update = (index: number, value: PageHeroSlideData) => onChange(slides.map((slide, current) => current === index ? value : slide));
+  return <section className="border-t border-slate-100 pt-7"><p className="text-[10px]! font-bold uppercase tracking-[0.16em] text-[#157670]">Home slider</p><h3 className="mt-1 text-lg! leading-7! font-bold text-[#0f172a]">Four hero slides</h3><p className="mt-1 text-xs text-slate-500">All four slides are saved, versioned, previewed, and published with the Home page. Use the arrows to change their public order.</p><div className="mt-4 space-y-4">{slides.map((slide, index) => <article key={slide.id} className="rounded-2xl border border-slate-200 p-4"><div className="flex items-center gap-2"><p className="flex-1 text-xs font-bold">Slide {index + 1}</p><label className="flex items-center gap-1.5 text-[11px] font-bold text-slate-600"><input type="checkbox" aria-label={`Slide ${index + 1} enabled`} checked={slide.enabled} onChange={(event) => update(index, { ...slide, enabled: event.target.checked })} className="h-3.5 w-3.5 rounded border-slate-300" />Enabled</label><button type="button" aria-label="Move slide up" disabled={index === 0} onClick={() => move(index, -1)} className="rounded-lg border p-2 disabled:opacity-40"><ArrowUp className="h-3 w-3" /></button><button type="button" aria-label="Move slide down" disabled={index === slides.length - 1} onClick={() => move(index, 1)} className="rounded-lg border p-2 disabled:opacity-40"><ArrowDown className="h-3 w-3" /></button></div><div className="mt-3 grid gap-3 sm:grid-cols-2"><input aria-label={`Slide ${index + 1} tab label`} value={slide.name} onChange={(event) => update(index, { ...slide, name: event.target.value })} placeholder="Navigation label" className="h-10 rounded-xl border px-3 text-sm" /><input aria-label={`Slide ${index + 1} eyebrow`} value={slide.eyebrow} onChange={(event) => update(index, { ...slide, eyebrow: event.target.value })} placeholder="Eyebrow" className="h-10 rounded-xl border px-3 text-sm" /></div><input aria-label={`Slide ${index + 1} title`} value={slide.title} onChange={(event) => update(index, { ...slide, title: event.target.value })} placeholder="Title" className="mt-3 h-10 w-full rounded-xl border px-3 text-sm" /><textarea aria-label={`Slide ${index + 1} subtitle`} value={slide.subtitle} onChange={(event) => update(index, { ...slide, subtitle: event.target.value })} placeholder="Subtitle" rows={3} className="mt-3 w-full rounded-xl border px-3 py-2 text-sm" /><div className="mt-3 grid gap-3 sm:grid-cols-2"><input aria-label={`Slide ${index + 1} image URL`} value={slide.image.url} onChange={(event) => update(index, { ...slide, image: { ...slide.image, url: event.target.value } })} placeholder="Image URL" className="h-10 rounded-xl border px-3 text-sm" /><input aria-label={`Slide ${index + 1} image alt`} value={slide.image.alt} onChange={(event) => update(index, { ...slide, image: { ...slide.image, alt: event.target.value } })} placeholder="Image alt text" className="h-10 rounded-xl border px-3 text-sm" /></div><div className="mt-3 grid gap-3 sm:grid-cols-2"><input aria-label={`Slide ${index + 1} primary CTA`} value={slide.primaryCta.label} onChange={(event) => update(index, { ...slide, primaryCta: { ...slide.primaryCta, label: event.target.value } })} placeholder="Primary CTA label" className="h-10 rounded-xl border px-3 text-sm" /><input aria-label={`Slide ${index + 1} primary CTA URL`} value={slide.primaryCta.href} onChange={(event) => update(index, { ...slide, primaryCta: { ...slide.primaryCta, href: event.target.value } })} placeholder="Primary CTA URL" className="h-10 rounded-xl border px-3 text-sm" /></div><div className="mt-3 grid gap-3 sm:grid-cols-2"><input aria-label={`Slide ${index + 1} secondary CTA`} value={slide.secondaryCta.label} onChange={(event) => update(index, { ...slide, secondaryCta: { ...slide.secondaryCta, label: event.target.value } })} placeholder="Secondary CTA label" className="h-10 rounded-xl border px-3 text-sm" /><input aria-label={`Slide ${index + 1} secondary CTA URL`} value={slide.secondaryCta.href} onChange={(event) => update(index, { ...slide, secondaryCta: { ...slide.secondaryCta, href: event.target.value } })} placeholder="Secondary CTA URL" className="h-10 rounded-xl border px-3 text-sm" /></div></article>)}</div></section>;
 }
 
 function formatRevisionDate(value: string) {
@@ -442,6 +457,7 @@ export function PageEditor({ page, canEdit, canPublish, canUpload }: PageEditorP
                       </div>
                     </div>
                   </div>
+                  {page.path === "/" && <HomeSlidesEditor slides={draft.hero.slides.length === 4 ? draft.hero.slides : homeSlideDefaults} onChange={(slides) => updateHero("slides", slides)} />}
                 </fieldset>
               </div>
             )}

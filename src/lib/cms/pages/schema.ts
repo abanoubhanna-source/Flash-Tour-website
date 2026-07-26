@@ -11,6 +11,18 @@ const imageSchema = z.object({
   alt: z.string().trim().max(180).default(""),
 });
 
+export const pageHeroSlideSchema = z.object({
+  id: z.string().trim().min(1).max(80),
+  name: z.string().trim().min(1).max(80),
+  eyebrow: z.string().trim().max(120).default(""),
+  title: z.string().trim().min(1).max(140),
+  subtitle: z.string().trim().max(500).default(""),
+  primaryCta: linkSchema.default({ label: "", href: "" }),
+  secondaryCta: linkSchema.default({ label: "", href: "" }),
+  image: imageSchema.default({ assetId: null, url: "", alt: "" }),
+  enabled: z.boolean().default(true),
+});
+
 export const pageHeroSchema = z.object({
   eyebrow: z.string().trim().max(120).default(""),
   title: z.string().trim().min(1, "Page title is required.").max(140),
@@ -18,6 +30,7 @@ export const pageHeroSchema = z.object({
   primaryCta: linkSchema.default({ label: "", href: "" }),
   secondaryCta: linkSchema.default({ label: "", href: "" }),
   image: imageSchema.default({ assetId: null, url: "", alt: "" }),
+  slides: z.array(pageHeroSlideSchema).min(0).max(4).default([]),
 });
 
 export const pageSeoSchema = z.object({
@@ -40,6 +53,7 @@ export const createPageSchema = z.object({
 });
 
 export type PageHeroData = z.infer<typeof pageHeroSchema>;
+export type PageHeroSlideData = z.infer<typeof pageHeroSlideSchema>;
 export type PageSeoData = z.infer<typeof pageSeoSchema>;
 export type PageDraftData = z.infer<typeof pageDraftSchema>;
 
@@ -50,6 +64,7 @@ export const defaultPageHero: PageHeroData = {
   primaryCta: { label: "", href: "" },
   secondaryCta: { label: "", href: "" },
   image: { assetId: null, url: "/images/egypt-bg.jpg", alt: "" },
+  slides: [],
 };
 
 export const defaultPageSeo: PageSeoData = {

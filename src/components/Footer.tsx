@@ -2,6 +2,7 @@
 'use client';
 
 import { SendHorizontal, MapPin, Mail, Phone } from 'lucide-react';
+import { useEffect, useState } from 'react';
 // ضفنا FaFacebookF هنا
 import { FaFacebookF, FaLinkedinIn, FaInstagram, FaXTwitter } from 'react-icons/fa6';
 import Image from 'next/image';
@@ -9,6 +10,8 @@ import Link from 'next/link';
 import { trackEmailClick, trackPhoneClick } from '@/lib/analytics';
 
 export default function Footer() {
+  const [settings, setSettings] = useState({ phone: '+20226904654', email: 'info@flashtour.travel', address: '30 Thawra St., Heliopolis, Cairo, Egypt', instagram: 'https://www.instagram.com/flash.tour/', facebook: 'https://www.facebook.com/Flashtour.Egypt' });
+  useEffect(() => { fetch('/api/settings').then((response) => response.ok ? response.json() : {}).then((value) => { if (value && typeof value === 'object') setSettings((current) => ({ ...current, ...value })); }).catch(() => undefined); }, []);
   return (
     <footer className="w-full bg-brand-navy-deep text-white pt-24 pb-8 font-en relative overflow-hidden border-t border-white/10">
       
@@ -29,13 +32,13 @@ export default function Footer() {
               Crafting world-class hospitality standards since 1985. Join our global network and let&apos;s redefine the future of tourism together.
             </p>
             <div className="flex gap-4">
-              <Link href="https://www.facebook.com/Flashtour.Egypt" target="_blank" rel="noopener noreferrer" aria-label="Flash Group on Facebook" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-teal-700 hover:border-teal-700 transition-all duration-300 group">
+              <Link href={settings.facebook || '#'} target="_blank" rel="noopener noreferrer" aria-label="Flash Group on Facebook" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-teal-700 hover:border-teal-700 transition-all duration-300 group">
                 <FaFacebookF aria-hidden="true" className="w-5 h-5 text-slate-400 group-hover:text-white" />
               </Link>
               <Link href="https://www.linkedin.com/company/flash-tour/posts/?feedView=all" target="_blank" rel="noopener noreferrer" aria-label="Flash Group on LinkedIn" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-teal-700 hover:border-teal-700 transition-all duration-300 group">
                 <FaLinkedinIn aria-hidden="true" className="w-5 h-5 text-slate-400 group-hover:text-white" />
               </Link>
-              <Link href="https://www.instagram.com/flash.tour/" target="_blank" rel="noopener noreferrer" aria-label="Flash Group on Instagram" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-teal-700 hover:border-teal-700 transition-all duration-300 group">
+              <Link href={settings.instagram || '#'} target="_blank" rel="noopener noreferrer" aria-label="Flash Group on Instagram" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-teal-700 hover:border-teal-700 transition-all duration-300 group">
                 <FaInstagram aria-hidden="true" className="w-5 h-5 text-slate-400 group-hover:text-white" />
               </Link>
               <Link href="#" aria-label="Flash Group on X" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-teal-700 hover:border-teal-700 transition-all duration-300 group">
@@ -57,31 +60,31 @@ export default function Footer() {
                   className="flex gap-4 items-start text-slate-300 hover:text-teal-500 transition-colors group"
                 >
                   <MapPin className="w-5 h-5 text-teal-600 shrink-0 mt-1 group-hover:scale-110 transition-transform" />
-                  <span>30 Thawra St., Heliopolis, Cairo, Egypt</span>
+                  <span>{settings.address}</span>
                 </a>
               </li>
 
               {/* 3. تفعيل الإيميل ليفتح تطبيق البريد */}
               <li>
                 <a
-                  href="mailto:info@flashtour.travel"
+                  href={`mailto:${settings.email}`}
                   onClick={() => trackEmailClick({ location: 'footer' })}
                   className="flex gap-4 items-center text-slate-300 hover:text-teal-500 transition-colors group"
                 >
                   <Mail className="w-5 h-5 text-teal-600 shrink-0 group-hover:scale-110 transition-transform" />
-                  <span>info@flashtour.travel</span>
+                  <span>{settings.email}</span>
                 </a>
               </li>
 
               {/* 4. تفعيل التليفون ليفتح لوحة الاتصال */}
               <li>
                 <a
-                  href="tel:+20226904654"
+                  href={`tel:${settings.phone.replace(/\s/g, '')}`}
                   onClick={() => trackPhoneClick({ location: 'footer' })}
                   className="flex gap-4 items-center text-slate-300 hover:text-teal-500 transition-colors group"
                 >
                   <Phone className="w-5 h-5 text-teal-600 shrink-0 group-hover:scale-110 transition-transform" />
-                  <span>+202 26904654</span>
+                  <span>{settings.phone}</span>
                 </a>
               </li>
 
@@ -111,6 +114,7 @@ export default function Footer() {
 
         <div className="pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-slate-500 text-sm">
           <p>&copy; {new Date().getFullYear()} Flash Group. All rights reserved.</p>
+          <p className="text-xs text-slate-500">Designed &amp; Developed by Flash Software Solutions</p>
         </div>
 
       </div>

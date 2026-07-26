@@ -1,11 +1,11 @@
 'use client';
 
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Anchor, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 
-const cruises = [
+const fallbackCruises = [
   {
     id: 'nile-excellence',
     name: 'Nile Excellence',
@@ -24,9 +24,23 @@ const cruises = [
   }
 ];
 
-type Cruise = (typeof cruises)[number];
+type Cruise = (typeof fallbackCruises)[number];
 
 export default function CruisesPage() {
+  const [cruises, setCruises] = useState<Cruise[]>(fallbackCruises);
+  useEffect(() => {
+    fetch('/api/cruises').then((response) => response.ok ? response.json() : []).then((data: unknown) => {
+      if (!Array.isArray(data) || !data.length) return;
+      const mapped = data.map((item): Cruise | null => {
+        if (!item || typeof item !== 'object' || Array.isArray(item)) return null;
+        const record = item as Record<string, unknown>;
+        const title = typeof record.title === 'string' ? record.title : typeof record.name === 'string' ? record.name : '';
+        if (!title) return null;
+        return { id: typeof record.id === 'string' ? record.id : title.toLowerCase().replace(/[^a-z0-9]+/g, '-'), name: title, tagline: typeof record.region === 'string' ? record.region : 'Premium Fleet', description: typeof record.shortDescription === 'string' ? record.shortDescription : typeof record.fullDescription === 'string' ? record.fullDescription : '', features: Array.isArray(record.facilities) ? record.facilities.filter((feature): feature is string => typeof feature === 'string') : [], image: typeof record.image === 'string' ? record.image : '/images/nile-excellence-hero.jpg' };
+      }).filter((item): item is Cruise => item !== null);
+      if (mapped.length) setCruises(mapped);
+    }).catch(() => undefined);
+  }, []);
   return (
     <div className="bg-white">
       {/* Hero Section - Serenity Cruises */}

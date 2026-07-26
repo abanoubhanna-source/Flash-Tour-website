@@ -59,7 +59,7 @@ export default function ServicesPage() {
           setServicesData(data);
         }
       })
-      .catch(() => console.log("Using static fallback for services."));
+      .catch(() => undefined);
   }, []);
 
   return (

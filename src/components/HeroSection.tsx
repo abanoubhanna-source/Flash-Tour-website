@@ -8,7 +8,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { PageHeroData } from '@/lib/cms/pages/schema';
 
-const showcases = [
+type Showcase = { id: string; name: string; eyebrow: string; title: string; desc: string; bg: string; alt: string; primaryCta?: { label: string; href: string }; secondaryCta?: { label: string; href: string } };
+
+const showcases: Showcase[] = [
   {
     id: 'group',
     name: 'FLASH GROUP',
@@ -52,7 +54,20 @@ type HeroSectionProps = {
 };
 
 export default function HeroSection({ content }: HeroSectionProps) {
-  const cmsShowcases = content
+  const enabledSlides = content?.slides.length === 4 ? content.slides.filter((slide) => slide.enabled) : [];
+  const cmsShowcases = content?.slides.length === 4
+    ? (enabledSlides.length > 0 ? enabledSlides : content.slides).map((slide) => ({
+        id: slide.id,
+        name: slide.name,
+        eyebrow: slide.eyebrow,
+        title: slide.title,
+        desc: slide.subtitle,
+        bg: slide.image.url || '/images/egypt-bg.jpg',
+        alt: slide.image.alt || slide.name,
+        primaryCta: slide.primaryCta,
+        secondaryCta: slide.secondaryCta,
+      }))
+    : content
     ? showcases.map((showcase, index) => index === 0 ? {
         ...showcase,
         eyebrow: content.eyebrow,
@@ -118,12 +133,12 @@ export default function HeroSection({ content }: HeroSectionProps) {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link href={content?.primaryCta.href || "/contact"} className="group inline-flex items-center justify-center gap-3 bg-brand-navy text-white px-8 py-4 rounded-full text-base font-bold font-en hover:bg-brand-teal transition-all duration-300 shadow-xl">
-                {content?.primaryCta.label || "Partner With Flash Group"}
+              <Link href={selected.primaryCta?.href || content?.primaryCta.href || "/contact"} className="group inline-flex items-center justify-center gap-3 bg-brand-navy text-white px-8 py-4 rounded-full text-base font-bold font-en hover:bg-brand-teal transition-all duration-300 shadow-xl">
+                {selected.primaryCta?.label || content?.primaryCta.label || "Partner With Flash Group"}
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
-              <Link href={content?.secondaryCta.href || "/brands"} className="inline-flex items-center justify-center gap-3 bg-white/15 text-white border border-white/25 px-8 py-4 rounded-full text-base font-bold font-en hover:bg-white/25 transition-all duration-300">
-                {content?.secondaryCta.label || "Explore Portfolio"}
+              <Link href={selected.secondaryCta?.href || content?.secondaryCta.href || "/brands"} className="inline-flex items-center justify-center gap-3 bg-white/15 text-white border border-white/25 px-8 py-4 rounded-full text-base font-bold font-en hover:bg-white/25 transition-all duration-300">
+                {selected.secondaryCta?.label || content?.secondaryCta.label || "Explore Portfolio"}
               </Link>
             </div>
           </motion.div>

@@ -79,7 +79,7 @@ export default function DestinationsPage() {
           setDestinations(data);
         }
       })
-      .catch(() => console.log("Failed to fetch destinations, using fallback data."));
+      .catch(() => undefined);
   }, []);
 
   return (
