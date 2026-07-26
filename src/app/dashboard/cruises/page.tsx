@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-import { ModulePlaceholder } from "@/components/cms/module-placeholder";
+import { requireCmsUser } from "@/lib/auth/session";
+import { getCollectionSummaries } from "@/lib/cms/collections/queries";
+import { CollectionList } from "@/components/cms/collections/collection-list";
 
 export const metadata: Metadata = { title: "Cruises" };
 
-export default function CruisesModulePage() {
-  return <ModulePlaceholder title="Cruises" description="Cruise content editing is intentionally outside the Phase 2 scope." />;
+export default async function CruisesModulePage() {
+  const [user, allItems] = await Promise.all([requireCmsUser(), getCollectionSummaries("cruise")]);
+  return <CollectionList mode="cruises" items={allItems} parents={[]} categories={[]} canCreate={user.permissions.includes("content.create")} canArchive={user.permissions.includes("content.archive")} />;
 }

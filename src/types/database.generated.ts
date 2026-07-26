@@ -86,6 +86,7 @@ export type Database = {
           created_by: string | null
           draft_data: Json
           id: string
+          is_active: boolean
           locale: string
           lock_version: number
           published_at: string | null
@@ -104,6 +105,7 @@ export type Database = {
           created_by?: string | null
           draft_data?: Json
           id?: string
+          is_active?: boolean
           locale?: string
           lock_version?: number
           published_at?: string | null
@@ -122,6 +124,7 @@ export type Database = {
           created_by?: string | null
           draft_data?: Json
           id?: string
+          is_active?: boolean
           locale?: string
           lock_version?: number
           published_at?: string | null
@@ -253,6 +256,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      hospitality_categories: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          is_active: boolean
+          key: string
+          name: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          id?: string
+          is_active?: boolean
+          key: string
+          name: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          is_active?: boolean
+          key?: string
+          name?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
       }
       media_assets: {
         Row: {
@@ -407,6 +443,42 @@ export type Database = {
             referencedColumns: ["key"]
           },
         ]
+      }
+      navigation_items: {
+        Row: {
+          created_at: string
+          href: string
+          id: string
+          is_active: boolean
+          label: string
+          location: string
+          open_in_new_tab: boolean
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          href: string
+          id?: string
+          is_active?: boolean
+          label: string
+          location: string
+          open_in_new_tab?: boolean
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          href?: string
+          id?: string
+          is_active?: boolean
+          label?: string
+          location?: string
+          open_in_new_tab?: boolean
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
       }
       page_sections: {
         Row: {
@@ -1276,6 +1348,8 @@ export type Database = {
         | "certification"
         | "article"
         | "navigation_item"
+        | "destination_place"
+        | "destination_attraction"
       media_status: "processing" | "ready" | "archived"
       profile_status: "active" | "suspended"
       revision_event:
@@ -1425,6 +1499,8 @@ export const Constants = {
         "certification",
         "article",
         "navigation_item",
+        "destination_place",
+        "destination_attraction",
       ],
       media_status: ["processing", "ready", "archived"],
       profile_status: ["active", "suspended"],
@@ -1438,3 +1514,4 @@ export const Constants = {
     },
   },
 } as const
+

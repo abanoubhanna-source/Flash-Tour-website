@@ -9,3 +9,8 @@ yarn-error.log*
 .env*.local
 .vercel
 *.tsbuildinfo
+
+# Local backups / archives - never commit
+Archive.zip
+public/images-backup/
+__MACOSX/

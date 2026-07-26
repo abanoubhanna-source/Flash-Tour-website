@@ -94,6 +94,9 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
             <p className="mt-6 text-center text-xs leading-5 text-slate-400">
               Access is monitored and limited to authorized Flash Tour team members.
             </p>
+            <p className="mt-2 text-center text-[10px] text-slate-400">
+              Designed &amp; Developed by Flash Software Solutions
+            </p>
           </div>
         </section>
       </div>

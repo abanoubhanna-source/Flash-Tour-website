@@ -157,6 +157,7 @@ export function DashboardShell({ user, navigation, children }: DashboardShellPro
             {!collapsed && "Sign out"}
           </button>
         </form>
+        {!collapsed && <p className="mt-3 px-1 text-[9px] leading-4 text-slate-500">Designed &amp; Developed by Flash Software Solutions</p>}
       </div>
     </div>
   );

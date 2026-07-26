@@ -1,25 +1,5 @@
-import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import { NextResponse } from "next/server";
+import fallback from "@/data/about.json";
 
-const dataFilePath = path.join(process.cwd(), 'src', 'data', 'about.json');
-
-export async function GET() {
-  try {
-    const fileContents = fs.readFileSync(dataFilePath, 'utf8');
-    const data = JSON.parse(fileContents);
-    return NextResponse.json(data);
-  } catch {
-    return NextResponse.json({ error: 'Failed to read data' }, { status: 500 });
-  }
-}
-
-export async function POST(request: Request) {
-  try {
-    const newData = await request.json();
-    fs.writeFileSync(dataFilePath, JSON.stringify(newData, null, 2), 'utf8');
-    return NextResponse.json({ success: true });
-  } catch {
-    return NextResponse.json({ error: 'Failed to write data' }, { status: 500 });
-  }
-}
+/** About remains on the legacy JSON shape until its published sections are mapped one-for-one. */
+export async function GET() { return NextResponse.json(fallback); }

@@ -50,8 +50,7 @@ export default async function DashboardPage() {
               Welcome back, {user.displayName.split(" ")[0]}.
             </h2>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">
-              The dashboard foundation is ready. Content modules are visible according to your role;
-              editing and publishing controls will be activated incrementally in later phases.
+              Manage the published website with draft workflows, role-based access, media, SEO, and content revisions.
             </p>
           </div>
           <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.06] p-4 backdrop-blur-sm">
@@ -124,7 +123,7 @@ export default async function DashboardPage() {
               </div>
               <div className="min-w-0 flex-1">
                 <p className="font-semibold text-[#0f172a]">{module.label}</p>
-                <p className="mt-0.5 text-xs text-slate-500">Module shell ready</p>
+                <p className="mt-0.5 text-xs text-slate-500">Open module</p>
               </div>
               <ArrowUpRight className="h-4 w-4 text-slate-300 transition group-hover:text-[#157670]" />
             </Link>
