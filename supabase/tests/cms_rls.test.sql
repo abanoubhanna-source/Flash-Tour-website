@@ -85,7 +85,7 @@ select is(
   (
     select data ->> 'title'
     from public.published_page_sections
-    where page_id = '31000000-0000-0000-0000-000000000001' and key = 'hero'
+    where page_id = (select id from public.published_pages where key = 'home' and locale = 'en') and key = 'hero'
   ),
   'Crafting Hospitality Since 1985',
   'the seeded public hero matches the frozen website copy'
