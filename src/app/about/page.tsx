@@ -283,7 +283,7 @@ export default function AboutPage() {
             >
               <h3 className="text-3xl font-bold font-en mb-6 text-amber-500">The Team Behind The Empire</h3>
               <p className="text-slate-400 font-en leading-relaxed mb-8 text-lg">
-                With more than {aboutData.team_stats} dedicated experts and consultants, our workforce is our greatest asset. From the captains of our Nile cruises to the concierges at our 5-star resorts, every member of the Flash family is committed to delivering perfection.
+                With more than {aboutData.team_stats} dedicated experts and consultants across four continents, our workforce is our greatest asset. Our bilingual teams speak Arabic, English, German, French, Russian, Italian, and Dutch, ensuring every guest feels understood. From the captains of our Nile cruises to the concierges at our 5-star resorts, every member of the Flash family is committed to delivering perfection.
               </p>
               <div className="flex items-center gap-6">
                 <div className="text-6xl font-bold text-white font-en">{aboutData.team_stats}</div>

@@ -57,6 +57,22 @@ const fleet = [
     desc: 'Exceptional sun decks and shaded lounges, providing the ultimate environment for relaxation and networking between temple visits.', 
     img: '/images/cruise-6.jpg',
     specs: ['65 Cabins', 'Massive Sun Deck', 'Poolside Bar', 'Reading Lounge']
+  },
+  { 
+    id: '07', 
+    name: 'Nile Majestic', 
+    tag: 'THE HIDDEN DAHABIYA',
+    desc: 'A pharaonic-inspired dahabiya revealing hidden islands rarely seen in Luxor and Aswan. With just 10 guest cabins, it offers refined local dining, curated excursions, and a relaxing sundeck with pool and lounge areas for an intimate Nile journey.', 
+    img: '/images/hospitality-cruise.jpg',
+    specs: ['10 Guest Cabins', 'Pharaonic-Inspired Design', 'Curated Hidden-Island Excursions', 'Sundeck With Pool & Bar']
+  },
+  { 
+    id: '08', 
+    name: 'Nile Divine', 
+    tag: 'THE ARTISTS\u2019 DAHABIYA',
+    desc: 'The first dahabiya of its kind, redefining history on the Nile through a collaboration with renowned artists. Its 8 cabins are hand-painted works of art by Egyptian artisans, complemented by an elegant reception, a spa, and two sundecks.', 
+    img: '/images/hospitality-cruise.jpg',
+    specs: ['8 Artist-Designed Cabins', 'Hand-Painted Interiors', 'Elegant Reception & Spa', 'Two Private Sundecks']
   }
 ];
 

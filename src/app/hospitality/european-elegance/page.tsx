@@ -12,39 +12,66 @@ import { trackHospitalityPropertyView } from '@/lib/analytics';
 const mediterraneanData = [
   { 
     id: '01', 
-    name: '7 Exclusive Italian Resorts', 
-    tag: 'PREMIUM PORTFOLIO',
-    desc: 'A curated collection of seven elite properties, offering unparalleled luxury and authentic Italian charm. Each resort is meticulously designed to cater to the highest standards of international travelers, ensuring that our hospitality knows no borders.', 
-    img: '/images/italy-resorts.jpg', // تأكد من اسم الصورة
+    name: 'President Sea Palace Hotel', 
+    tag: 'NOTO MARINA, SICILY',
+    desc: 'A charming 4-star seaside retreat on the beachfront of Noto Marina, surrounded by lush gardens, swaying palm trees, and the crystal-clear Mediterranean, with direct access to a sandy beach. Choose from 74 rooms with side sea views, and enjoy authentic Sicilian dining across two restaurants and two bars, an Italian entertainment team, a fully equipped gym, and wheelchair-friendly facilities.', 
+    img: '/images/sicily-main.jpg',
     icon: Building2,
-    specs: ['7 Premium Properties', 'Luxury Suites', 'Exclusive Amenities', 'VIP Concierge Services']
+    specs: ['74 Sea-View Rooms', 'Buffet & Poolside Dining', 'Daily Entertainment Team', 'Wheelchair-Friendly Areas']
   },
   { 
     id: '02', 
-    name: 'Sardinia & Sicily Prime Locations', 
-    tag: 'STRATEGIC PRESENCE',
-    desc: 'Commanding a strategic presence in Europe\'s most elite destinations. From the emerald waters of Sardinia to the historic, sun-drenched splendor of Sicily, our locations are handpicked for their breathtaking beauty and absolute exclusivity.', 
-    img: '/images/sicily-sardinia.jpg', // تأكد من اسم الصورة
+    name: 'Castelsardo Resort', 
+    tag: 'SARDINIA',
+    desc: 'An exceptional seaside retreat with spectacular views of Asinara Island, minutes from the medieval village of Castelsardo. The resort features 132 traditionally styled Sardinian rooms, most with private balconies, alongside a main restaurant, pizzeria, and sea-view bar, plus a gym, tennis court, and daily live entertainment.', 
+    img: '/images/sardinia-main.jpg',
     icon: MapPin,
-    specs: ['Costa Smeralda Access', 'Historic Sicilian Sites', 'Private Beaches', 'Strategic European Hubs']
+    specs: ['132 Rooms, 99 Sea-View', 'Pizzeria & Sea-View Bar', 'Tennis Court & Gym', 'Live Evening Entertainment']
   },
   { 
     id: '03', 
-    name: 'Authentic Mediterranean Hospitality', 
-    tag: 'DOLCE VITA',
-    desc: 'Experience the true essence of Italian living. We seamlessly blend Flash Group\'s uncompromised service standards with the warmth of traditional Mediterranean hospitality, world-class gastronomy, and fine regional wines.', 
-    img: '/images/italian-hospitality.jpg', // تأكد من اسم الصورة
+    name: 'Hopps Hotel', 
+    tag: 'MAZARA DEL VALLO, SICILY',
+    desc: 'An incredible 4-star retreat on the picturesque seafront of Mazara del Vallo, with easy access to a private beach equipped with sun loungers and umbrellas. The hotel offers 235 rooms with a variety of views, pizzeria restaurants, two bars, swimming pools, and a vibrant entertainment program for all ages.', 
+    img: '/images/italy-resorts.jpg',
     icon: Wine,
-    specs: ['Gourmet Italian Dining', 'Regional Wine Tasting', 'Cultural Immersion', 'Personalized Service']
+    specs: ['235 Rooms, Multiple Views', 'Private Beach Access', 'Pizzeria & Two Bars', 'Entertainment For All Ages']
   },
   { 
     id: '04', 
-    name: 'Elite European MICE Capabilities', 
-    tag: 'CORPORATE EXCELLENCE',
-    desc: 'The ultimate backdrop for high-net-worth corporate gatherings and incentive trips. Our European footprint is fully equipped to host bespoke events, offering flawless planning and elite ground mobility across the Mediterranean.', 
-    img: '/images/italy-mice.jpg', // تأكد من اسم الصورة
+    name: "Baia D'Oro Hotel", 
+    tag: 'SICILY BEACHFRONT',
+    desc: 'One of Sicily\u2019s incredible beachfront resorts, offering 68 rooms and bungalows, most with sea views and private terraces. Guests enjoy separate adult and children\u2019s pools, buffet dining across two restaurants, a fully equipped gym, and a vibrant French entertainment team with daily and evening activities.', 
+    img: '/images/hospitality-italy.jpg',
+    icon: Building2,
+    specs: ['68 Rooms & Bungalows', 'Adult & Kids\u2019 Pools', 'Accessible Rooms Available', 'French Entertainment Team']
+  },
+  { 
+    id: '05', 
+    name: 'Hotel Eloro', 
+    tag: 'NEAR NOTO ANTICA & SYRACUSE, SICILY',
+    desc: 'Surrounded by historic sites including Noto Antica, Eloro, and Syracuse, this beachfront hotel overlooks a wide sandy bay with pools for adults and kids. Its 247 rooms mostly enjoy sea views, and dining spans seven cuisines, from Sicilian and grill to fish, Greek, and Mexican, alongside a mini club, tennis court, and sports field.', 
+    img: '/images/sicily-main.jpg',
+    icon: MapPin,
+    specs: ['247 Rooms, Mostly Sea-View', '7 Dining Cuisines', 'Mini Club & Playground', 'Tennis & Multi-Sport Field']
+  },
+  { 
+    id: '06', 
+    name: 'Hotel Dolcestate Club', 
+    tag: 'SICILIAN TYRRHENIAN COAST',
+    desc: 'Set on Sicily\u2019s Tyrrhenian coast near Buonfornello, this 60-room hotel blends modern comfort with traditional Sicilian and Italian cuisine. Guests enjoy banquet facilities for 20 to 300 guests, a reading room, massage centre, two pools, a bocce court, and a 250-seat amphitheatre for entertainment.', 
+    img: '/images/italy-resorts.jpg',
     icon: Briefcase,
-    specs: ['Incentive Travel', 'Executive Boardrooms', 'Gala Event Spaces', 'VIP Group Handling']
+    specs: ['60 Rooms, Standard & Superior', 'Banquet Halls For 20\u2013300', 'Massage Centre & Reading Room', '250-Seat Amphitheatre']
+  },
+  { 
+    id: '07', 
+    name: 'Le Dune Beach Club', 
+    tag: 'SICILY BEACHFRONT',
+    desc: 'A beachfront bungalow-style property designed for relaxing stays with family and friends, with easy access to the sea and panoramic coastal scenery. Facilities include a fresh-water adult pool, a bar, well-maintained gardens, and beach volleyball, tennis, and soccer, plus a Mini and Baby Club for children aged 4 to 12.', 
+    img: '/images/hospitality-italy.jpg',
+    icon: Wine,
+    specs: ['Beachfront Bungalows', 'Beach Sports & Amphitheatre', 'Mini & Baby Club (Ages 4\u201312)', 'Guarded Parking Available']
   }
 ];
 
