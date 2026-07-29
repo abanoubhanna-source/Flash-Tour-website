@@ -32,6 +32,9 @@ export default function ContactPage() {
         
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto mt-20">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-brand-gold/30 bg-brand-gold/10 text-brand-gold font-bold text-xs uppercase tracking-[0.2em] mb-6 font-en">
+              <span className="h-px w-4 bg-brand-gold" /> Global Presence
+            </span>
             <h1 className="text-5xl md:text-7xl font-bold text-white font-en mb-4 tracking-tight">
               Partner With <span className="text-teal-500">Flash Group</span>
             </h1>

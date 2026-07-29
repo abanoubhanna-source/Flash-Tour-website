@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import {
-  ArrowUpRight, ShieldCheck, Globe2, PlaneTakeoff, Building2,
+  ArrowUpRight, Globe2, PlaneTakeoff, Building2,
   Map, Car, Palmtree, Users, Bus, MoonStar, Luggage,
   Briefcase, FileCheck, Flag
 } from 'lucide-react';
@@ -73,7 +73,7 @@ export default function ServicesPage() {
         <div className="relative z-20 text-center px-6 max-w-4xl mx-auto w-full mt-10">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-brand-gold/30 bg-brand-gold/10 text-brand-gold font-bold text-xs uppercase tracking-[0.2em] mb-6 font-en">
-              <ShieldCheck className="w-4 h-4" /> Global Portfolio
+              <span className="h-px w-4 bg-brand-gold" /> Global Portfolio
             </span>
             <h1 className="text-5xl md:text-7xl font-bold text-white font-en mb-6 tracking-tight uppercase drop-shadow-lg">
               Our <span className="text-brand-gold">Expertise.</span>

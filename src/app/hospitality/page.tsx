@@ -53,7 +53,7 @@ export default function HospitalityPage() {
     <main className="flex min-h-screen flex-col items-center w-full bg-white overflow-hidden">
       
       {/* 1. Redesigned Premium Hero */}
-      <section className="relative w-full h-[85vh] flex flex-col items-center justify-center bg-brand-navy-deep mt-16 md:mt-20 overflow-hidden">
+      <section className="relative w-full h-[85vh] flex flex-col items-center justify-center bg-brand-navy-deep overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image src="/images/hospitality-hero.jpg" alt="Flash Group Portfolio" fill sizes="100vw" className="object-cover opacity-50 scale-105 animate-[pulse_10s_ease-in-out_infinite_alternate]" loading="eager" fetchPriority="high" />
           <div className="absolute inset-0 bg-gradient-to-b from-brand-navy-deep/70 via-brand-navy-deep/40 to-brand-navy-deep z-10"></div>
@@ -62,8 +62,8 @@ export default function HospitalityPage() {
         
         <div className="relative z-20 px-6 max-w-[1200px] mx-auto w-full text-center mt-10">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-brand-teal/30 bg-brand-teal/10 text-brand-teal font-bold text-xs uppercase tracking-widest mb-8 font-en">
-              <span className="h-px w-6 bg-brand-teal" /> Hospitality Without Borders
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-brand-gold/30 bg-brand-gold/10 text-brand-gold font-bold text-xs uppercase tracking-widest mb-8 font-en">
+              <span className="h-px w-6 bg-brand-gold" /> Hospitality Without Borders
             </div>
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white font-en mb-6 tracking-tight leading-[1.1]">
               Everywhere You Seek <br/>

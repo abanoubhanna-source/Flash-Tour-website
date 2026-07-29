@@ -100,11 +100,9 @@ export default function DestinationsPage() {
         
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto mt-20">
           <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }}>
-            <div className="flex items-center justify-center gap-4 mb-6">
-              <div className="h-px w-16 bg-brand-teal"></div>
-              <p className="text-brand-teal font-bold tracking-[0.3em] uppercase text-sm font-en">Global Reach</p>
-              <div className="h-px w-16 bg-brand-teal"></div>
-            </div>
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-brand-gold/30 bg-brand-gold/10 text-brand-gold font-bold text-xs uppercase tracking-[0.2em] mb-6 font-en">
+              <span className="h-px w-4 bg-brand-gold" /> Global Reach
+            </span>
             <h1 className="text-6xl md:text-8xl font-bold text-white font-en mb-6 tracking-tight leading-none">
               Explore Our <br/><span className="text-brand-gold">World</span>
             </h1>

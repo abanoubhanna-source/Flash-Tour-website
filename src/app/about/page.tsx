@@ -62,19 +62,19 @@ export default function AboutPage() {
     <main className="flex min-h-screen flex-col items-center justify-between w-full bg-white overflow-hidden">
       
       {/* 1. Monumental Hero Section */}
-      <section className="relative w-full h-[70vh] flex items-center bg-slate-50 border-b border-slate-100 mt-16 md:mt-20">
-        <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none" 
-             style={{ backgroundImage: 'radial-gradient(var(--color-brand-teal) 2px, transparent 2px)', backgroundSize: '40px 40px' }} />
-        
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-8 relative z-10 w-full flex flex-col items-center text-center">
+      <section className="relative w-full py-40 flex flex-col items-center justify-center bg-brand-navy-deep overflow-hidden">
+        <div className="absolute inset-0 z-0 opacity-20" style={{ backgroundImage: 'radial-gradient(var(--color-brand-teal) 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-brand-navy-deep/80 to-slate-50 z-10"></div>
+
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-8 relative z-20 w-full flex flex-col items-center text-center mt-10">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <span className="inline-block py-2 px-6 rounded-full bg-teal-50 text-teal-800 font-bold font-en tracking-[0.2em] uppercase text-sm mb-8 border border-teal-100">
-              {aboutData.hero.tag}
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-brand-gold/30 bg-brand-gold/10 text-brand-gold font-bold text-xs uppercase tracking-[0.2em] mb-6 font-en">
+              <span className="h-px w-4 bg-brand-gold" /> {aboutData.hero.tag}
             </span>
-            <h1 className="text-6xl md:text-8xl font-bold text-slate-900 font-en mb-6 tracking-tight leading-tight">
-              {aboutData.hero.title_part1.replace('Empire', '').trim()} <span className="text-teal-700">Empire</span> <br /> {aboutData.hero.title_part2}
+            <h1 className="text-5xl md:text-7xl font-bold text-white font-en mb-6 tracking-tight uppercase drop-shadow-lg">
+              {aboutData.hero.title_part1.replace('Empire', '').trim()} <span className="text-brand-gold">Empire</span> <br /> {aboutData.hero.title_part2}
             </h1>
-            <p className="text-xl md:text-2xl text-slate-500 font-en max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg md:text-xl text-slate-300 font-en leading-relaxed max-w-3xl mx-auto font-light drop-shadow-md">
               {aboutData.hero.desc}
             </p>
           </motion.div>
