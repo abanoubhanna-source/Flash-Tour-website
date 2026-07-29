@@ -1,7 +1,7 @@
 // src/app/destinations/zanzibar/page.tsx
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, ChevronRight, Trees, Sun } from 'lucide-react';
 import Image from 'next/image';
@@ -10,17 +10,21 @@ import { trackDestinationView } from '@/lib/analytics';
 import { usePublishedDestination } from '@/lib/cms/destinations/use-published-destination';
 
 // الداتا الموحدة لزنجبار والسفاري
-const zanzibarData = [
+type ZanzibarPlace = { name: string; slug?: string; desc: string; img: string };
+type ZanzibarCity = { id: string; slug?: string; name: string; icon: typeof Sun; desc: string; mainImg: string; places: ZanzibarPlace[] };
+
+const defaultZanzibarData: ZanzibarCity[] = [
   {
     id: "zanzibar",
+    slug: "zanzibar-island",
     name: "ZANZIBAR",
     icon: Sun,
     desc: "In Zanzibar, our own resort Kiwengwa Beach has more than 200 rooms. It is directly located on the beach and offers a wide range of activities. The island itself has the most famous beaches in Africa, where we will organize your private boat Safaris to sand banks located in the middle of the ocean. A visit to the forest with a guide taking you on a spice tour, and a day of relaxation sipping on coconut by the beach.",
     mainImg: "/images/zanzibar-island.jpg",
     places: [
-      { name: "National Park", desc: "A vast lagoon blessed with a spectacular landscape of striped sand. The mangrove trees surround the lagoon adding to its natural beauty.", img: "/images/zanzibar-national-park.jpg" },
-      { name: "Stone Town", desc: "The ancient capital city, where travelers enter the daily life of locals. A visit is never complete without seeing Freddie Mercury’s home museum.", img: "/images/stone-town.jpg" },
-      { name: "Jozani Forest", desc: "Home to the Red Colobus: a rare species of monkey regarded as the national symbol of Zanzibar. Perfect for those who seek adventure.", img: "/images/jozani.jpg" }
+      { name: "National Park", slug: "national-park", desc: "A vast lagoon blessed with a spectacular landscape of striped sand. The mangrove trees surround the lagoon adding to its natural beauty.", img: "/images/zanzibar-national-park.jpg" },
+      { name: "Stone Town", slug: "stone-town", desc: "The ancient capital city, where travelers enter the daily life of locals. A visit is never complete without seeing Freddie Mercury’s home museum.", img: "/images/stone-town.jpg" },
+      { name: "Jozani Forest", slug: "jozani-forest", desc: "Home to the Red Colobus: a rare species of monkey regarded as the national symbol of Zanzibar. Perfect for those who seek adventure.", img: "/images/jozani.jpg" }
     ]
   },
   {
@@ -40,6 +44,28 @@ const zanzibarData = [
 export default function ZanzibarDestinationPage() {
   const cms = usePublishedDestination('zanzibar');
   useEffect(() => { trackDestinationView('Zanzibar'); }, []);
+  const [zanzibarData, setZanzibarData] = useState(defaultZanzibarData);
+  useEffect(() => {
+    fetch(`/api/destinations/hierarchy?slug=zanzibar`)
+      .then((r) => (r.ok ? r.json() : { places: [] }))
+      .then(({ places }) => {
+        if (!places || !places.length) return;
+        setZanzibarData((current) => current.map((city) => {
+          const cmsCity = 'slug' in city ? places.find((p: { slug: string }) => p.slug === (city as { slug?: string }).slug) : undefined;
+          if (!cmsCity) return city;
+          return {
+            ...city,
+            desc: cmsCity.desc || city.desc,
+            places: city.places.map((spot) => {
+              const spotSlug = 'slug' in spot ? (spot as { slug?: string }).slug : undefined;
+              const cmsSpot = spotSlug ? cmsCity.attractions.find((a: { slug: string }) => a.slug === spotSlug) : undefined;
+              return cmsSpot ? { ...spot, desc: cmsSpot.desc || spot.desc } : spot;
+            }),
+          };
+        }));
+      })
+      .catch(() => undefined);
+  }, []);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);

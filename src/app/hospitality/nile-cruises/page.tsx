@@ -1,7 +1,7 @@
 // src/app/hospitality/nile-cruises/page.tsx
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -9,7 +9,16 @@ import Footer from "@/components/Footer";
 import { ArrowUpRight, Anchor, Ship, Waves, CheckCircle2 } from 'lucide-react';
 import { trackCruiseView } from '@/lib/analytics';
 
-const fleet = [
+type CmsProperty = { slug: string; name: string; tag: string; desc: string; roomsOrCabins: number | null; facilities: string[]; diningOptions: string[] };
+
+function buildSpecs(item: CmsProperty): string[] {
+  const specs: string[] = [];
+  if (item.roomsOrCabins) specs.push(`${item.roomsOrCabins} Cabins`);
+  specs.push(...item.diningOptions.slice(0, 1), ...item.facilities.slice(0, 3));
+  return specs.slice(0, 4);
+}
+
+const defaultFleet = [
   { 
     id: '01', 
     name: 'Nile Serenity', 
@@ -21,6 +30,7 @@ const fleet = [
   { 
     id: '02', 
     name: 'Nile Excellence', 
+    slug: 'nile-excellence',
     tag: 'MODERN ELEGANCE',
     desc: 'A seamless blend of contemporary design and classic river heritage, featuring expansive sun decks and premium culinary experiences.', 
     img: '/images/cruise-2.jpg',
@@ -29,6 +39,7 @@ const fleet = [
   { 
     id: '03', 
     name: 'Lady Carol', 
+    slug: 'lady-carol',
     tag: 'BOUTIQUE SANCTUARY',
     desc: 'An intimate, highly exclusive cruising experience perfectly tailored for private charters and high-net-worth corporate gatherings.', 
     img: '/images/cruise-3.jpg',
@@ -37,6 +48,7 @@ const fleet = [
   { 
     id: '04', 
     name: 'Magic II', 
+    slug: 'magic-ii',
     tag: 'PANORAMIC VOYAGER',
     desc: 'Commanding the ancient waters with breathtaking floor-to-ceiling windows, ensuring the timeless Nile is always your backdrop.', 
     img: '/images/cruise-4.jpg',
@@ -45,6 +57,7 @@ const fleet = [
   { 
     id: '05', 
     name: 'Magic I', 
+    slug: 'magic-i',
     tag: 'HERITAGE CLASSIC',
     desc: 'A legacy of majestic sailings. The optimal choice for large corporate incentive groups seeking authentic Egyptian hospitality.', 
     img: '/images/cruise-5.jpg',
@@ -53,6 +66,7 @@ const fleet = [
   { 
     id: '06', 
     name: 'Lady Mary', 
+    slug: 'lady-mary',
     tag: 'THE SUN CHASER',
     desc: 'Exceptional sun decks and shaded lounges, providing the ultimate environment for relaxation and networking between temple visits.', 
     img: '/images/cruise-6.jpg',
@@ -61,6 +75,7 @@ const fleet = [
   { 
     id: '07', 
     name: 'Nile Majestic', 
+    slug: 'nile-majestic',
     tag: 'THE HIDDEN DAHABIYA',
     desc: 'A pharaonic-inspired dahabiya revealing hidden islands rarely seen in Luxor and Aswan. With just 10 guest cabins, it offers refined local dining, curated excursions, and a relaxing sundeck with pool and lounge areas for an intimate Nile journey.', 
     img: '/images/hospitality-cruise.jpg',
@@ -69,6 +84,7 @@ const fleet = [
   { 
     id: '08', 
     name: 'Nile Divine', 
+    slug: 'nile-divine',
     tag: 'THE ARTISTS\u2019 DAHABIYA',
     desc: 'The first dahabiya of its kind, redefining history on the Nile through a collaboration with renowned artists. Its 8 cabins are hand-painted works of art by Egyptian artisans, complemented by an elegant reception, a spa, and two sundecks.', 
     img: '/images/hospitality-cruise.jpg',
@@ -77,7 +93,26 @@ const fleet = [
 ];
 
 export default function NileCruisesPage() {
+  const [fleet, setFleet] = useState(defaultFleet);
   useEffect(() => { trackCruiseView('Nile Cruises'); }, []);
+  useEffect(() => {
+    const slugs = defaultFleet.map((boat) => ('slug' in boat ? (boat as { slug?: string }).slug : undefined)).filter(Boolean).join(',');
+    if (!slugs) return;
+    fetch(`/api/hospitality/properties?slugs=${slugs}`)
+      .then((r) => (r.ok ? r.json() : []))
+      .then((items: CmsProperty[]) => {
+        if (!items.length) return;
+        const bySlug = new Map(items.map((item) => [item.slug, item]));
+        setFleet((current) => current.map((boat) => {
+          const slug = 'slug' in boat ? (boat as { slug?: string }).slug : undefined;
+          const match = slug ? bySlug.get(slug) : undefined;
+          if (!match) return boat;
+          const specs = buildSpecs(match);
+          return { ...boat, name: match.name, tag: match.tag || boat.tag, desc: match.desc || boat.desc, specs: specs.length ? specs : boat.specs };
+        }));
+      })
+      .catch(() => undefined);
+  }, []);
 
   return (
     <main className="flex min-h-screen flex-col items-center w-full bg-white overflow-hidden">

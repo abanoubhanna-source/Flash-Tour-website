@@ -1,7 +1,7 @@
 // src/app/hospitality/tropical-retreats/page.tsx
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -9,10 +9,11 @@ import Footer from "@/components/Footer";
 import { ArrowUpRight, CheckCircle2, Building2, Sun, Trees, Briefcase, Palmtree } from 'lucide-react';
 import { trackHospitalityPropertyView } from '@/lib/analytics';
 
-const tropicalData = [
+const defaultTropicalData = [
   { 
     id: '01', 
     name: 'Kiwengwa Beach Resort', 
+    slug: 'kiwengwa-beach-resort',
     tag: '5-STAR ESTATES',
     desc: 'Our fully-owned flagship property in Zanzibar delivers the Flash Group standard of luxury. Boasting over 200 modern African-style units, it offers a seamless blend of natural beauty and premium comfort directly on the beach.', 
     img: '/images/zanzibar-island.jpg', // تأكد من اسم الصورة
@@ -48,8 +49,36 @@ const tropicalData = [
   }
 ];
 
+type CmsProperty = { slug: string; name: string; tag: string; desc: string; roomsOrCabins: number | null; facilities: string[]; diningOptions: string[] };
+
+function buildSpecs(item: CmsProperty): string[] {
+  const specs: string[] = [];
+  if (item.roomsOrCabins) specs.push(`${item.roomsOrCabins} Rooms`);
+  specs.push(...item.diningOptions.slice(0, 1), ...item.facilities.slice(0, 3));
+  return specs.slice(0, 4);
+}
+
 export default function TropicalRetreatsPage() {
+  const [tropicalData, setTropicalData] = useState(defaultTropicalData);
   useEffect(() => { trackHospitalityPropertyView('Tropical Retreats'); }, []);
+  useEffect(() => {
+    const slugs = defaultTropicalData.map((item) => ('slug' in item ? (item as { slug?: string }).slug : undefined)).filter(Boolean).join(',');
+    if (!slugs) return;
+    fetch(`/api/hospitality/properties?slugs=${slugs}`)
+      .then((r) => (r.ok ? r.json() : []))
+      .then((items: CmsProperty[]) => {
+        if (!items.length) return;
+        const bySlug = new Map(items.map((item) => [item.slug, item]));
+        setTropicalData((current) => current.map((entry) => {
+          const slug = 'slug' in entry ? (entry as { slug?: string }).slug : undefined;
+          const match = slug ? bySlug.get(slug) : undefined;
+          if (!match) return entry;
+          const specs = buildSpecs(match);
+          return { ...entry, name: match.name, tag: match.tag || entry.tag, desc: match.desc || entry.desc, specs: specs.length ? specs : entry.specs };
+        }));
+      })
+      .catch(() => undefined);
+  }, []);
 
   return (
     <main className="flex min-h-screen flex-col items-center w-full bg-white overflow-hidden">

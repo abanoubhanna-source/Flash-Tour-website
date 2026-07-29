@@ -1,7 +1,7 @@
 // src/app/hospitality/european-elegance/page.tsx
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -9,10 +9,20 @@ import Footer from "@/components/Footer";
 import { ArrowUpRight, CheckCircle2, Building2, MapPin, Wine, Briefcase, Anchor } from 'lucide-react';
 import { trackHospitalityPropertyView } from '@/lib/analytics';
 
-const mediterraneanData = [
+type CmsProperty = { slug: string; name: string; tag: string; desc: string; roomsOrCabins: number | null; facilities: string[]; diningOptions: string[] };
+
+function buildSpecs(item: CmsProperty): string[] {
+  const specs: string[] = [];
+  if (item.roomsOrCabins) specs.push(`${item.roomsOrCabins} Rooms`);
+  specs.push(...item.diningOptions.slice(0, 1), ...item.facilities.slice(0, 3));
+  return specs.slice(0, 4);
+}
+
+const defaultMediterraneanData = [
   { 
     id: '01', 
     name: 'President Sea Palace Hotel', 
+    slug: 'president-sea-palace-hotel',
     tag: 'NOTO MARINA, SICILY',
     desc: 'A charming 4-star seaside retreat on the beachfront of Noto Marina, surrounded by lush gardens, swaying palm trees, and the crystal-clear Mediterranean, with direct access to a sandy beach. Choose from 74 rooms with side sea views, and enjoy authentic Sicilian dining across two restaurants and two bars, an Italian entertainment team, a fully equipped gym, and wheelchair-friendly facilities.', 
     img: '/images/sicily-main.jpg',
@@ -22,6 +32,7 @@ const mediterraneanData = [
   { 
     id: '02', 
     name: 'Castelsardo Resort', 
+    slug: 'castelsardo-resort',
     tag: 'SARDINIA',
     desc: 'An exceptional seaside retreat with spectacular views of Asinara Island, minutes from the medieval village of Castelsardo. The resort features 132 traditionally styled Sardinian rooms, most with private balconies, alongside a main restaurant, pizzeria, and sea-view bar, plus a gym, tennis court, and daily live entertainment.', 
     img: '/images/sardinia-main.jpg',
@@ -31,6 +42,7 @@ const mediterraneanData = [
   { 
     id: '03', 
     name: 'Hopps Hotel', 
+    slug: 'hopps-hotel',
     tag: 'MAZARA DEL VALLO, SICILY',
     desc: 'An incredible 4-star retreat on the picturesque seafront of Mazara del Vallo, with easy access to a private beach equipped with sun loungers and umbrellas. The hotel offers 235 rooms with a variety of views, pizzeria restaurants, two bars, swimming pools, and a vibrant entertainment program for all ages.', 
     img: '/images/italy-resorts.jpg',
@@ -40,6 +52,7 @@ const mediterraneanData = [
   { 
     id: '04', 
     name: "Baia D'Oro Hotel", 
+    slug: 'baia-doro-hotel',
     tag: 'SICILY BEACHFRONT',
     desc: 'One of Sicily\u2019s incredible beachfront resorts, offering 68 rooms and bungalows, most with sea views and private terraces. Guests enjoy separate adult and children\u2019s pools, buffet dining across two restaurants, a fully equipped gym, and a vibrant French entertainment team with daily and evening activities.', 
     img: '/images/hospitality-italy.jpg',
@@ -49,6 +62,7 @@ const mediterraneanData = [
   { 
     id: '05', 
     name: 'Hotel Eloro', 
+    slug: 'hotel-club-eloro',
     tag: 'NEAR NOTO ANTICA & SYRACUSE, SICILY',
     desc: 'Surrounded by historic sites including Noto Antica, Eloro, and Syracuse, this beachfront hotel overlooks a wide sandy bay with pools for adults and kids. Its 247 rooms mostly enjoy sea views, and dining spans seven cuisines, from Sicilian and grill to fish, Greek, and Mexican, alongside a mini club, tennis court, and sports field.', 
     img: '/images/sicily-main.jpg',
@@ -58,6 +72,7 @@ const mediterraneanData = [
   { 
     id: '06', 
     name: 'Hotel Dolcestate Club', 
+    slug: 'hotel-dolcestate-club',
     tag: 'SICILIAN TYRRHENIAN COAST',
     desc: 'Set on Sicily\u2019s Tyrrhenian coast near Buonfornello, this 60-room hotel blends modern comfort with traditional Sicilian and Italian cuisine. Guests enjoy banquet facilities for 20 to 300 guests, a reading room, massage centre, two pools, a bocce court, and a 250-seat amphitheatre for entertainment.', 
     img: '/images/italy-resorts.jpg',
@@ -67,6 +82,7 @@ const mediterraneanData = [
   { 
     id: '07', 
     name: 'Le Dune Beach Club', 
+    slug: 'le-dune-beach-club',
     tag: 'SICILY BEACHFRONT',
     desc: 'A beachfront bungalow-style property designed for relaxing stays with family and friends, with easy access to the sea and panoramic coastal scenery. Facilities include a fresh-water adult pool, a bar, well-maintained gardens, and beach volleyball, tennis, and soccer, plus a Mini and Baby Club for children aged 4 to 12.', 
     img: '/images/hospitality-italy.jpg',
@@ -76,7 +92,26 @@ const mediterraneanData = [
 ];
 
 export default function EuropeanElegancePage() {
+  const [mediterraneanData, setMediterraneanData] = useState(defaultMediterraneanData);
   useEffect(() => { trackHospitalityPropertyView('European Elegance'); }, []);
+  useEffect(() => {
+    const slugs = defaultMediterraneanData.map((item) => ('slug' in item ? (item as { slug?: string }).slug : undefined)).filter(Boolean).join(',');
+    if (!slugs) return;
+    fetch(`/api/hospitality/properties?slugs=${slugs}`)
+      .then((r) => (r.ok ? r.json() : []))
+      .then((items: CmsProperty[]) => {
+        if (!items.length) return;
+        const bySlug = new Map(items.map((item) => [item.slug, item]));
+        setMediterraneanData((current) => current.map((hotel) => {
+          const slug = 'slug' in hotel ? (hotel as { slug?: string }).slug : undefined;
+          const match = slug ? bySlug.get(slug) : undefined;
+          if (!match) return hotel;
+          const specs = buildSpecs(match);
+          return { ...hotel, name: match.name, tag: match.tag || hotel.tag, desc: match.desc || hotel.desc, specs: specs.length ? specs : hotel.specs };
+        }));
+      })
+      .catch(() => undefined);
+  }, []);
 
   return (
     <main className="flex min-h-screen flex-col items-center w-full bg-white overflow-hidden">

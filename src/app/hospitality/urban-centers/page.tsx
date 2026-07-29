@@ -1,7 +1,7 @@
 // src/app/hospitality/urban-centers/page.tsx
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -9,10 +9,11 @@ import Footer from "@/components/Footer";
 import { ArrowUpRight, CheckCircle2, Building2, UtensilsCrossed, Wine, Crown, Landmark } from 'lucide-react';
 import { trackHospitalityPropertyView } from '@/lib/analytics';
 
-const urbanData = [
+const defaultUrbanData = [
   { 
     id: '01', 
     name: '1920s Boutique Hotel', 
+    slug: '1920s-boutique-hotel',
     tag: 'HISTORIC STAY',
     desc: 'Step back in time in the prestigious district of Heliopolis. We preserve history through this meticulously restored 100-year-old historic villa, offering a seamless blend of classic 1920s architecture, antique charm, and modern sophistication.', 
     img: '/images/1920s-hotel.jpg', // تأكد من اسم الصورة
@@ -22,6 +23,7 @@ const urbanData = [
   { 
     id: '02', 
     name: 'Carlo\'s Restaurant', 
+    slug: 'carlo-heliopolis',
     tag: 'HISTORIC GARDENS',
     desc: 'Nestled within the lush, historic gardens of our boutique villa. Carlo\'s elevates the premium casual dining scene, serving a masterful variety of Oriental, Asian, and international dishes in an atmosphere of unparalleled elegance.', 
     img: '/images/carlos.jpg', // تأكد من اسم الصورة
@@ -31,6 +33,7 @@ const urbanData = [
   { 
     id: '03', 
     name: 'Rossini Fine Dining', 
+    slug: 'rossini',
     tag: 'AWARD-WINNING CULINARY',
     desc: 'A true landmark in Cairo\'s fine dining scene since 1993. Proud bearer of the prestigious Chaine des Rotisseurs certification, Rossini offers authentic Italian and Mediterranean gastronomy for the most discerning palates.', 
     img: '/images/rossini.jpg', // تأكد من اسم الصورة
@@ -48,8 +51,36 @@ const urbanData = [
   }
 ];
 
+type CmsProperty = { slug: string; name: string; tag: string; desc: string; roomsOrCabins: number | null; facilities: string[]; diningOptions: string[] };
+
+function buildSpecs(item: CmsProperty): string[] {
+  const specs: string[] = [];
+  if (item.roomsOrCabins) specs.push(`${item.roomsOrCabins} Rooms`);
+  specs.push(...item.diningOptions.slice(0, 1), ...item.facilities.slice(0, 3));
+  return specs.slice(0, 4);
+}
+
 export default function UrbanCentersPage() {
+  const [urbanData, setUrbanData] = useState(defaultUrbanData);
   useEffect(() => { trackHospitalityPropertyView('Urban Centers'); }, []);
+  useEffect(() => {
+    const slugs = defaultUrbanData.map((item) => ('slug' in item ? (item as { slug?: string }).slug : undefined)).filter(Boolean).join(',');
+    if (!slugs) return;
+    fetch(`/api/hospitality/properties?slugs=${slugs}`)
+      .then((r) => (r.ok ? r.json() : []))
+      .then((items: CmsProperty[]) => {
+        if (!items.length) return;
+        const bySlug = new Map(items.map((item) => [item.slug, item]));
+        setUrbanData((current) => current.map((entry) => {
+          const slug = 'slug' in entry ? (entry as { slug?: string }).slug : undefined;
+          const match = slug ? bySlug.get(slug) : undefined;
+          if (!match) return entry;
+          const specs = buildSpecs(match);
+          return { ...entry, name: match.name, tag: match.tag || entry.tag, desc: match.desc || entry.desc, specs: specs.length ? specs : entry.specs };
+        }));
+      })
+      .catch(() => undefined);
+  }, []);
 
   return (
     <main className="flex min-h-screen flex-col items-center w-full bg-white overflow-hidden">

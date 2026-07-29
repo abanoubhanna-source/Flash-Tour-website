@@ -1,7 +1,7 @@
 // src/app/destinations/morocco/page.tsx
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, ChevronRight, Compass, Mountain, Building2 } from 'lucide-react';
 import Image from 'next/image';
@@ -10,9 +10,10 @@ import { trackDestinationView } from '@/lib/analytics';
 import { usePublishedDestination } from '@/lib/cms/destinations/use-published-destination';
 
 // الداتا الموحدة للمغرب (بأسلوب B2B فخم)
-const moroccoData = [
+const defaultMoroccoData = [
   {
     id: "marrakech",
+    slug: "marrakech",
     name: "MARRAKECH",
     icon: Building2,
     desc: "Known as the 'Red City', Marrakech is a sensory masterpiece where ancient traditions meet modern luxury. From the bustling souks and the historic Medina to our exclusive, meticulously restored luxury Riads, we offer your elite clients an authentic yet highly sophisticated Moroccan experience.",
@@ -52,6 +53,28 @@ const moroccoData = [
 export default function MoroccoDestinationPage() {
   const cms = usePublishedDestination('morocco');
   useEffect(() => { trackDestinationView('Morocco'); }, []);
+  const [moroccoData, setMoroccoData] = useState(defaultMoroccoData);
+  useEffect(() => {
+    fetch(`/api/destinations/hierarchy?slug=morocco`)
+      .then((r) => (r.ok ? r.json() : { places: [] }))
+      .then(({ places }) => {
+        if (!places || !places.length) return;
+        setMoroccoData((current) => current.map((city) => {
+          const cmsCity = 'slug' in city ? places.find((p: { slug: string }) => p.slug === (city as { slug?: string }).slug) : undefined;
+          if (!cmsCity) return city;
+          return {
+            ...city,
+            desc: cmsCity.desc || city.desc,
+            places: city.places.map((spot) => {
+              const spotSlug = 'slug' in spot ? (spot as { slug?: string }).slug : undefined;
+              const cmsSpot = spotSlug ? cmsCity.attractions.find((a: { slug: string }) => a.slug === spotSlug) : undefined;
+              return cmsSpot ? { ...spot, desc: cmsSpot.desc || spot.desc } : spot;
+            }),
+          };
+        }));
+      })
+      .catch(() => undefined);
+  }, []);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);

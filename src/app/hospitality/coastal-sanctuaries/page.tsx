@@ -1,7 +1,7 @@
 // src/app/hospitality/coastal-sanctuaries/page.tsx
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -9,10 +9,11 @@ import Footer from "@/components/Footer";
 import { ArrowUpRight, Anchor, Ship, Waves, CheckCircle2, Building2, Sun, Wind } from 'lucide-react';
 import { trackHospitalityPropertyView } from '@/lib/analytics';
 
-const coastalData = [
+const defaultCoastalData = [
   { 
     id: '01', 
     name: 'True Beach Resort', 
+    slug: 'true-beach-resort',
     tag: '5-STAR LUXURY',
     desc: 'Our signature hospitality shines at our flagship coastal property in Marsa Alam. Thoughtfully divided into a vibrant family-friendly resort and an exclusive adults-only village for ultimate serenity.', 
     img: '/images/true-beach.jpg', // تأكد من وجود الصورة
@@ -22,6 +23,7 @@ const coastalData = [
   { 
     id: '02', 
     name: 'Flash Yachting (Flash 3, 4, 5)', 
+    slug: 'flash-boats',
     tag: 'SEA MOBILITY',
     desc: 'Command the Red Sea with our exclusive fleet of private motorboats and diving yachts. Perfectly designed to dominate the coastline, offering bespoke marine excursions and private island hopping.', 
     img: '/images/flash-boats.jpg', // تأكد من وجود الصورة
@@ -48,8 +50,36 @@ const coastalData = [
   }
 ];
 
+type CmsProperty = { slug: string; name: string; tag: string; desc: string; roomsOrCabins: number | null; facilities: string[]; diningOptions: string[] };
+
+function buildSpecs(item: CmsProperty): string[] {
+  const specs: string[] = [];
+  if (item.roomsOrCabins) specs.push(`${item.roomsOrCabins} Rooms`);
+  specs.push(...item.diningOptions.slice(0, 1), ...item.facilities.slice(0, 3));
+  return specs.slice(0, 4);
+}
+
 export default function CoastalSanctuariesPage() {
+  const [coastalData, setCoastalData] = useState(defaultCoastalData);
   useEffect(() => { trackHospitalityPropertyView('Coastal Sanctuaries'); }, []);
+  useEffect(() => {
+    const slugs = defaultCoastalData.map((item) => ('slug' in item ? (item as { slug?: string }).slug : undefined)).filter(Boolean).join(',');
+    if (!slugs) return;
+    fetch(`/api/hospitality/properties?slugs=${slugs}`)
+      .then((r) => (r.ok ? r.json() : []))
+      .then((items: CmsProperty[]) => {
+        if (!items.length) return;
+        const bySlug = new Map(items.map((item) => [item.slug, item]));
+        setCoastalData((current) => current.map((entry) => {
+          const slug = 'slug' in entry ? (entry as { slug?: string }).slug : undefined;
+          const match = slug ? bySlug.get(slug) : undefined;
+          if (!match) return entry;
+          const specs = buildSpecs(match);
+          return { ...entry, name: match.name, tag: match.tag || entry.tag, desc: match.desc || entry.desc, specs: specs.length ? specs : entry.specs };
+        }));
+      })
+      .catch(() => undefined);
+  }, []);
 
   return (
     <main className="flex min-h-screen flex-col items-center w-full bg-white overflow-hidden">

@@ -1,7 +1,7 @@
 // src/app/destinations/egypt/page.tsx
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, ChevronRight, Palmtree, Waves, Fish, Landmark, Ship } from 'lucide-react';
 import Image from 'next/image';
@@ -10,65 +10,70 @@ import { trackDestinationView } from '@/lib/analytics';
 import { usePublishedDestination } from '@/lib/cms/destinations/use-published-destination';
 
 // الداتا الأصلية لمصر مع إضافة الأيقونات المخصصة لكل مدينة
-const egyptData = [
+const defaultEgyptData = [
   {
     id: "sharm",
+    slug: "sharm-el-sheikh",
     name: "SHARM EL SHEIKH",
     desc: "Located in South Sinai, Sharm El-Sheikh is a coastal destination. It is warm and sunny all year long and has the most famous coral reef sites. If you are a diving enthusiast, this is the best place to go. For some adrenaline rush you can try different kinds of water sports. If you are a marine passionate you will discover so many marine species and be astonished by the underwater colored reefs. For those wanting to relax, they can enjoy refreshments while tanning on a sunbed by the beach. Nightlife in Sharm is very lively, and this aesthetically beautiful town offers all sorts of activities from early morning to late at night.",
     mainImg: "/images/sharm-main.jpg",
     icon: Palmtree,
     places: [
-      { name: "Tiran Island", desc: "One of the most astonishing spots in the Red Sea with enchanting aquatic wonders. It is one of the best preserved diving sites.", img: "/images/tiran-island.jpg" },
-      { name: "Mt. Moses", desc: "The biblical site where Moses received the 10 commandments. Nearby the mountain at St. Catherine’s village, accommodation is offered for adventurers.", img: "/images/mt-moses.jpg" },
-      { name: "Ras Mohamed", desc: "A natural preservation where diving enthusiasts will be dazzled by the beauty of its coral reefs. It is protected under Egyptian law to never be polluted.", img: "/images/ras-mohamed.jpg" }
+      { name: "Tiran Island", slug: "tiran-island", desc: "One of the most astonishing spots in the Red Sea with enchanting aquatic wonders. It is one of the best preserved diving sites.", img: "/images/tiran-island.jpg" },
+      { name: "Mt. Moses", slug: "mount-moses", desc: "The biblical site where Moses received the 10 commandments. Nearby the mountain at St. Catherine’s village, accommodation is offered for adventurers.", img: "/images/mt-moses.jpg" },
+      { name: "Ras Mohamed", slug: "ras-mohammed-national-park", desc: "A natural preservation where diving enthusiasts will be dazzled by the beauty of its coral reefs. It is protected under Egyptian law to never be polluted.", img: "/images/ras-mohamed.jpg" }
     ]
   },
   {
     id: "hurghada",
+    slug: "hurghada",
     name: "HURGHADA",
     desc: "Located along the Red Sea, Hurghada offers a wide variety of activities. In this city you can go on an adventure, you can snorkel, you can enjoy a boat day and relax. Hurghada is very famous for its laidback lifestyle, for fish lovers you will enjoy the freshest seafood. Hurghada ranks amongst the top destinations for those seeking a relaxing holiday.",
     mainImg: "/images/hurghada-main.jpg",
     icon: Waves,
     places: [
-      { name: "Dream Island", desc: "A very special site to explore the under-water gardens of the coral reefs and colorful fish; moreover, enjoy your sunbathe by the beach.", img: "/images/dream-island.jpg" },
-      { name: "Giftun Island", desc: "A truly magnificent island with its offshore reefs providing spectacular drop-offs for experienced divers, hiding moray eels and fish amongst the corals.", img: "/images/giftun-island.jpg" },
-      { name: "Red Sea Monasteries", desc: "Hidden amid the arid Red Sea Hills, far from the hustle and bustle of the cities, lies Egypt’s two oldest Coptic monasteries: St Paul’s and St Anthony’s.", img: "/images/monasteries.jpg" }
+      { name: "Dream Island", slug: "dream-island", desc: "A very special site to explore the under-water gardens of the coral reefs and colorful fish; moreover, enjoy your sunbathe by the beach.", img: "/images/dream-island.jpg" },
+      { name: "Giftun Island", slug: "giftun-island", desc: "A truly magnificent island with its offshore reefs providing spectacular drop-offs for experienced divers, hiding moray eels and fish amongst the corals.", img: "/images/giftun-island.jpg" },
+      { name: "Red Sea Monasteries", slug: "red-sea-monasteries", desc: "Hidden amid the arid Red Sea Hills, far from the hustle and bustle of the cities, lies Egypt’s two oldest Coptic monasteries: St Paul’s and St Anthony’s.", img: "/images/monasteries.jpg" }
     ]
   },
   {
     id: "marsaalam",
+    slug: "marsa-alam",
     name: "MARSA ALAM",
     desc: "Marsa Alam, a very well preserved protectorate where nature is intact, far away from urbanization and in the heart of nature. This destination is so authentic that the main activity there is exploring the marine life, the birds. This tranquil destination has white sandy beaches, lagoons, and top sites for diving.",
     mainImg: "/images/marsa-main.jpg",
     icon: Fish,
     places: [
-      { name: "Abu Dabab", desc: "A chance to spot the seaweeds gracing dugongs and turtles within their natural habitat. In addition to abundance of colored fish.", img: "/images/abu-dabab.jpg" },
-      { name: "Hamata Islands", desc: "The shallow waters are home to the black and orange striped fish and marine delicate species within the vicinity of the coral reefs.", img: "/images/hamata.jpg" },
-      { name: "Sataya Dolphin Reef", desc: "An extraordinary site with a steep wall at the outer reef... It provides an opportunity to encounter large schools of fish such as dolphins, tunas, Napoleon, and occasionally passing turtles.", img: "/images/sataya.jpg" }
+      { name: "Abu Dabab", slug: "abu-dabbab", desc: "A chance to spot the seaweeds gracing dugongs and turtles within their natural habitat. In addition to abundance of colored fish.", img: "/images/abu-dabab.jpg" },
+      { name: "Hamata Islands", slug: "hamata-islands", desc: "The shallow waters are home to the black and orange striped fish and marine delicate species within the vicinity of the coral reefs.", img: "/images/hamata.jpg" },
+      { name: "Sataya Dolphin Reef", slug: "sataya-dolphin-reef", desc: "An extraordinary site with a steep wall at the outer reef... It provides an opportunity to encounter large schools of fish such as dolphins, tunas, Napoleon, and occasionally passing turtles.", img: "/images/sataya.jpg" }
     ]
   },
   {
     id: "luxor",
+    slug: "luxor",
     name: "LUXOR",
     desc: "Located on the Eastern bank of the Nile, where the ancient capital of Egypt, Thebes, stood. Due to the city’s historical significance, it is abundant with numerous artifacts from several eras in Egyptian history; moreover, the city is renowned as an open-air museum.",
     mainImg: "/images/luxor-main.jpg",
     icon: Landmark,
     places: [
-      { name: "Mummification Museum", desc: "An archeological museum, dedicated to the art of Ancient Egyptian mummification. It displays related artifacts and mummies.", img: "/images/mummification.jpg" },
-      { name: "Karnak Temple", desc: "Karnak is viewed as the biggest antiquated site on the planet. Around thirty pharaohs have contributed to the structures, permitting it to arrive at a size, intricacy, and variety not discovered elsewhere in Egypt.", img: "/images/karnak.jpg" },
-      { name: "Valley of the Kings", desc: "The massive site of royal burials since around 2100 BC with more than 63 magnificent royal tombs. It is one of the most prominent sites.", img: "/images/valley-kings.jpg" }
+      { name: "Mummification Museum", slug: "mummification-museum", desc: "An archeological museum, dedicated to the art of Ancient Egyptian mummification. It displays related artifacts and mummies.", img: "/images/mummification.jpg" },
+      { name: "Karnak Temple", slug: "karnak-temple", desc: "Karnak is viewed as the biggest antiquated site on the planet. Around thirty pharaohs have contributed to the structures, permitting it to arrive at a size, intricacy, and variety not discovered elsewhere in Egypt.", img: "/images/karnak.jpg" },
+      { name: "Valley of the Kings", slug: "valley-of-the-kings", desc: "The massive site of royal burials since around 2100 BC with more than 63 magnificent royal tombs. It is one of the most prominent sites.", img: "/images/valley-kings.jpg" }
     ]
   },
   {
     id: "aswan",
+    slug: "aswan",
     name: "ASWAN",
     desc: "Located in Southern Egypt, it has served as a strategic location since ancient times for commercial activities. Nowadays, the city hosts several ancient temples from different eras; furthermore, the Nubian villages are where you observe well preserved cultures still practicing ancient practices.",
     mainImg: "/images/aswan-main.jpg",
     icon: Ship,
     places: [
-      { name: "Nubian Village", desc: "Explore the Traditional Nubian village with vividly colored houses, spice shops, and cafes overlooking the Nile River. It is an experience that no one should miss.", img: "/images/nubian-village.jpg" },
-      { name: "Abu Simbel", desc: "Built by the Egyptian king Ramses II and the largest temple carved in rocks in the world. Sun lights up the face of Ramses II in Abu Simbel in biannual illumination.", img: "/images/abu-simbel.jpg" },
-      { name: "Philae Temple", desc: "Egypt’s ancient center for the cult of Isis. The temple complex was rescued and moved to nearby Agilkia Island as part of the UNESCO Nubia Campaign project.", img: "/images/philae.jpg" }
+      { name: "Nubian Village", slug: "nubian-village", desc: "Explore the Traditional Nubian village with vividly colored houses, spice shops, and cafes overlooking the Nile River. It is an experience that no one should miss.", img: "/images/nubian-village.jpg" },
+      { name: "Abu Simbel", slug: "abu-simbel-temple", desc: "Built by the Egyptian king Ramses II and the largest temple carved in rocks in the world. Sun lights up the face of Ramses II in Abu Simbel in biannual illumination.", img: "/images/abu-simbel.jpg" },
+      { name: "Philae Temple", slug: "philae-temple", desc: "Egypt’s ancient center for the cult of Isis. The temple complex was rescued and moved to nearby Agilkia Island as part of the UNESCO Nubia Campaign project.", img: "/images/philae.jpg" }
     ]
   }
 ];
@@ -76,6 +81,28 @@ const egyptData = [
 export default function EgyptComprehensivePage() {
   const cms = usePublishedDestination('egypt');
   useEffect(() => { trackDestinationView('Egypt'); }, []);
+  const [egyptData, setEgyptData] = useState(defaultEgyptData);
+  useEffect(() => {
+    fetch(`/api/destinations/hierarchy?slug=egypt`)
+      .then((r) => (r.ok ? r.json() : { places: [] }))
+      .then(({ places }) => {
+        if (!places || !places.length) return;
+        setEgyptData((current) => current.map((city) => {
+          const cmsCity = 'slug' in city ? places.find((p: { slug: string }) => p.slug === (city as { slug?: string }).slug) : undefined;
+          if (!cmsCity) return city;
+          return {
+            ...city,
+            desc: cmsCity.desc || city.desc,
+            places: city.places.map((spot) => {
+              const spotSlug = 'slug' in spot ? (spot as { slug?: string }).slug : undefined;
+              const cmsSpot = spotSlug ? cmsCity.attractions.find((a: { slug: string }) => a.slug === spotSlug) : undefined;
+              return cmsSpot ? { ...spot, desc: cmsSpot.desc || spot.desc } : spot;
+            }),
+          };
+        }));
+      })
+      .catch(() => undefined);
+  }, []);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);

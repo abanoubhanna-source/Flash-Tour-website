@@ -1,7 +1,7 @@
 // src/app/destinations/uae/page.tsx
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, ChevronRight, Building2, Landmark, Mountain, Waves, Library } from 'lucide-react';
 import Image from 'next/image';
@@ -10,62 +10,67 @@ import { trackDestinationView } from '@/lib/analytics';
 import { usePublishedDestination } from '@/lib/cms/destinations/use-published-destination';
 
 // الداتا الأصلية للإمارات
-const uaeData = [
+const defaultUaeData = [
   {
     id: "dubai",
+    slug: "dubai",
     name: "DUBAI",
     desc: "Dubai is the most populated city in the UAE, and gained a solid reputation for its ultramodern lifestyle. Our clients would expect no less than a luxurious lifestyle to surround them everywhere they go.",
     mainImg: "/images/dubai-main.jpg",
     icon: Building2,
     places: [
-      { name: "Burj Khalifa", desc: "The tallest skyscraper where you can enjoy the spectacular view of Dubai's skyline from the observatory, and delight yourself with upscale dining.", img: "/images/burj-khalifa.jpg" },
-      { name: "Palm Jumeirah", desc: "The famous palm in the middle of the sea hosts top notch hotels and resorts. It is dedicated to convey the upscale luxury that the UAE aspires to introduce to the world.", img: "/images/palm-jumeirah.jpg" },
-      { name: "Burj Al Arab", desc: "The global Icon of Arabian luxury which is set on an island in a striking sail-shaped building. It is the first choice for presidents and royal families.", img: "/images/burj-al-arab.jpg" }
+      { name: "Burj Khalifa", slug: "burj-khalifa", desc: "The tallest skyscraper where you can enjoy the spectacular view of Dubai's skyline from the observatory, and delight yourself with upscale dining.", img: "/images/burj-khalifa.jpg" },
+      { name: "Palm Jumeirah", slug: "palm-jumeirah", desc: "The famous palm in the middle of the sea hosts top notch hotels and resorts. It is dedicated to convey the upscale luxury that the UAE aspires to introduce to the world.", img: "/images/palm-jumeirah.jpg" },
+      { name: "Burj Al Arab", slug: "burj-al-arab", desc: "The global Icon of Arabian luxury which is set on an island in a striking sail-shaped building. It is the first choice for presidents and royal families.", img: "/images/burj-al-arab.jpg" }
     ]
   },
   {
     id: "abudhabi",
+    slug: "abu-dhabi",
     name: "ABU DHABI",
     desc: "Abu Dhabi is the capital city of the UAE that has made it all real. Its business oriented nature has led the strategy that transformed the country in such a short time. Our Clients Will Get To Explore The Culture And History Of This Prosperous Nation.",
     mainImg: "/images/abudhabi-main.jpg",
     icon: Landmark,
     places: [
-      { name: "Emirates Palace", desc: "The place where Emirati luxury is defined. This is where presidents and royalty stay upon visiting the UAE, so one can only expect perfection.", img: "/images/emirates-palace.jpg" },
-      { name: "Sheikh Zayed Grand Mosque", desc: "One of the largest mosques in the world, and designed to have traditional Islamic architecture meet the modern world.", img: "/images/zayed-mosque.jpg" },
-      { name: "Yas Island", desc: "The famous Island featuring Ferrari World is where you get to enjoy the history of Ferrari, and also test-drive your favorite car.", img: "/images/yas-island.jpg" }
+      { name: "Emirates Palace", slug: "emirates-palace", desc: "The place where Emirati luxury is defined. This is where presidents and royalty stay upon visiting the UAE, so one can only expect perfection.", img: "/images/emirates-palace.jpg" },
+      { name: "Sheikh Zayed Grand Mosque", slug: "sheikh-zayed-grand-mosque", desc: "One of the largest mosques in the world, and designed to have traditional Islamic architecture meet the modern world.", img: "/images/zayed-mosque.jpg" },
+      { name: "Yas Island", slug: "yas-island", desc: "The famous Island featuring Ferrari World is where you get to enjoy the history of Ferrari, and also test-drive your favorite car.", img: "/images/yas-island.jpg" }
     ]
   },
   {
     id: "rak",
+    slug: "ras-al-khaimah",
     name: "RAS EL KHEIMAH",
     desc: "The Emirate is well known for its beautiful nature. Several mountain ranges fill the landscape, with Jebel Jais being the most famous; moreover our clients get to experience the world's longest zipline adventure amongst the mountains.",
     mainImg: "/images/rak-main.jpg",
     icon: Mountain,
     places: [
-      { name: "Jebel Jais", desc: "Located within other surrounding mountain ranges, Jebel Jais is the most famous mountain in Ras Al Khaimah where several desert activities take place.", img: "/images/jebel-jais.jpg" },
-      { name: "Longest Zip-Line", desc: "The longest zip-line in the world offers a spectacular view of the mountain ranges. With an average of 60 Km/h, one will have a unique experience.", img: "/images/zip-line.jpg" }
+      { name: "Jebel Jais", slug: "jebel-jais", desc: "Located within other surrounding mountain ranges, Jebel Jais is the most famous mountain in Ras Al Khaimah where several desert activities take place.", img: "/images/jebel-jais.jpg" },
+      { name: "Longest Zip-Line", slug: "jebel-jais-zipline", desc: "The longest zip-line in the world offers a spectacular view of the mountain ranges. With an average of 60 Km/h, one will have a unique experience.", img: "/images/zip-line.jpg" }
     ]
   },
   {
     id: "fujairah",
+    slug: "fujairah",
     name: "FUJAIRAH",
     desc: "Regarded as one of the top destinations in the UAE for its beaches and coral reefs, the city is a must go for those seeking to destress and unwind; moreover our clients can go back further in time when the ruling family was living there by visiting the oldest fort in the UAE.",
     mainImg: "/images/fujairah-main.jpg",
     icon: Waves,
     places: [
-      { name: "Fujairah Fort", desc: "A 300 year old fort, one of oldest forts in the UAE; moreover, very few forts and castles are well preserved as Fujairah fort is. It has served as a major post for anti-colonialism.", img: "/images/fujairah-fort.jpg" },
-      { name: "Musandam Dibba", desc: "One of the most beautiful fjords in the region. Sailing the fjord with a dhow provides an amazing experience for guests who enjoy being in nature's company.", img: "/images/musandam.jpg" }
+      { name: "Fujairah Fort", slug: "fujairah-fort", desc: "A 300 year old fort, one of oldest forts in the UAE; moreover, very few forts and castles are well preserved as Fujairah fort is. It has served as a major post for anti-colonialism.", img: "/images/fujairah-fort.jpg" },
+      { name: "Musandam Dibba", slug: "musandam-dibba", desc: "One of the most beautiful fjords in the region. Sailing the fjord with a dhow provides an amazing experience for guests who enjoy being in nature's company.", img: "/images/musandam.jpg" }
     ]
   },
   {
     id: "sharjah",
+    slug: "sharjah",
     name: "SHARJAH",
     desc: "The third most populated emirate in the UAE is renowned as a family-friendly emirate. It offers a laid back atmosphere where you can immerse yourself into Emirati culture. It is a well-known destination amongst scholars and travelers seeking to dig deeper into Islamic history.",
     mainImg: "/images/sharjah-main.jpg",
     icon: Library,
     places: [
-      { name: "Museum of Islamic Civilization", desc: "The museum is dedicated to Islamic civilization, offering guests to experience the history and culture. One can expect ceramics, coins, glass objects, and manuscripts.", img: "/images/islamic-museum.jpg" },
-      { name: "King Faisal Mosque", desc: "One of the largest mosques in Sharjah Emirate is one of the most beautiful mosques in the UAE due to its amazing architecture.", img: "/images/king-faisal-mosque.jpg" }
+      { name: "Museum of Islamic Civilization", slug: "museum-of-islamic-civilization", desc: "The museum is dedicated to Islamic civilization, offering guests to experience the history and culture. One can expect ceramics, coins, glass objects, and manuscripts.", img: "/images/islamic-museum.jpg" },
+      { name: "King Faisal Mosque", slug: "king-faisal-mosque", desc: "One of the largest mosques in Sharjah Emirate is one of the most beautiful mosques in the UAE due to its amazing architecture.", img: "/images/king-faisal-mosque.jpg" }
     ]
   }
 ];
@@ -73,6 +78,28 @@ const uaeData = [
 export default function UAEDestinationPage() {
   const cms = usePublishedDestination('uae');
   useEffect(() => { trackDestinationView('UAE'); }, []);
+  const [uaeData, setUaeData] = useState(defaultUaeData);
+  useEffect(() => {
+    fetch(`/api/destinations/hierarchy?slug=uae`)
+      .then((r) => (r.ok ? r.json() : { places: [] }))
+      .then(({ places }) => {
+        if (!places || !places.length) return;
+        setUaeData((current) => current.map((city) => {
+          const cmsCity = 'slug' in city ? places.find((p: { slug: string }) => p.slug === (city as { slug?: string }).slug) : undefined;
+          if (!cmsCity) return city;
+          return {
+            ...city,
+            desc: cmsCity.desc || city.desc,
+            places: city.places.map((spot) => {
+              const spotSlug = 'slug' in spot ? (spot as { slug?: string }).slug : undefined;
+              const cmsSpot = spotSlug ? cmsCity.attractions.find((a: { slug: string }) => a.slug === spotSlug) : undefined;
+              return cmsSpot ? { ...spot, desc: cmsSpot.desc || spot.desc } : spot;
+            }),
+          };
+        }));
+      })
+      .catch(() => undefined);
+  }, []);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);

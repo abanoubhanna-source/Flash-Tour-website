@@ -1,7 +1,7 @@
 // src/app/destinations/italy/page.tsx
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, ChevronRight, Wine, Sun } from 'lucide-react';
 import Image from 'next/image';
@@ -10,29 +10,31 @@ import { trackDestinationView } from '@/lib/analytics';
 import { usePublishedDestination } from '@/lib/cms/destinations/use-published-destination';
 
 // الداتا الموحدة لإيطاليا
-const italyData = [
+const defaultItalyData = [
   {
     id: "sicily",
+    slug: "sicily",
     name: "SICILY",
     desc: "Sicily, the beauty of Italy. It is one of the most renowned islands in Europe due to its greenery, its endless beaches and locally grown products; moreover, its history and lots of films and movies have been shot there. Sicily has astonishing landscapes, views and some UNESCO world heritage places. Whether you are visiting Ortigia Old town exploring a thousand year old church, or strolling around Marzamemi discovering the biggest tuna factories while tasting local products, you will witness landscapes that you have never seen, and beaches that are as clear as the sky.",
     mainImg: "/images/sicily-main.jpg",
     icon: Wine,
     places: [
-      { name: "Palermo", desc: "The city is well known for its downtown markets where local merchants sell their merchandise and pass on the profession to the next generation. The capital city, known for its narrow streets and traditional street markets.", img: "/images/palermo.jpg" },
-      { name: "Olive Oil Farms", desc: "Sicilian olive oil is renowned as the best olive oil made in Italy, and the olive farms provide an amazing experience to explore the process of how this delicacy is produced. Experience Sicilian cuisine at its best.", img: "/images/olive-oil.jpg" },
-      { name: "Ortigia", desc: "An old city built in the Baroque style, and well maintained by the locals. It is regarded as a UNESCO site as it is one of the few places that still features a full Baroque experience and a beautiful World Heritage site.", img: "/images/ortigia.jpg" }
+      { name: "Palermo", slug: "palermo", desc: "The city is well known for its downtown markets where local merchants sell their merchandise and pass on the profession to the next generation. The capital city, known for its narrow streets and traditional street markets.", img: "/images/palermo.jpg" },
+      { name: "Olive Oil Farms", slug: "olive-oil-farms", desc: "Sicilian olive oil is renowned as the best olive oil made in Italy, and the olive farms provide an amazing experience to explore the process of how this delicacy is produced. Experience Sicilian cuisine at its best.", img: "/images/olive-oil.jpg" },
+      { name: "Ortigia", slug: "ortigia", desc: "An old city built in the Baroque style, and well maintained by the locals. It is regarded as a UNESCO site as it is one of the few places that still features a full Baroque experience and a beautiful World Heritage site.", img: "/images/ortigia.jpg" }
     ]
   },
   {
     id: "sardinia",
+    slug: "sardinia",
     name: "SARDINIA",
     desc: "Sardinia, famous for its Turquoise waters, is the perfect destination to completely relax by the beach. It is the right place to just spend an unforgettable holiday swimming everyday in transparent waters, while enjoying their wine and excellent Italian delicacies such as the fresh sea food and home grown vegetables. Famous for its emerald waters, Sardinia is the perfect destination for an unforgettable luxury stay.",
     mainImg: "/images/sardinia-main.jpg",
     icon: Sun,
     places: [
-      { name: "Porto Cervo", desc: "A magnificent marina that hosts several yachts voyaging the Mediterranean. Financed and created by Prince Karim Aga Khan along with other investors, it is a destination for those who seek an extravagant holiday.", img: "/images/porto-cervo.jpg" },
-      { name: "Costa Smeralda", desc: "A stretch of land surrounded by turquoise water and sandy beaches. The main town of the area is very famous for its upscale hotels and luxury shopping sites. It is a must go destination for everyone visiting Sardinia.", img: "/images/costa-smeralda.jpg" },
-      { name: "Cagliari", desc: "The capital city of the Island, and the place where most tourists seeking knowledge about history will stop first; moreover, the hilltop castello, a wall quarter built during the medieval era, is a top attraction.", img: "/images/cagliari.jpg" }
+      { name: "Porto Cervo", slug: "porto-cervo", desc: "A magnificent marina that hosts several yachts voyaging the Mediterranean. Financed and created by Prince Karim Aga Khan along with other investors, it is a destination for those who seek an extravagant holiday.", img: "/images/porto-cervo.jpg" },
+      { name: "Costa Smeralda", slug: "costa-smeralda", desc: "A stretch of land surrounded by turquoise water and sandy beaches. The main town of the area is very famous for its upscale hotels and luxury shopping sites. It is a must go destination for everyone visiting Sardinia.", img: "/images/costa-smeralda.jpg" },
+      { name: "Cagliari", slug: "cagliari", desc: "The capital city of the Island, and the place where most tourists seeking knowledge about history will stop first; moreover, the hilltop castello, a wall quarter built during the medieval era, is a top attraction.", img: "/images/cagliari.jpg" }
     ]
   }
 ];
@@ -40,6 +42,28 @@ const italyData = [
 export default function ItalyDestinationPage() {
   const cms = usePublishedDestination('italy');
   useEffect(() => { trackDestinationView('Italy'); }, []);
+  const [italyData, setItalyData] = useState(defaultItalyData);
+  useEffect(() => {
+    fetch(`/api/destinations/hierarchy?slug=italy`)
+      .then((r) => (r.ok ? r.json() : { places: [] }))
+      .then(({ places }) => {
+        if (!places || !places.length) return;
+        setItalyData((current) => current.map((city) => {
+          const cmsCity = 'slug' in city ? places.find((p: { slug: string }) => p.slug === (city as { slug?: string }).slug) : undefined;
+          if (!cmsCity) return city;
+          return {
+            ...city,
+            desc: cmsCity.desc || city.desc,
+            places: city.places.map((spot) => {
+              const spotSlug = 'slug' in spot ? (spot as { slug?: string }).slug : undefined;
+              const cmsSpot = spotSlug ? cmsCity.attractions.find((a: { slug: string }) => a.slug === spotSlug) : undefined;
+              return cmsSpot ? { ...spot, desc: cmsSpot.desc || spot.desc } : spot;
+            }),
+          };
+        }));
+      })
+      .catch(() => undefined);
+  }, []);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);

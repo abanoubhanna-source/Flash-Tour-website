@@ -53,10 +53,22 @@ select is(
   'the pre-seeded services use RFC-4122-valid ids (correct version/variant nibbles), as required by z.uuid() in actions.ts'
 );
 
+-- Computed while still superuser: anon can only read the published_* views,
+-- not the raw content_entries table, so the expected count must be captured
+-- before switching roles. A session-level GUC (rather than a temp table)
+-- sidesteps any question of whether anon would have SELECT on the table
+-- that captured it.
+select set_config(
+  'test.expected_published_count',
+  (select count(*)::text from public.content_entries
+     where status = 'published' and is_active and published_data is not null),
+  false
+);
+
 set local role anon;
 select is(
   (select count(*)::integer from public.published_content_entries),
-  19,
+  current_setting('test.expected_published_count')::integer,
   'anonymous visitors see all and only published entries'
 );
 select is(
