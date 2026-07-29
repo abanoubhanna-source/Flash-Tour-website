@@ -95,8 +95,8 @@ export default function ServicesPage() {
               const IconComponent = iconMapping[service.title] || Globe2;
 
               return (
-                <motion.div 
-                  key={service.id || index}
+                <motion.div
+                  key={service.title}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}

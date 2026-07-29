@@ -120,7 +120,7 @@ export default function DestinationsPage() {
           const IconComponent = iconMap[dest.icon] || Globe2; 
 
           return (
-            <div key={dest.id || index} className="relative w-full min-h-[80vh] flex items-center overflow-hidden border-b border-slate-100 group">
+            <div key={dest.name} className="relative w-full min-h-[80vh] flex items-center overflow-hidden border-b border-slate-100 group">
               
               <div className="absolute inset-0 z-0 overflow-hidden">
                 <div className="absolute inset-0 transform group-hover:scale-105 transition-transform duration-[2s] ease-out">

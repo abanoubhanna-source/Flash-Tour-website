@@ -68,7 +68,7 @@ export default function CruisesPage() {
       {/* Cruises List */}
       <section className="py-24 space-y-32">
         {cruises.map((cruise, index) => (
-          <CruiseRow key={cruise.id} cruise={cruise} reverse={index % 2 !== 0} />
+          <CruiseRow key={cruise.name} cruise={cruise} reverse={index % 2 !== 0} />
         ))}
       </section>
     </div>
