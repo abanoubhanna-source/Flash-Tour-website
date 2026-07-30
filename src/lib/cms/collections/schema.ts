@@ -9,7 +9,7 @@ export const imageSchema = z.object({
   alt: z.string().trim().max(180).default(""),
   caption: z.string().trim().max(240).default(""),
 });
-export const seoSchema = z.object({ title: z.string().trim().max(70).default(""), description: z.string().trim().max(170).default(""), keywords: z.array(z.string().trim().min(1).max(80)).max(30).default([]), canonicalUrl: z.string().trim().max(500).default(""), openGraph: z.object({ title: z.string().trim().max(100).default(""), description: z.string().trim().max(220).default(""), image: z.string().trim().max(2000).default("") }) });
+export const seoSchema = z.object({ title: z.string().trim().max(70).default(""), description: z.string().trim().max(170).default(""), keywords: z.array(z.string().trim().min(1).max(80)).max(30).default([]), canonicalUrl: z.string().trim().max(500).default(""), openGraph: z.object({ title: z.string().trim().max(100).default(""), description: z.string().trim().max(220).default(""), image: z.string().trim().max(2000).default("") }).default({ title: "", description: "", image: "" }) });
 export type ManagedSeo = z.infer<typeof seoSchema>;
 
 export const contentSchema = z.object({

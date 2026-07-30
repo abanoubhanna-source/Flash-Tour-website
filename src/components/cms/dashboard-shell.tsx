@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -76,13 +77,16 @@ export function DashboardShell({ user, navigation, children }: DashboardShellPro
     <div className="flex h-full flex-col">
       <div className={`flex h-20 items-center border-b border-white/8 ${collapsed ? "justify-center px-3" : "justify-between px-6"}`}>
         <Link href="/dashboard" onClick={() => setMobileOpen(false)} className="flex min-w-0 items-center gap-3" aria-label="Flash Tour CMS dashboard">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#157670] text-xs font-black text-white shadow-lg shadow-[#157670]/20">
-            FT
-          </span>
-          {!collapsed && (
+          {collapsed ? (
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#157670] text-xs font-black text-white shadow-lg shadow-[#157670]/20">
+              FT
+            </span>
+          ) : (
             <span className="min-w-0">
-              <span className="block truncate text-base font-black tracking-tight text-white">FLASH TOUR</span>
-              <span className="block text-[9px] font-bold uppercase tracking-[0.23em] text-[#65c3bb]">Website CMS</span>
+              <span className="relative block h-8 w-36 rounded-md bg-white/95 p-1">
+                <Image src="/images/logo.png" alt="Flash Tour" fill sizes="144px" className="object-contain" />
+              </span>
+              <span className="mt-1.5 block text-[9px] font-bold uppercase tracking-[0.23em] text-[#65c3bb]">Website CMS</span>
             </span>
           )}
         </Link>
@@ -157,7 +161,7 @@ export function DashboardShell({ user, navigation, children }: DashboardShellPro
             {!collapsed && "Sign out"}
           </button>
         </form>
-        {!collapsed && <p className="mt-3 px-1 text-[9px] leading-4 text-slate-500">Designed &amp; Developed by Flash Software Solutions</p>}
+        {!collapsed && <p className="mt-3 truncate px-1 text-[8px] leading-4 whitespace-nowrap text-slate-500">Designed &amp; Developed by Flash Software Solutions</p>}
       </div>
     </div>
   );
