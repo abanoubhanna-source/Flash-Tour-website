@@ -142,7 +142,10 @@ function HomeStatsEditor({ value, onChange, canUpload }: { value: HomeStatsSecti
   const removeCert = (index: number) => onChange({ ...value, certifications: value.certifications.filter((_, i) => i !== index) });
   return (
     <CollapsibleSection eyebrow="Home page" title="Scale & certifications" description="The stat tiles and certification cards shown under the Home hero.">
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <label className="block text-xs font-bold text-slate-700">Section heading
+        <input value={value.heading} onChange={(event) => onChange({ ...value, heading: event.target.value })} placeholder="Scale That Builds Trust" className="mt-2 h-11 w-full rounded-xl border px-3.5 text-sm" />
+      </label>
+      <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {value.items.map((item, index) => (
           <div key={index} className="rounded-2xl border border-slate-200 p-3">
             <div className="flex items-center justify-between"><p className="text-[10px] font-bold text-slate-500">Stat {index + 1}</p><button type="button" aria-label={`Remove stat ${index + 1}`} onClick={() => removeItem(index)} className="text-[10px] font-bold text-red-600">Remove</button></div>
@@ -185,7 +188,10 @@ function HomeMapEditor({ value, onChange }: { value: HomeMapSectionData; onChang
   const removeLocation = (index: number) => onChange({ ...value, locations: value.locations.filter((_, i) => i !== index) });
   return (
     <CollapsibleSection eyebrow="Home page" title="Global infrastructure map" description="The intro copy, checklist, and pinned locations on the world map section.">
-      <label className="block text-xs font-bold text-slate-700">Intro paragraph
+      <label className="block text-xs font-bold text-slate-700">Section heading
+        <input value={value.heading} onChange={(event) => onChange({ ...value, heading: event.target.value })} placeholder="Our Global Infrastructure" className="mt-2 h-11 w-full rounded-xl border px-3.5 text-sm" />
+      </label>
+      <label className="mt-5 block text-xs font-bold text-slate-700">Intro paragraph
         <textarea value={value.intro} onChange={(event) => onChange({ ...value, intro: event.target.value })} rows={3} className="mt-2 w-full rounded-xl border px-3 py-2 text-sm" />
       </label>
 

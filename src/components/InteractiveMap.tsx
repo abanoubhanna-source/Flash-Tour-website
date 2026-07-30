@@ -56,6 +56,9 @@ export default function InteractiveMap({ content }: Props) {
   const intro = content?.intro || defaultIntro;
   const checklist = content?.checklist.length ? content.checklist : defaultChecklist;
   const globalFootprint = content?.locations.length ? content.locations : defaultGlobalFootprint;
+  const headingWords = (content?.heading || "Our Global Infrastructure").split(" ");
+  const headingLead = headingWords.slice(0, -1).join(" ");
+  const headingAccent = headingWords.slice(-1).join(" ");
   return (
     <section className="w-full py-28 bg-brand-navy relative z-20 overflow-hidden">
       {/* Pattern Background */}
@@ -71,7 +74,7 @@ export default function InteractiveMap({ content }: Props) {
           className="w-full lg:w-1/3 text-white"
         >
           <h2 className="text-4xl md:text-5xl font-bold font-en mb-6 leading-tight">
-            Our Global <br/><span className="text-brand-teal">Infrastructure</span>
+            {headingLead} <br/><span className="text-brand-teal">{headingAccent}</span>
           </h2>
           <div className="w-16 h-1 bg-brand-gold mb-8 rounded-full"></div>
           

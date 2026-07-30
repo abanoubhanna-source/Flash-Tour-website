@@ -26,14 +26,17 @@ export default function StatsAndCerts({ content }: Props) {
     "Operating under certified international standards to give partners uncompromised quality, safety, and operational confidence.";
   const stats = content?.items.length ? content.items : defaultStats;
   const certifications = content?.certifications.length ? content.certifications : defaultCertifications;
+  const headingWords = (content?.heading || "Scale That Builds Trust").split(" ");
+  const headingLead = headingWords.slice(0, -1).join(" ");
+  const headingAccent = headingWords.slice(-1).join(" ");
   return (
     <section className="w-full bg-white pt-20 pb-24 relative z-20">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
-        
+
         {/* الجزء الأول: الأرقام (Stats) */}
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-brand-navy font-en mb-2">
-            Scale That <span className="text-brand-teal">Builds Trust</span>
+            {headingLead} <span className="text-brand-teal">{headingAccent}</span>
           </h2>
           <div className="w-16 h-1 bg-brand-gold mx-auto rounded-full"></div>
         </div>
