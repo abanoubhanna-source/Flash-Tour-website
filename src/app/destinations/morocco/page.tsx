@@ -17,11 +17,12 @@ const defaultMoroccoData = [
     name: "MARRAKECH",
     icon: Building2,
     desc: "Known as the 'Red City', Marrakech is a sensory masterpiece where ancient traditions meet modern luxury. From the bustling souks and the historic Medina to our exclusive, meticulously restored luxury Riads, we offer your elite clients an authentic yet highly sophisticated Moroccan experience.",
-    mainImg: "/images/marrakech-main.jpg",
+    // TODO: no photograph assets exist for Marrakech yet — add real ones once available.
+    mainImg: "",
     places: [
-      { name: "Luxury Riads", desc: "Experience ultimate privacy and authentic Moroccan hospitality in our curated selection of high-end Riads located in the heart of the Medina.", img: "/images/luxury-riad.jpg" },
-      { name: "Jemaa el-Fnaa", desc: "The vibrant heartbeat of the city. A UNESCO Masterpiece of the Oral and Intangible Heritage of Humanity, offering an unforgettable cultural immersion.", img: "/images/jemaa-elfna.jpg" },
-      { name: "Bahia Palace", desc: "A 19th-century palace reflecting the true essence of Islamic and Moroccan architectural brilliance, surrounded by lush, tranquil gardens.", img: "/images/bahia-palace.jpg" }
+      { name: "Luxury Riads", desc: "Experience ultimate privacy and authentic Moroccan hospitality in our curated selection of high-end Riads located in the heart of the Medina.", img: "" },
+      { name: "Jemaa el-Fnaa", desc: "The vibrant heartbeat of the city. A UNESCO Masterpiece of the Oral and Intangible Heritage of Humanity, offering an unforgettable cultural immersion.", img: "" },
+      { name: "Bahia Palace", desc: "A 19th-century palace reflecting the true essence of Islamic and Moroccan architectural brilliance, surrounded by lush, tranquil gardens.", img: "" }
     ]
   },
   {
@@ -29,11 +30,12 @@ const defaultMoroccoData = [
     name: "ATLAS MOUNTAINS",
     icon: Mountain,
     desc: "Just a short drive from the vibrant cities lies the serene majesty of the Atlas Mountains. Perfect for exclusive corporate retreats and VIP leisure, offering breathtaking valleys, authentic Berber villages, and luxury eco-lodges that blend seamlessly with nature.",
-    mainImg: "/images/atlas-main.jpg",
+    // TODO: no photograph assets exist for the Atlas Mountains yet — add real ones once available.
+    mainImg: "",
     places: [
-      { name: "Luxury Eco-Lodges", desc: "Unwind in high-end mountain retreats offering panoramic views, premium spa services, and absolute tranquility away from the city.", img: "/images/atlas-lodge.jpg" },
-      { name: "Ourika Valley", desc: "A stunning valley offering exclusive guided excursions, pristine waterfalls, and a chance to experience the authentic lifestyle of the Berber people.", img: "/images/ourika.jpg" },
-      { name: "Mount Toubkal", desc: "The highest peak in North Africa. We organize bespoke, fully-serviced hiking and climbing expeditions for the adventurous elite.", img: "/images/toubkal.jpg" }
+      { name: "Luxury Eco-Lodges", desc: "Unwind in high-end mountain retreats offering panoramic views, premium spa services, and absolute tranquility away from the city.", img: "" },
+      { name: "Ourika Valley", desc: "A stunning valley offering exclusive guided excursions, pristine waterfalls, and a chance to experience the authentic lifestyle of the Berber people.", img: "" },
+      { name: "Mount Toubkal", desc: "The highest peak in North Africa. We organize bespoke, fully-serviced hiking and climbing expeditions for the adventurous elite.", img: "" }
     ]
   },
   {
@@ -41,11 +43,12 @@ const defaultMoroccoData = [
     name: "THE SAHARA DESERT",
     icon: Compass,
     desc: "A journey into the endless golden dunes. We redefine desert exploration by providing ultra-luxury glamping experiences. Imagine dining under a canopy of stars with world-class service, private nomadic tents, and VIP mobility across the majestic Sahara.",
-    mainImg: "/images/sahara-main.jpg",
+    // TODO: no photograph assets exist for the Sahara yet — add real ones once available.
+    mainImg: "",
     places: [
-      { name: "Luxury Glamping", desc: "Bespoke desert camps featuring king-size beds, en-suite facilities, and gourmet dining, ensuring 5-star comfort in the heart of the dunes.", img: "/images/luxury-camp.jpg" },
-      { name: "Merzouga Dunes", desc: "Famous for the towering Erg Chebbi dunes. Experience private sunset camel treks and exclusive 4x4 dune bashing adventures.", img: "/images/merzouga.jpg" },
-      { name: "Ait Benhaddou", desc: "A historic fortified village (Ksar) and UNESCO World Heritage site, famous as a backdrop for numerous Hollywood masterpieces.", img: "/images/ait-benhaddou.jpg" }
+      { name: "Luxury Glamping", desc: "Bespoke desert camps featuring king-size beds, en-suite facilities, and gourmet dining, ensuring 5-star comfort in the heart of the dunes.", img: "" },
+      { name: "Merzouga Dunes", desc: "Famous for the towering Erg Chebbi dunes. Experience private sunset camel treks and exclusive 4x4 dune bashing adventures.", img: "" },
+      { name: "Ait Benhaddou", desc: "A historic fortified village (Ksar) and UNESCO World Heritage site, famous as a backdrop for numerous Hollywood masterpieces.", img: "" }
     ]
   }
 ];
@@ -169,7 +172,11 @@ export default function MoroccoDestinationPage() {
 
                   {/* Main Large Image */}
                   <motion.div initial={{ opacity: 0, x: isEven ? 40 : -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: "-100px" }} className="w-full lg:w-7/12 relative h-[400px] rounded-[1.5rem] overflow-hidden shadow-2xl group">
-                    <Image src={region.mainImg} alt={region.name} sizes="(max-width: 1024px) 100vw, 58vw" fill className="object-cover group-hover:scale-105 transition-transform duration-[1.5s]" />
+                    {region.mainImg ? (
+                      <Image src={region.mainImg} alt={region.name} sizes="(max-width: 1024px) 100vw, 58vw" fill className="object-cover group-hover:scale-105 transition-transform duration-[1.5s]" />
+                    ) : (
+                      <div className="absolute inset-0 bg-brand-navy-deep" />
+                    )}
                     <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/50 to-transparent"></div>
                     <div className="absolute bottom-6 left-8 text-white font-bold font-en text-2xl flex items-center gap-3">
                       <MapPin className="text-brand-gold w-6 h-6" /> Explore {region.name}
@@ -182,7 +189,11 @@ export default function MoroccoDestinationPage() {
                   {region.places.map((place, pIdx) => (
                     <motion.div key={pIdx} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: pIdx * 0.1 }} className="group cursor-pointer">
                       <div className="relative h-64 w-full rounded-2xl overflow-hidden shadow-md mb-6 border border-slate-100">
-                        <Image src={place.img} alt={place.name} sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
+                        {place.img ? (
+                          <Image src={place.img} alt={place.name} sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
+                        ) : (
+                          <div className="absolute inset-0 bg-brand-navy-deep" />
+                        )}
                         <div className="absolute inset-0 bg-brand-navy/10 group-hover:bg-brand-navy/30 transition-colors duration-500"></div>
                       </div>
                       <h3 className="text-2xl font-bold text-brand-teal font-en mb-3 flex items-center gap-2">
