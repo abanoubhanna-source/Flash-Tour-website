@@ -1,7 +1,7 @@
 begin;
 
 create extension if not exists pgtap with schema extensions;
-select plan(62);
+select plan(63);
 
 select is((select count(*)::integer from public.roles), 4, 'four system roles are seeded');
 select is((select count(*)::integer from public.permissions), 22, 'the permission catalog is seeded');
@@ -390,6 +390,14 @@ select ok(public.current_user_has_permission('content.purge'), 'AAL2 super admin
 select ok(
   public.current_user_can_assign_role((select id from public.roles where key = 'super_admin')),
   'super admin can assign super admin roles'
+);
+select lives_ok(
+  $$
+    insert into public.user_roles (user_id, role_id)
+    values ('10000000-0000-0000-0000-000000000001', (select id from public.roles where key = 'viewer'))
+    on conflict (user_id, role_id) do update set user_id = excluded.user_id
+  $$,
+  'assigning a role the user already has (upsert conflict path) does not require extra grants'
 );
 
 reset role;
