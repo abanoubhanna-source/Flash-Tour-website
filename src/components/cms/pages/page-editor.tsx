@@ -344,16 +344,15 @@ export function PageEditor({ page, canEdit, canPublish, canUpload }: PageEditorP
                 {busyAction === "version" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />} Save version
               </button>
             )}
+            {canPublish && enabled && (
+              <button type="button" disabled={busyAction !== null} onClick={handleUnpublish} className="inline-flex h-10 items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3.5 text-xs font-bold text-amber-800 hover:bg-amber-100 disabled:opacity-50">
+                {busyAction === "unpublish" ? <Loader2 className="h-4 w-4 animate-spin" /> : <ChevronDown className="h-4 w-4" />} Move to draft
+              </button>
+            )}
             {canPublish && (
-              enabled ? (
-                <button type="button" disabled={busyAction !== null} onClick={handleUnpublish} className="inline-flex h-10 items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3.5 text-xs font-bold text-amber-800 hover:bg-amber-100 disabled:opacity-50">
-                  {busyAction === "unpublish" ? <Loader2 className="h-4 w-4 animate-spin" /> : <ChevronDown className="h-4 w-4" />} Move to draft
-                </button>
-              ) : (
-                <button type="button" disabled={busyAction !== null} onClick={handlePublish} className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#157670] px-4 text-xs font-bold text-white hover:bg-[#105f5a] disabled:opacity-50">
-                  {busyAction === "publish" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Rocket className="h-4 w-4" />} Publish
-                </button>
-              )
+              <button type="button" disabled={busyAction !== null} onClick={handlePublish} className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#157670] px-4 text-xs font-bold text-white hover:bg-[#105f5a] disabled:opacity-50">
+                {busyAction === "publish" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Rocket className="h-4 w-4" />} {enabled ? "Publish updates" : "Publish"}
+              </button>
             )}
           </div>
         </div>

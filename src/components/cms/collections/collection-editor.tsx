@@ -105,7 +105,7 @@ export function CollectionEditor({ entry, mode, canEdit, canPublish, canArchive 
           </div>
           <div className="flex flex-wrap gap-2">
             {canEdit && <button type="button" disabled={busy} onClick={() => save(true)} className="inline-flex h-10 items-center gap-2 rounded-xl border px-3 text-xs font-bold"><Save className="h-4 w-4" />Save version</button>}
-            {canPublish && entry.status !== "published" && <button type="button" disabled={busy} onClick={publish} className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#157670] px-4 text-xs font-bold text-white"><Rocket className="h-4 w-4" />Publish</button>}
+            {canPublish && <button type="button" disabled={busy} onClick={publish} className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#157670] px-4 text-xs font-bold text-white"><Rocket className="h-4 w-4" />{entry.status === "published" ? "Publish updates" : "Publish"}</button>}
             {canArchive && entry.status !== "archived" && <button type="button" disabled={busy} onClick={archive} className="h-10 rounded-xl border border-red-200 px-3 text-xs font-bold text-red-700">Archive</button>}
           </div>
         </div>
