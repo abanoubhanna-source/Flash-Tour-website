@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import {
   AlertTriangle,
   ArrowLeft,
@@ -17,24 +17,20 @@ import {
   Eye,
   FileText,
   History,
-  ImageIcon,
   Loader2,
   RefreshCcw,
   Rocket,
   Save,
   SearchCheck,
   Smartphone,
-  Upload,
 } from "lucide-react";
 import {
-  finalizeHeroUpload,
-  prepareHeroUpload,
   publishPage,
   restorePageRevision,
   savePageDraft,
   unpublishPage,
 } from "@/app/dashboard/pages/actions";
-import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
+import { MediaPicker } from "@/components/cms/media-picker";
 import type {
   HomeCertificationData,
   HomeMapLocationData,
@@ -66,21 +62,78 @@ const homeSlideDefaults: PageHeroSlideData[] = [
   { id: "mobility", name: "Mobility", eyebrow: "Executive Transport Infrastructure", title: "Precision on Every Route", subtitle: "A premium fleet, trained chauffeurs, and operational control built for B2B travel, MICE, VIP transfers, and large-scale movements.", primaryCta: { label: "Our services", href: "/services" }, secondaryCta: { label: "Contact us", href: "/contact" }, image: { assetId: null, url: "/images/fleet-showcase.jpg", alt: "Flash Group executive mobility" }, enabled: true },
 ];
 
+function CollapsibleSection({ eyebrow, title, description, defaultOpen = false, children }: { eyebrow: string; title: string; description?: string; defaultOpen?: boolean; children: ReactNode }) {
+  return (
+    <details className="group rounded-2xl border border-slate-200 open:border-[#157670]/30 open:shadow-sm" open={defaultOpen}>
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-4 select-none">
+        <div>
+          <p className="text-[10px]! font-bold uppercase tracking-[0.16em] text-[#157670]">{eyebrow}</p>
+          <h3 className="mt-1 text-lg! leading-7! font-bold text-[#0f172a]">{title}</h3>
+          {description && <p className="mt-1 text-xs text-slate-500">{description}</p>}
+        </div>
+        <ChevronDown className="h-4 w-4 shrink-0 text-slate-400 transition-transform group-open:rotate-180" />
+      </summary>
+      <div className="border-t border-slate-100 p-4 pt-5">{children}</div>
+    </details>
+  );
+}
+
 function draftSignature(draft: PageDraftData) {
   return JSON.stringify(draft);
 }
 
-function HomeSlidesEditor({ slides, onChange }: { slides: PageHeroSlideData[]; onChange: (slides: PageHeroSlideData[]) => void }) {
+function HomeSlidesEditor({ slides, onChange, canUpload }: { slides: PageHeroSlideData[]; onChange: (slides: PageHeroSlideData[]) => void; canUpload: boolean }) {
   const move = (index: number, direction: -1 | 1) => { const next = index + direction; if (next < 0 || next >= slides.length) return; const reordered = [...slides]; [reordered[index], reordered[next]] = [reordered[next], reordered[index]]; onChange(reordered); };
   const update = (index: number, value: PageHeroSlideData) => onChange(slides.map((slide, current) => current === index ? value : slide));
-  return <section className="border-t border-slate-100 pt-7"><p className="text-[10px]! font-bold uppercase tracking-[0.16em] text-[#157670]">Home slider</p><h3 className="mt-1 text-lg! leading-7! font-bold text-[#0f172a]">Four hero slides</h3><p className="mt-1 text-xs text-slate-500">All four slides are saved, versioned, previewed, and published with the Home page. Use the arrows to change their public order.</p><div className="mt-4 space-y-4">{slides.map((slide, index) => <article key={slide.id} className="rounded-2xl border border-slate-200 p-4"><div className="flex items-center gap-2"><p className="flex-1 text-xs font-bold">Slide {index + 1}</p><label className="flex items-center gap-1.5 text-[11px] font-bold text-slate-600"><input type="checkbox" aria-label={`Slide ${index + 1} enabled`} checked={slide.enabled} onChange={(event) => update(index, { ...slide, enabled: event.target.checked })} className="h-3.5 w-3.5 rounded border-slate-300" />Enabled</label><button type="button" aria-label="Move slide up" disabled={index === 0} onClick={() => move(index, -1)} className="rounded-lg border p-2 disabled:opacity-40"><ArrowUp className="h-3 w-3" /></button><button type="button" aria-label="Move slide down" disabled={index === slides.length - 1} onClick={() => move(index, 1)} className="rounded-lg border p-2 disabled:opacity-40"><ArrowDown className="h-3 w-3" /></button></div><div className="mt-3 grid gap-3 sm:grid-cols-2"><input aria-label={`Slide ${index + 1} tab label`} value={slide.name} onChange={(event) => update(index, { ...slide, name: event.target.value })} placeholder="Navigation label" className="h-10 rounded-xl border px-3 text-sm" /><input aria-label={`Slide ${index + 1} eyebrow`} value={slide.eyebrow} onChange={(event) => update(index, { ...slide, eyebrow: event.target.value })} placeholder="Eyebrow" className="h-10 rounded-xl border px-3 text-sm" /></div><input aria-label={`Slide ${index + 1} title`} value={slide.title} onChange={(event) => update(index, { ...slide, title: event.target.value })} placeholder="Title" className="mt-3 h-10 w-full rounded-xl border px-3 text-sm" /><textarea aria-label={`Slide ${index + 1} subtitle`} value={slide.subtitle} onChange={(event) => update(index, { ...slide, subtitle: event.target.value })} placeholder="Subtitle" rows={3} className="mt-3 w-full rounded-xl border px-3 py-2 text-sm" /><div className="mt-3 grid gap-3 sm:grid-cols-2"><input aria-label={`Slide ${index + 1} image URL`} value={slide.image.url} onChange={(event) => update(index, { ...slide, image: { ...slide.image, url: event.target.value } })} placeholder="Image URL" className="h-10 rounded-xl border px-3 text-sm" /><input aria-label={`Slide ${index + 1} image alt`} value={slide.image.alt} onChange={(event) => update(index, { ...slide, image: { ...slide.image, alt: event.target.value } })} placeholder="Image alt text" className="h-10 rounded-xl border px-3 text-sm" /></div><div className="mt-3 grid gap-3 sm:grid-cols-2"><input aria-label={`Slide ${index + 1} primary CTA`} value={slide.primaryCta.label} onChange={(event) => update(index, { ...slide, primaryCta: { ...slide.primaryCta, label: event.target.value } })} placeholder="Primary CTA label" className="h-10 rounded-xl border px-3 text-sm" /><input aria-label={`Slide ${index + 1} primary CTA URL`} value={slide.primaryCta.href} onChange={(event) => update(index, { ...slide, primaryCta: { ...slide.primaryCta, href: event.target.value } })} placeholder="Primary CTA URL" className="h-10 rounded-xl border px-3 text-sm" /></div><div className="mt-3 grid gap-3 sm:grid-cols-2"><input aria-label={`Slide ${index + 1} secondary CTA`} value={slide.secondaryCta.label} onChange={(event) => update(index, { ...slide, secondaryCta: { ...slide.secondaryCta, label: event.target.value } })} placeholder="Secondary CTA label" className="h-10 rounded-xl border px-3 text-sm" /><input aria-label={`Slide ${index + 1} secondary CTA URL`} value={slide.secondaryCta.href} onChange={(event) => update(index, { ...slide, secondaryCta: { ...slide.secondaryCta, href: event.target.value } })} placeholder="Secondary CTA URL" className="h-10 rounded-xl border px-3 text-sm" /></div></article>)}</div></section>;
+  return (
+    <CollapsibleSection eyebrow="Home slider" title="Four hero slides" description="All four slides are saved, versioned, previewed, and published with the Home page. Use the arrows to change their public order.">
+      <div className="space-y-4">
+        {slides.map((slide, index) => (
+          <article key={slide.id} className="rounded-2xl border border-slate-200 p-4">
+            <div className="flex items-center gap-2">
+              <p className="flex-1 text-xs font-bold">Slide {index + 1}</p>
+              <label className="flex items-center gap-1.5 text-[11px] font-bold text-slate-600">
+                <input type="checkbox" aria-label={`Slide ${index + 1} enabled`} checked={slide.enabled} onChange={(event) => update(index, { ...slide, enabled: event.target.checked })} className="h-3.5 w-3.5 rounded border-slate-300" />
+                Enabled
+              </label>
+              <button type="button" aria-label="Move slide up" disabled={index === 0} onClick={() => move(index, -1)} className="rounded-lg border p-2 disabled:opacity-40"><ArrowUp className="h-3 w-3" /></button>
+              <button type="button" aria-label="Move slide down" disabled={index === slides.length - 1} onClick={() => move(index, 1)} className="rounded-lg border p-2 disabled:opacity-40"><ArrowDown className="h-3 w-3" /></button>
+            </div>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <input aria-label={`Slide ${index + 1} tab label`} value={slide.name} onChange={(event) => update(index, { ...slide, name: event.target.value })} placeholder="Navigation label" className="h-10 rounded-xl border px-3 text-sm" />
+              <input aria-label={`Slide ${index + 1} eyebrow`} value={slide.eyebrow} onChange={(event) => update(index, { ...slide, eyebrow: event.target.value })} placeholder="Eyebrow" className="h-10 rounded-xl border px-3 text-sm" />
+            </div>
+            <input aria-label={`Slide ${index + 1} title`} value={slide.title} onChange={(event) => update(index, { ...slide, title: event.target.value })} placeholder="Title" className="mt-3 h-10 w-full rounded-xl border px-3 text-sm" />
+            <textarea aria-label={`Slide ${index + 1} subtitle`} value={slide.subtitle} onChange={(event) => update(index, { ...slide, subtitle: event.target.value })} placeholder="Subtitle" rows={3} className="mt-3 w-full rounded-xl border px-3 py-2 text-sm" />
+            <div className="mt-3">
+              <MediaPicker
+                label={`Slide ${index + 1} image`}
+                value={slide.image}
+                canUpload={canUpload}
+                onChange={(image) => update(index, { ...slide, image: { assetId: image.assetId ?? slide.image.assetId, url: image.url, alt: image.alt ?? slide.image.alt } })}
+              />
+              <input aria-label={`Slide ${index + 1} image alt`} value={slide.image.alt} onChange={(event) => update(index, { ...slide, image: { ...slide.image, alt: event.target.value } })} placeholder="Image alt text" className="mt-2 h-10 w-full rounded-xl border px-3 text-sm" />
+            </div>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <input aria-label={`Slide ${index + 1} primary CTA`} value={slide.primaryCta.label} onChange={(event) => update(index, { ...slide, primaryCta: { ...slide.primaryCta, label: event.target.value } })} placeholder="Primary CTA label" className="h-10 rounded-xl border px-3 text-sm" />
+              <input aria-label={`Slide ${index + 1} primary CTA URL`} value={slide.primaryCta.href} onChange={(event) => update(index, { ...slide, primaryCta: { ...slide.primaryCta, href: event.target.value } })} placeholder="Primary CTA URL" className="h-10 rounded-xl border px-3 text-sm" />
+            </div>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <input aria-label={`Slide ${index + 1} secondary CTA`} value={slide.secondaryCta.label} onChange={(event) => update(index, { ...slide, secondaryCta: { ...slide.secondaryCta, label: event.target.value } })} placeholder="Secondary CTA label" className="h-10 rounded-xl border px-3 text-sm" />
+              <input aria-label={`Slide ${index + 1} secondary CTA URL`} value={slide.secondaryCta.href} onChange={(event) => update(index, { ...slide, secondaryCta: { ...slide.secondaryCta, href: event.target.value } })} placeholder="Secondary CTA URL" className="h-10 rounded-xl border px-3 text-sm" />
+            </div>
+          </article>
+        ))}
+      </div>
+    </CollapsibleSection>
+  );
 }
 
 const emptyStatItem: HomeStatItemData = { number: "", label: "" };
 const emptyCertification: HomeCertificationData = { name: "", desc: "", logo: "" };
 const emptyMapLocation: HomeMapLocationData = { id: "", name: "", top: "50%", left: "50%", details: "" };
 
-function HomeStatsEditor({ value, onChange }: { value: HomeStatsSectionData; onChange: (value: HomeStatsSectionData) => void }) {
+function HomeStatsEditor({ value, onChange, canUpload }: { value: HomeStatsSectionData; onChange: (value: HomeStatsSectionData) => void; canUpload: boolean }) {
   const updateItem = (index: number, item: HomeStatItemData) => onChange({ ...value, items: value.items.map((current, i) => (i === index ? item : current)) });
   const addItem = () => onChange({ ...value, items: [...value.items, emptyStatItem] });
   const removeItem = (index: number) => onChange({ ...value, items: value.items.filter((_, i) => i !== index) });
@@ -88,12 +141,8 @@ function HomeStatsEditor({ value, onChange }: { value: HomeStatsSectionData; onC
   const addCert = () => onChange({ ...value, certifications: [...value.certifications, emptyCertification] });
   const removeCert = (index: number) => onChange({ ...value, certifications: value.certifications.filter((_, i) => i !== index) });
   return (
-    <section className="border-t border-slate-100 pt-7">
-      <p className="text-[10px]! font-bold uppercase tracking-[0.16em] text-[#157670]">Home page</p>
-      <h3 className="mt-1 text-lg! leading-7! font-bold text-[#0f172a]">Scale &amp; certifications</h3>
-      <p className="mt-1 text-xs text-slate-500">The stat tiles and certification cards shown under the Home hero.</p>
-
-      <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    <CollapsibleSection eyebrow="Home page" title="Scale & certifications" description="The stat tiles and certification cards shown under the Home hero.">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {value.items.map((item, index) => (
           <div key={index} className="rounded-2xl border border-slate-200 p-3">
             <div className="flex items-center justify-between"><p className="text-[10px] font-bold text-slate-500">Stat {index + 1}</p><button type="button" aria-label={`Remove stat ${index + 1}`} onClick={() => removeItem(index)} className="text-[10px] font-bold text-red-600">Remove</button></div>
@@ -116,12 +165,14 @@ function HomeStatsEditor({ value, onChange }: { value: HomeStatsSectionData; onC
               <input aria-label={`Certification ${index + 1} name`} value={cert.name} onChange={(event) => updateCert(index, { ...cert, name: event.target.value })} placeholder="ISO 9001:2015" className="h-10 rounded-xl border px-3 text-sm" />
               <input aria-label={`Certification ${index + 1} description`} value={cert.desc} onChange={(event) => updateCert(index, { ...cert, desc: event.target.value })} placeholder="Quality Management System" className="h-10 rounded-xl border px-3 text-sm" />
             </div>
-            <input aria-label={`Certification ${index + 1} logo URL`} value={cert.logo} onChange={(event) => updateCert(index, { ...cert, logo: event.target.value })} placeholder="/images/certifications/iso-9001.png" className="mt-3 h-10 w-full rounded-xl border px-3 text-sm" />
+            <div className="mt-3 w-40">
+              <MediaPicker label="Logo" value={{ url: cert.logo, alt: cert.name }} canUpload={canUpload} onChange={(image) => updateCert(index, { ...cert, logo: image.url })} />
+            </div>
           </article>
         ))}
         <button type="button" onClick={addCert} className="w-full rounded-2xl border border-dashed border-slate-300 py-3 text-xs font-bold text-slate-500 hover:bg-slate-50">+ Add certification</button>
       </div>
-    </section>
+    </CollapsibleSection>
   );
 }
 
@@ -133,12 +184,8 @@ function HomeMapEditor({ value, onChange }: { value: HomeMapSectionData; onChang
   const addLocation = () => onChange({ ...value, locations: [...value.locations, emptyMapLocation] });
   const removeLocation = (index: number) => onChange({ ...value, locations: value.locations.filter((_, i) => i !== index) });
   return (
-    <section className="border-t border-slate-100 pt-7">
-      <p className="text-[10px]! font-bold uppercase tracking-[0.16em] text-[#157670]">Home page</p>
-      <h3 className="mt-1 text-lg! leading-7! font-bold text-[#0f172a]">Global infrastructure map</h3>
-      <p className="mt-1 text-xs text-slate-500">The intro copy, checklist, and pinned locations on the world map section.</p>
-
-      <label className="mt-4 block text-xs font-bold text-slate-700">Intro paragraph
+    <CollapsibleSection eyebrow="Home page" title="Global infrastructure map" description="The intro copy, checklist, and pinned locations on the world map section.">
+      <label className="block text-xs font-bold text-slate-700">Intro paragraph
         <textarea value={value.intro} onChange={(event) => onChange({ ...value, intro: event.target.value })} rows={3} className="mt-2 w-full rounded-xl border px-3 py-2 text-sm" />
       </label>
 
@@ -171,7 +218,7 @@ function HomeMapEditor({ value, onChange }: { value: HomeMapSectionData; onChang
         ))}
         <button type="button" onClick={addLocation} className="w-full rounded-2xl border border-dashed border-slate-300 py-3 text-xs font-bold text-slate-500 hover:bg-slate-50">+ Add location</button>
       </div>
-    </section>
+    </CollapsibleSection>
   );
 }
 
@@ -187,22 +234,6 @@ function eventLabel(event: CmsPageEditorData["revisions"][number]["event"]) {
     archived: "Archived",
     restored: "Restored",
   }[event];
-}
-
-async function sha256(file: File) {
-  const digest = await crypto.subtle.digest("SHA-256", await file.arrayBuffer());
-  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
-}
-
-async function imageDimensions(file: File): Promise<{ width: number | null; height: number | null }> {
-  try {
-    const bitmap = await createImageBitmap(file);
-    const dimensions = { width: bitmap.width, height: bitmap.height };
-    bitmap.close();
-    return dimensions;
-  } catch {
-    return { width: null, height: null };
-  }
 }
 
 export function PageEditor({ page, canEdit, canPublish, canUpload }: PageEditorProps) {
@@ -351,58 +382,6 @@ export function PageEditor({ page, canEdit, canPublish, canUpload }: PageEditorP
     router.refresh();
   }
 
-  async function handleImageUpload(file: File | undefined) {
-    if (!file) return;
-    setBusyAction("upload");
-    setNotice(null);
-    try {
-      const [checksum, dimensions] = await Promise.all([sha256(file), imageDimensions(file)]);
-      const preparation = await prepareHeroUpload({
-        pageId: page.id,
-        fileName: file.name,
-        mimeType: file.type as "image/jpeg" | "image/png" | "image/webp" | "image/avif",
-        byteSize: file.size,
-        checksum,
-      });
-      if (!preparation.ok) throw new Error(preparation.message);
-
-      let uploaded: { assetId: string; url: string };
-      if (preparation.existing) {
-        uploaded = preparation;
-      } else {
-        const supabase = createSupabaseBrowserClient();
-        const { error } = await supabase.storage
-          .from("site-media")
-          .uploadToSignedUrl(preparation.path, preparation.token, file, { contentType: file.type });
-        if (error) throw error;
-        const finalized = await finalizeHeroUpload({
-          pageId: page.id,
-          fileName: file.name,
-          mimeType: file.type as "image/jpeg" | "image/png" | "image/webp" | "image/avif",
-          byteSize: file.size,
-          checksum,
-          storagePath: preparation.path,
-          width: dimensions.width,
-          height: dimensions.height,
-          altText: draftRef.current.hero.image.alt,
-        });
-        if (!finalized.ok) throw new Error(finalized.message);
-        uploaded = finalized;
-      }
-
-      updateHero("image", {
-        ...draftRef.current.hero.image,
-        assetId: uploaded.assetId,
-        url: uploaded.url,
-      });
-      setNotice("Hero image uploaded. Autosave will attach it to this draft.");
-    } catch (error) {
-      setNotice(error instanceof Error ? error.message : "The image could not be uploaded.");
-    } finally {
-      setBusyAction(null);
-    }
-  }
-
   const statusDetails = {
     saved: { icon: Check, label: "All changes saved", className: "text-emerald-700" },
     dirty: { icon: Cloud, label: "Unsaved changes", className: "text-amber-700" },
@@ -498,75 +477,58 @@ export function PageEditor({ page, canEdit, canPublish, canUpload }: PageEditorP
           <div className="p-4 sm:p-6">
             {activeTab === "content" && (
               <div className="space-y-7">
-                <fieldset disabled={!canEdit} className="space-y-5 disabled:opacity-75">
-                  <div>
-                    <p className="text-[10px]! font-bold uppercase tracking-[0.16em] text-[#157670]">Hero content</p>
-                    <h3 className="mt-1 text-lg! leading-7! font-bold text-[#0f172a]">Page introduction</h3>
-                  </div>
-                  <label className="block text-xs font-bold text-slate-700">
-                    Eyebrow
-                    <input value={draft.hero.eyebrow} onChange={(event) => updateHero("eyebrow", event.target.value)} maxLength={120} className="mt-2 h-11 w-full rounded-xl border border-slate-200 px-3.5 text-sm font-normal outline-none focus:border-[#157670] focus:ring-4 focus:ring-[#157670]/8" />
-                  </label>
-                  <label className="block text-xs font-bold text-slate-700">
-                    Page title
-                    <input value={draft.hero.title} onChange={(event) => updateHero("title", event.target.value)} required maxLength={140} className="mt-2 h-11 w-full rounded-xl border border-slate-200 px-3.5 text-sm font-normal outline-none focus:border-[#157670] focus:ring-4 focus:ring-[#157670]/8" />
-                    <span className="mt-1.5 block text-right text-[10px] font-normal text-slate-400">{draft.hero.title.length}/140</span>
-                  </label>
-                  <label className="block text-xs font-bold text-slate-700">
-                    Subtitle
-                    <textarea value={draft.hero.subtitle} onChange={(event) => updateHero("subtitle", event.target.value)} maxLength={500} rows={4} className="mt-2 w-full resize-y rounded-xl border border-slate-200 px-3.5 py-3 text-sm font-normal leading-6 outline-none focus:border-[#157670] focus:ring-4 focus:ring-[#157670]/8" />
-                    <span className="mt-1.5 block text-right text-[10px] font-normal text-slate-400">{draft.hero.subtitle.length}/500</span>
-                  </label>
+                <fieldset disabled={!canEdit} className="space-y-4 disabled:opacity-75">
+                  <CollapsibleSection eyebrow="Hero content" title="Page introduction" defaultOpen>
+                    <div className="space-y-5">
+                      <label className="block text-xs font-bold text-slate-700">
+                        Eyebrow
+                        <input value={draft.hero.eyebrow} onChange={(event) => updateHero("eyebrow", event.target.value)} maxLength={120} className="mt-2 h-11 w-full rounded-xl border border-slate-200 px-3.5 text-sm font-normal outline-none focus:border-[#157670] focus:ring-4 focus:ring-[#157670]/8" />
+                      </label>
+                      <label className="block text-xs font-bold text-slate-700">
+                        Page title
+                        <input value={draft.hero.title} onChange={(event) => updateHero("title", event.target.value)} required maxLength={140} className="mt-2 h-11 w-full rounded-xl border border-slate-200 px-3.5 text-sm font-normal outline-none focus:border-[#157670] focus:ring-4 focus:ring-[#157670]/8" />
+                        <span className="mt-1.5 block text-right text-[10px] font-normal text-slate-400">{draft.hero.title.length}/140</span>
+                      </label>
+                      <label className="block text-xs font-bold text-slate-700">
+                        Subtitle
+                        <textarea value={draft.hero.subtitle} onChange={(event) => updateHero("subtitle", event.target.value)} maxLength={500} rows={4} className="mt-2 w-full resize-y rounded-xl border border-slate-200 px-3.5 py-3 text-sm font-normal leading-6 outline-none focus:border-[#157670] focus:ring-4 focus:ring-[#157670]/8" />
+                        <span className="mt-1.5 block text-right text-[10px] font-normal text-slate-400">{draft.hero.subtitle.length}/500</span>
+                      </label>
 
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <div className="rounded-2xl border border-slate-200 p-4">
-                      <p className="text-xs! font-bold text-slate-800">Primary CTA</p>
-                      <div className="mt-3 space-y-3">
-                        <input aria-label="Primary CTA label" value={draft.hero.primaryCta.label} onChange={(event) => updateHero("primaryCta", { ...draft.hero.primaryCta, label: event.target.value })} placeholder="Button label" maxLength={80} className="h-10 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#157670]" />
-                        <input aria-label="Primary CTA link" value={draft.hero.primaryCta.href} onChange={(event) => updateHero("primaryCta", { ...draft.hero.primaryCta, href: event.target.value })} placeholder="/contact" maxLength={500} className="h-10 w-full rounded-xl border border-slate-200 px-3 font-mono text-xs outline-none focus:border-[#157670]" />
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        <div className="rounded-2xl border border-slate-200 p-4">
+                          <p className="text-xs! font-bold text-slate-800">Primary CTA</p>
+                          <div className="mt-3 space-y-3">
+                            <input aria-label="Primary CTA label" value={draft.hero.primaryCta.label} onChange={(event) => updateHero("primaryCta", { ...draft.hero.primaryCta, label: event.target.value })} placeholder="Button label" maxLength={80} className="h-10 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#157670]" />
+                            <input aria-label="Primary CTA link" value={draft.hero.primaryCta.href} onChange={(event) => updateHero("primaryCta", { ...draft.hero.primaryCta, href: event.target.value })} placeholder="/contact" maxLength={500} className="h-10 w-full rounded-xl border border-slate-200 px-3 font-mono text-xs outline-none focus:border-[#157670]" />
+                          </div>
+                        </div>
+                        <div className="rounded-2xl border border-slate-200 p-4">
+                          <p className="text-xs! font-bold text-slate-800">Secondary CTA</p>
+                          <div className="mt-3 space-y-3">
+                            <input aria-label="Secondary CTA label" value={draft.hero.secondaryCta.label} onChange={(event) => updateHero("secondaryCta", { ...draft.hero.secondaryCta, label: event.target.value })} placeholder="Button label" maxLength={80} className="h-10 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#157670]" />
+                            <input aria-label="Secondary CTA link" value={draft.hero.secondaryCta.href} onChange={(event) => updateHero("secondaryCta", { ...draft.hero.secondaryCta, href: event.target.value })} placeholder="/brands" maxLength={500} className="h-10 w-full rounded-xl border border-slate-200 px-3 font-mono text-xs outline-none focus:border-[#157670]" />
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div className="rounded-2xl border border-slate-200 p-4">
-                      <p className="text-xs! font-bold text-slate-800">Secondary CTA</p>
-                      <div className="mt-3 space-y-3">
-                        <input aria-label="Secondary CTA label" value={draft.hero.secondaryCta.label} onChange={(event) => updateHero("secondaryCta", { ...draft.hero.secondaryCta, label: event.target.value })} placeholder="Button label" maxLength={80} className="h-10 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#157670]" />
-                        <input aria-label="Secondary CTA link" value={draft.hero.secondaryCta.href} onChange={(event) => updateHero("secondaryCta", { ...draft.hero.secondaryCta, href: event.target.value })} placeholder="/brands" maxLength={500} className="h-10 w-full rounded-xl border border-slate-200 px-3 font-mono text-xs outline-none focus:border-[#157670]" />
-                      </div>
-                    </div>
-                  </div>
+                  </CollapsibleSection>
 
-                  <div className="border-t border-slate-100 pt-7">
-                    <div className="flex items-center justify-between gap-4">
-                      <div>
-                        <p className="text-[10px]! font-bold uppercase tracking-[0.16em] text-[#157670]">Hero image</p>
-                        <h3 className="mt-1 text-lg! leading-7! font-bold text-[#0f172a]">Background media</h3>
-                      </div>
-                      <ImageIcon className="h-5 w-5 text-slate-300" />
-                    </div>
-                    <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200">
-                      <div className="relative aspect-[16/7] bg-slate-100 bg-cover bg-center" style={{ backgroundImage: `url(${draft.hero.image.url || "/images/egypt-bg.jpg"})` }}>
-                        <div className="absolute inset-0 bg-slate-950/25" />
-                        {canUpload && (
-                          <label className="absolute inset-0 flex cursor-pointer items-center justify-center">
-                            <span className="inline-flex items-center gap-2 rounded-xl bg-white/95 px-4 py-2.5 text-xs font-bold text-slate-800 shadow-lg backdrop-blur hover:bg-white">
-                              {busyAction === "upload" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
-                              {busyAction === "upload" ? "Uploading…" : "Replace image"}
-                            </span>
-                            <input type="file" accept="image/jpeg,image/png,image/webp,image/avif" disabled={busyAction === "upload"} onChange={(event) => void handleImageUpload(event.target.files?.[0])} className="sr-only" />
-                          </label>
-                        )}
-                      </div>
-                      <div className="p-4">
-                        <label className="block text-xs font-bold text-slate-700">
-                          Alternative text
-                          <input value={draft.hero.image.alt} onChange={(event) => updateHero("image", { ...draft.hero.image, alt: event.target.value })} maxLength={180} placeholder="Describe the image" className="mt-2 h-10 w-full rounded-xl border border-slate-200 px-3 text-sm font-normal outline-none focus:border-[#157670]" />
-                        </label>
-                        <p className="mt-2 truncate text-[10px]! text-slate-400">{draft.hero.image.url}</p>
-                      </div>
-                    </div>
-                  </div>
-                  {page.path === "/" && <HomeSlidesEditor slides={draft.hero.slides.length === 4 ? draft.hero.slides : homeSlideDefaults} onChange={(slides) => updateHero("slides", slides)} />}
-                  {page.path === "/" && <HomeStatsEditor value={draft.hero.stats} onChange={(stats) => updateHero("stats", stats)} />}
+                  <CollapsibleSection eyebrow="Hero image" title="Background media">
+                    <MediaPicker
+                      label="Background image"
+                      value={draft.hero.image}
+                      canUpload={canUpload}
+                      onChange={(image) => updateHero("image", { assetId: image.assetId ?? draft.hero.image.assetId, url: image.url, alt: image.alt ?? draft.hero.image.alt })}
+                    />
+                    <label className="mt-4 block text-xs font-bold text-slate-700">
+                      Alternative text
+                      <input value={draft.hero.image.alt} onChange={(event) => updateHero("image", { ...draft.hero.image, alt: event.target.value })} maxLength={180} placeholder="Describe the image" className="mt-2 h-10 w-full rounded-xl border border-slate-200 px-3 text-sm font-normal outline-none focus:border-[#157670]" />
+                    </label>
+                  </CollapsibleSection>
+
+                  {page.path === "/" && <HomeSlidesEditor slides={draft.hero.slides.length === 4 ? draft.hero.slides : homeSlideDefaults} onChange={(slides) => updateHero("slides", slides)} canUpload={canUpload} />}
+                  {page.path === "/" && <HomeStatsEditor value={draft.hero.stats} onChange={(stats) => updateHero("stats", stats)} canUpload={canUpload} />}
                   {page.path === "/" && <HomeMapEditor value={draft.hero.map} onChange={(map) => updateHero("map", map)} />}
                 </fieldset>
               </div>
