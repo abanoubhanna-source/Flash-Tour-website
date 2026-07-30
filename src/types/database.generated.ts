@@ -201,6 +201,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "content_relations_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "published_destination_hierarchy"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "content_relations_target_id_fkey"
             columns: ["target_id"]
             isOneToOne: false
@@ -212,6 +219,13 @@ export type Database = {
             columns: ["target_id"]
             isOneToOne: false
             referencedRelation: "published_content_entries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_relations_target_id_fkey"
+            columns: ["target_id"]
+            isOneToOne: false
+            referencedRelation: "published_destination_hierarchy"
             referencedColumns: ["id"]
           },
         ]
@@ -412,6 +426,13 @@ export type Database = {
             columns: ["content_entry_id"]
             isOneToOne: false
             referencedRelation: "published_content_entries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "media_usages_content_entry_id_fkey"
+            columns: ["content_entry_id"]
+            isOneToOne: false
+            referencedRelation: "published_destination_hierarchy"
             referencedColumns: ["id"]
           },
           {
@@ -652,6 +673,7 @@ export type Database = {
           avatar_asset_id: string | null
           created_at: string
           display_name: string
+          email: string | null
           id: string
           last_seen_at: string | null
           status: Database["public"]["Enums"]["profile_status"]
@@ -661,6 +683,7 @@ export type Database = {
           avatar_asset_id?: string | null
           created_at?: string
           display_name?: string
+          email?: string | null
           id: string
           last_seen_at?: string | null
           status?: Database["public"]["Enums"]["profile_status"]
@@ -670,6 +693,7 @@ export type Database = {
           avatar_asset_id?: string | null
           created_at?: string
           display_name?: string
+          email?: string | null
           id?: string
           last_seen_at?: string | null
           status?: Database["public"]["Enums"]["profile_status"]
@@ -861,6 +885,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "seo_entries_content_entry_id_fkey"
+            columns: ["content_entry_id"]
+            isOneToOne: false
+            referencedRelation: "published_destination_hierarchy"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "seo_entries_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
@@ -1028,6 +1059,19 @@ export type Database = {
         }
         Relationships: []
       }
+      published_destination_hierarchy: {
+        Row: {
+          content_type: Database["public"]["Enums"]["content_type"] | null
+          data: Json | null
+          id: string | null
+          parent_slug: string | null
+          parent_type: Database["public"]["Enums"]["content_type"] | null
+          slug: string | null
+          sort_order: number | null
+          title: string | null
+        }
+        Relationships: []
+      }
       published_page_sections: {
         Row: {
           component_key: string | null
@@ -1147,6 +1191,13 @@ export type Database = {
             columns: ["content_entry_id"]
             isOneToOne: false
             referencedRelation: "published_content_entries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "seo_entries_content_entry_id_fkey"
+            columns: ["content_entry_id"]
+            isOneToOne: false
+            referencedRelation: "published_destination_hierarchy"
             referencedColumns: ["id"]
           },
           {
