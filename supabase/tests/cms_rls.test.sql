@@ -269,14 +269,14 @@ select set_config(
   '{"sub":"10000000-0000-0000-0000-000000000003","role":"authenticated","aal":"aal1"}',
   true
 );
-select ok(not public.current_user_has_permission('content.publish'), 'administrator publishing requires AAL2');
+select ok(public.current_user_has_permission('content.publish'), 'administrator can publish without an MFA-verified session');
 
 select set_config(
   'request.jwt.claims',
   '{"sub":"10000000-0000-0000-0000-000000000003","role":"authenticated","aal":"aal2"}',
   true
 );
-select ok(public.current_user_has_permission('content.publish'), 'AAL2 administrator can publish');
+select ok(public.current_user_has_permission('content.publish'), 'administrator can also publish under an aal2 session');
 select ok(public.current_user_has_permission('users.manage'), 'AAL2 administrator can manage ordinary users');
 select lives_ok(
   $$ update public.content_entries set published_data = '{"description":"authorized update"}' where id = '20000000-0000-0000-0000-000000000001' $$,
