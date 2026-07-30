@@ -8,6 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Footer from "@/components/Footer";
 import { RichText } from "@/components/content/rich-text";
+import { usePublishedPage } from "@/lib/cms/pages/use-published-page";
 type PublicDestination={id:string;name:string;subtitle:string;description:string;highlights:string[];image:string;icon:string};
 
 // قاموس الأيقونات
@@ -69,6 +70,7 @@ const fallbackDestinations = [
 ];
 
 export default function DestinationsPage() {
+  const cms = usePublishedPage('/destinations');
   const [destinations, setDestinations] = useState<PublicDestination[]>(fallbackDestinations);
 
   useEffect(() => {
@@ -101,13 +103,13 @@ export default function DestinationsPage() {
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto mt-20">
           <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }}>
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-brand-gold/30 bg-brand-gold/10 text-brand-gold font-bold text-xs uppercase tracking-[0.2em] mb-6 font-en">
-              <span className="h-px w-4 bg-brand-gold" /> Global Reach
+              <span className="h-px w-4 bg-brand-gold" /> {cms?.hero?.eyebrow || "Global Reach"}
             </span>
             <h1 className="text-6xl md:text-8xl font-bold text-white font-en mb-6 tracking-tight leading-none">
-              Explore Our <br/><span className="text-brand-gold">World</span>
+              {cms?.hero?.title || "Explore Our"} <br/><span className="text-brand-gold">{cms?.hero?.accentTitle || "World"}</span>
             </h1>
             <p className="text-xl text-slate-300 font-en leading-relaxed max-w-2xl mx-auto">
-              Five distinct regions. Infinite possibilities. Discover the destinations where Flash Group brings luxury to life.
+              {cms?.hero?.subtitle || "Five distinct regions. Infinite possibilities. Discover the destinations where Flash Group brings luxury to life."}
             </p>
           </motion.div>
         </div>

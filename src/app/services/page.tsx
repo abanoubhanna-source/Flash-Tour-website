@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import Footer from "@/components/Footer";
 import { RichText } from "@/components/content/rich-text";
+import { usePublishedPage } from "@/lib/cms/pages/use-published-page";
 
 type PublicService = { id?: string; title: string; desc: string; img?: string };
 
@@ -49,6 +50,7 @@ const fallbackServices = [
 ];
 
 export default function ServicesPage() {
+  const cms = usePublishedPage('/services');
   const [servicesData, setServicesData] = useState<PublicService[]>(fallbackServices);
 
   useEffect(() => {
@@ -73,13 +75,13 @@ export default function ServicesPage() {
         <div className="relative z-20 text-center px-6 max-w-4xl mx-auto w-full mt-10">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-brand-gold/30 bg-brand-gold/10 text-brand-gold font-bold text-xs uppercase tracking-[0.2em] mb-6 font-en">
-              <span className="h-px w-4 bg-brand-gold" /> Global Portfolio
+              <span className="h-px w-4 bg-brand-gold" /> {cms?.hero?.eyebrow || "Global Portfolio"}
             </span>
             <h1 className="text-5xl md:text-7xl font-bold text-white font-en mb-6 tracking-tight uppercase drop-shadow-lg">
-              Our <span className="text-brand-gold">Expertise.</span>
+              {cms?.hero?.title || "Our"} <span className="text-brand-gold">{cms?.hero?.accentTitle || "Expertise."}</span>
             </h1>
             <p className="text-lg md:text-xl text-slate-300 font-en leading-relaxed max-w-3xl mx-auto font-light drop-shadow-md">
-              From exclusive leisure travel to flawless corporate event management, Flash Group delivers uncompromised quality across every touchpoint of your journey.
+              {cms?.hero?.subtitle || "From exclusive leisure travel to flawless corporate event management, Flash Group delivers uncompromised quality across every touchpoint of your journey."}
             </p>
           </motion.div>
         </div>

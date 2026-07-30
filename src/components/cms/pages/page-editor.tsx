@@ -490,6 +490,10 @@ export function PageEditor({ page, canEdit, canPublish, canUpload }: PageEditorP
                         <span className="mt-1.5 block text-right text-[10px] font-normal text-slate-400">{draft.hero.title.length}/140</span>
                       </label>
                       <label className="block text-xs font-bold text-slate-700">
+                        Accent title <span className="font-normal text-slate-400">(shown in gold/teal after the title above)</span>
+                        <input value={draft.hero.accentTitle} onChange={(event) => updateHero("accentTitle", event.target.value)} maxLength={140} className="mt-2 h-11 w-full rounded-xl border border-slate-200 px-3.5 text-sm font-normal outline-none focus:border-[#157670] focus:ring-4 focus:ring-[#157670]/8" />
+                      </label>
+                      <label className="block text-xs font-bold text-slate-700">
                         Subtitle
                         <textarea value={draft.hero.subtitle} onChange={(event) => updateHero("subtitle", event.target.value)} maxLength={500} rows={4} className="mt-2 w-full resize-y rounded-xl border border-slate-200 px-3.5 py-3 text-sm font-normal leading-6 outline-none focus:border-[#157670] focus:ring-4 focus:ring-[#157670]/8" />
                         <span className="mt-1.5 block text-right text-[10px] font-normal text-slate-400">{draft.hero.subtitle.length}/500</span>

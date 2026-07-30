@@ -6,6 +6,7 @@ import { MapPin, Phone, Mail, Globe2, SendHorizontal, Building2, ShieldCheck } f
 import Image from 'next/image';
 import Footer from "@/components/Footer";
 import { trackContactFormSubmit, trackEmailClick } from '@/lib/analytics';
+import { usePublishedPage } from "@/lib/cms/pages/use-published-page";
 
 const offices = [
   { region: "Global Headquarters", city: "Cairo, Egypt", address: "30 Thawra St., Heliopolis", email: "info@flashtour.travel", phone: "+202 26904654" },
@@ -14,32 +15,33 @@ const offices = [
 ];
 
 export default function ContactPage() {
+  const cms = usePublishedPage('/contact');
   return (
     <main className="flex min-h-screen flex-col items-center justify-between w-full bg-slate-50 overflow-hidden">
-      
+
       {/* 1. Elegant Hero Section */}
       <section className="relative w-full h-[50vh] flex items-center justify-center bg-slate-950">
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/office-cairo.jpg" // استخدم صورة للمقر الرئيسي
-            alt="Flash Group Headquarters"
+            src={cms?.hero?.image.url || "/images/office-1.jpg"}
+            alt={cms?.hero?.image.alt || "Flash Group Headquarters"}
             fill
             sizes="100vw"
             className="object-cover opacity-30"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 to-transparent"></div>
         </div>
-        
+
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto mt-20">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-brand-gold/30 bg-brand-gold/10 text-brand-gold font-bold text-xs uppercase tracking-[0.2em] mb-6 font-en">
-              <span className="h-px w-4 bg-brand-gold" /> Global Presence
+              <span className="h-px w-4 bg-brand-gold" /> {cms?.hero?.eyebrow || "Global Presence"}
             </span>
             <h1 className="text-5xl md:text-7xl font-bold text-white font-en mb-4 tracking-tight">
-              Partner With <span className="text-teal-500">Flash Group</span>
+              {cms?.hero?.title || "Partner With"} <span className="text-teal-500">{cms?.hero?.accentTitle || "Flash Group"}</span>
             </h1>
             <p className="text-xl text-slate-300 font-en leading-relaxed">
-              For tour operators, corporate entities, event planners, and hospitality partners seeking direct access to Flash Group infrastructure.
+              {cms?.hero?.subtitle || "For tour operators, corporate entities, event planners, and hospitality partners seeking direct access to Flash Group infrastructure."}
             </p>
           </motion.div>
         </div>

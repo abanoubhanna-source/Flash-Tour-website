@@ -7,6 +7,7 @@ import { Ship, Waves, Palmtree, Map, Building2, CheckCircle, ArrowRight, Loader2
 import Image from 'next/image';
 import Link from 'next/link';
 import Footer from "@/components/Footer";
+import { usePublishedPage } from "@/lib/cms/pages/use-published-page";
 
 type HospitalityRegion = {
   id: string;
@@ -33,6 +34,7 @@ const renderIcon = (iconName: string, className: string) => {
 };
 
 export default function HospitalityPage() {
+  const cms = usePublishedPage('/hospitality');
   const [regions, setRegions] = useState<HospitalityRegion[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -63,14 +65,14 @@ export default function HospitalityPage() {
         <div className="relative z-20 px-6 max-w-[1200px] mx-auto w-full text-center mt-10">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-brand-gold/30 bg-brand-gold/10 text-brand-gold font-bold text-xs uppercase tracking-widest mb-8 font-en">
-              <span className="h-px w-6 bg-brand-gold" /> Hospitality Without Borders
+              <span className="h-px w-6 bg-brand-gold" /> {cms?.hero?.eyebrow || "Hospitality Without Borders"}
             </div>
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white font-en mb-6 tracking-tight leading-[1.1]">
-              Everywhere You Seek <br/>
-              <span className="text-brand-gold">Excellence.</span>
+              {cms?.hero?.title || "Everywhere You Seek"} <br/>
+              <span className="text-brand-gold">{cms?.hero?.accentTitle || "Excellence."}</span>
             </h1>
             <p className="text-lg md:text-2xl text-slate-300 font-en leading-relaxed max-w-3xl mx-auto font-light mb-12">
-              Our hospitality is a different breed. We are not just a service provider; we are the destination. From the majestic Nile and the vibrant Red Sea to the exotic Indian Ocean and historic European coastlines—wherever luxury is demanded, we are there.
+              {cms?.hero?.subtitle || "Our hospitality is a different breed. We are not just a service provider; we are the destination. From the majestic Nile and the vibrant Red Sea to the exotic Indian Ocean and historic European coastlines—wherever luxury is demanded, we are there."}
             </p>
           </motion.div>
         </div>

@@ -60,6 +60,7 @@ export const homeMapSectionSchema = z.object({
 export const pageHeroSchema = z.object({
   eyebrow: z.string().trim().max(120).default(""),
   title: z.string().trim().min(1, "Page title is required.").max(140),
+  accentTitle: z.string().trim().max(140).default(""),
   subtitle: z.string().trim().max(500).default(""),
   primaryCta: linkSchema.default({ label: "", href: "" }),
   secondaryCta: linkSchema.default({ label: "", href: "" }),
@@ -112,6 +113,7 @@ export type HomeMapLocationData = z.infer<typeof homeMapLocationSchema>;
 export const defaultPageHero: PageHeroData = {
   eyebrow: "",
   title: "New page",
+  accentTitle: "",
   subtitle: "",
   primaryCta: { label: "", href: "" },
   secondaryCta: { label: "", href: "" },

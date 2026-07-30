@@ -5,8 +5,10 @@ import { motion } from 'framer-motion';
 import { Briefcase, Building2, Mail, Phone, MapPin, Send, ShieldCheck, UserCheck } from 'lucide-react';
 import Footer from "@/components/Footer";
 import { trackPartnerInquirySubmit } from '@/lib/analytics';
+import { usePublishedPage } from "@/lib/cms/pages/use-published-page";
 
 export default function PartnerPortal() {
+  const cms = usePublishedPage('/partner-portal');
   return (
     <main className="flex min-h-screen flex-col items-center w-full bg-slate-50 overflow-hidden">
       {/* 1. Header Section */}
@@ -15,13 +17,13 @@ export default function PartnerPortal() {
         <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-8 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <span className="text-brand-gold font-bold tracking-[0.2em] uppercase text-sm block mb-4 font-en flex items-center justify-center gap-2">
-              <Briefcase className="w-5 h-5" /> Global B2B Network
+              <Briefcase className="w-5 h-5" /> {cms?.hero?.eyebrow || "Global B2B Network"}
             </span>
             <h1 className="text-5xl md:text-6xl font-bold text-white font-en mb-6 tracking-tight">
-              Partner With <span className="text-brand-teal">The Empire</span>
+              {cms?.hero?.title || "Partner With"} <span className="text-brand-teal">{cms?.hero?.accentTitle || "The Empire"}</span>
             </h1>
             <p className="text-lg md:text-xl text-slate-400 font-en max-w-2xl mx-auto leading-relaxed">
-              Join an elite network of global travel agencies and corporate event organizers. Gain direct access to our contracted rates, owned assets, and unparalleled DMC expertise.
+              {cms?.hero?.subtitle || "Join an elite network of global travel agencies and corporate event organizers. Gain direct access to our contracted rates, owned assets, and unparalleled DMC expertise."}
             </p>
           </motion.div>
         </div>
