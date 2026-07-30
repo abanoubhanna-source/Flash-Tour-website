@@ -4,10 +4,11 @@
 import { motion } from 'framer-motion';
 import { CheckCircle } from 'lucide-react';
 import Image from 'next/image';
+import type { HomeMapSectionData } from '@/lib/cms/pages/schema';
 
 // دي الإحداثيات، ممكن تحتاج تظبطها تظبيطة أخيرة بسيطة جداً بعد التعديل ده
 // وبمجرد ما تظبطها، مستحيل تتحرك تاني في أي شاشة
-const globalFootprint = [
+const defaultGlobalFootprint = [
   { 
     id: 'italy', 
     name: 'Italy', 
@@ -45,7 +46,16 @@ const globalFootprint = [
   },
 ];
 
-export default function InteractiveMap() {
+const defaultChecklist = ["Global Headquarters & Hubs", "Owned Luxury Resorts", "VIP Transport Fleets"];
+const defaultIntro =
+  "We do not outsource luxury. Flash Group owns and operates a massive network of hotels, vehicle fleets, and river cruises across Europe, Africa, and the Middle East, giving our B2B partners absolute control over quality and pricing.";
+
+type Props = { content?: HomeMapSectionData };
+
+export default function InteractiveMap({ content }: Props) {
+  const intro = content?.intro || defaultIntro;
+  const checklist = content?.checklist.length ? content.checklist : defaultChecklist;
+  const globalFootprint = content?.locations.length ? content.locations : defaultGlobalFootprint;
   return (
     <section className="w-full py-28 bg-brand-navy relative z-20 overflow-hidden">
       {/* Pattern Background */}
@@ -66,22 +76,16 @@ export default function InteractiveMap() {
           <div className="w-16 h-1 bg-brand-gold mb-8 rounded-full"></div>
           
           <p className="text-slate-400 font-en leading-relaxed mb-10 text-lg">
-            We do not outsource luxury. Flash Group owns and operates a massive network of hotels, vehicle fleets, and river cruises across Europe, Africa, and the Middle East, giving our B2B partners absolute control over quality and pricing.
+            {intro}
           </p>
-          
+
           <ul className="space-y-5">
-            <li className="flex items-center gap-4 font-en text-slate-200 font-medium">
-              <div className="bg-brand-teal/20 p-2 rounded-full"><CheckCircle className="text-brand-gold w-5 h-5"/></div> 
-              Global Headquarters & Hubs
-            </li>
-            <li className="flex items-center gap-4 font-en text-slate-200 font-medium">
-              <div className="bg-brand-teal/20 p-2 rounded-full"><CheckCircle className="text-brand-gold w-5 h-5"/></div> 
-              Owned Luxury Resorts
-            </li>
-            <li className="flex items-center gap-4 font-en text-slate-200 font-medium">
-              <div className="bg-brand-teal/20 p-2 rounded-full"><CheckCircle className="text-brand-gold w-5 h-5"/></div> 
-              VIP Transport Fleets
-            </li>
+            {checklist.map((item) => (
+              <li key={item} className="flex items-center gap-4 font-en text-slate-200 font-medium">
+                <div className="bg-brand-teal/20 p-2 rounded-full"><CheckCircle className="text-brand-gold w-5 h-5"/></div>
+                {item}
+              </li>
+            ))}
           </ul>
         </motion.div>
 
@@ -114,8 +118,8 @@ export default function InteractiveMap() {
             />
             
             {/* توليد النقاط التفاعلية على الخريطة */}
-            {globalFootprint.map((loc, idx) => (
-              <div key={idx} className="absolute group cursor-crosshair z-20" style={{ top: loc.top, left: loc.left }}>
+            {globalFootprint.map((loc) => (
+              <div key={loc.id} className="absolute group cursor-crosshair z-20" style={{ top: loc.top, left: loc.left }}>
                 
                 {/* النبض الأخضر والأصفر */}
                 <div className="relative flex items-center justify-center w-5 h-5 md:w-6 md:h-6 -translate-x-1/2 -translate-y-1/2">

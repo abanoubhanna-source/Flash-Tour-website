@@ -23,6 +23,40 @@ export const pageHeroSlideSchema = z.object({
   enabled: z.boolean().default(true),
 });
 
+export const homeStatItemSchema = z.object({
+  number: z.string().trim().min(1).max(20),
+  label: z.string().trim().min(1).max(60),
+});
+
+export const homeCertificationSchema = z.object({
+  name: z.string().trim().min(1).max(80),
+  desc: z.string().trim().max(160).default(""),
+  logo: z.string().trim().max(500).default(""),
+});
+
+export const homeStatsSectionSchema = z.object({
+  heading: z.string().trim().max(140).default("Scale That Builds Trust"),
+  items: z.array(homeStatItemSchema).min(0).max(8).default([]),
+  certificationsHeading: z.string().trim().max(140).default("Certified Excellence"),
+  certificationsIntro: z.string().trim().max(400).default(""),
+  certifications: z.array(homeCertificationSchema).min(0).max(8).default([]),
+});
+
+export const homeMapLocationSchema = z.object({
+  id: z.string().trim().min(1).max(60),
+  name: z.string().trim().min(1).max(100),
+  top: z.string().trim().min(1).max(10),
+  left: z.string().trim().min(1).max(10),
+  details: z.string().trim().max(200).default(""),
+});
+
+export const homeMapSectionSchema = z.object({
+  heading: z.string().trim().max(140).default("Our Global Infrastructure"),
+  intro: z.string().trim().max(600).default(""),
+  checklist: z.array(z.string().trim().max(80)).min(0).max(8).default([]),
+  locations: z.array(homeMapLocationSchema).min(0).max(12).default([]),
+});
+
 export const pageHeroSchema = z.object({
   eyebrow: z.string().trim().max(120).default(""),
   title: z.string().trim().min(1, "Page title is required.").max(140),
@@ -31,6 +65,19 @@ export const pageHeroSchema = z.object({
   secondaryCta: linkSchema.default({ label: "", href: "" }),
   image: imageSchema.default({ assetId: null, url: "", alt: "" }),
   slides: z.array(pageHeroSlideSchema).min(0).max(4).default([]),
+  stats: homeStatsSectionSchema.default({
+    heading: "Scale That Builds Trust",
+    items: [],
+    certificationsHeading: "Certified Excellence",
+    certificationsIntro: "",
+    certifications: [],
+  }),
+  map: homeMapSectionSchema.default({
+    heading: "Our Global Infrastructure",
+    intro: "",
+    checklist: [],
+    locations: [],
+  }),
 });
 
 export const pageSeoSchema = z.object({
@@ -56,6 +103,11 @@ export type PageHeroData = z.infer<typeof pageHeroSchema>;
 export type PageHeroSlideData = z.infer<typeof pageHeroSlideSchema>;
 export type PageSeoData = z.infer<typeof pageSeoSchema>;
 export type PageDraftData = z.infer<typeof pageDraftSchema>;
+export type HomeStatsSectionData = z.infer<typeof homeStatsSectionSchema>;
+export type HomeStatItemData = z.infer<typeof homeStatItemSchema>;
+export type HomeCertificationData = z.infer<typeof homeCertificationSchema>;
+export type HomeMapSectionData = z.infer<typeof homeMapSectionSchema>;
+export type HomeMapLocationData = z.infer<typeof homeMapLocationSchema>;
 
 export const defaultPageHero: PageHeroData = {
   eyebrow: "",
@@ -65,6 +117,8 @@ export const defaultPageHero: PageHeroData = {
   secondaryCta: { label: "", href: "" },
   image: { assetId: null, url: "/images/egypt-bg.jpg", alt: "" },
   slides: [],
+  stats: { heading: "Scale That Builds Trust", items: [], certificationsHeading: "Certified Excellence", certificationsIntro: "", certifications: [] },
+  map: { heading: "Our Global Infrastructure", intro: "", checklist: [], locations: [] },
 };
 
 export const defaultPageSeo: PageSeoData = {

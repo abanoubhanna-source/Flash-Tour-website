@@ -29,10 +29,10 @@ export default async function Home() {
       <HeroSection content={content?.hero} />
 
       {/* 3. Scale + Certifications */}
-      <StatsAndCerts />
+      <StatsAndCerts content={content?.hero.stats} />
 
       {/* 4. Global Infrastructure */}
-      <InteractiveMap />
+      <InteractiveMap content={content?.hero.map} />
 
       {/* 5. Group Assets / Owned Hospitality */}
       <HospitalityBrands />

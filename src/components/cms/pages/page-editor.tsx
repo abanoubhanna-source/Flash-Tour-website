@@ -35,7 +35,17 @@ import {
   unpublishPage,
 } from "@/app/dashboard/pages/actions";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
-import type { PageDraftData, PageHeroData, PageHeroSlideData, PageSeoData } from "@/lib/cms/pages/schema";
+import type {
+  HomeCertificationData,
+  HomeMapLocationData,
+  HomeMapSectionData,
+  HomeStatItemData,
+  HomeStatsSectionData,
+  PageDraftData,
+  PageHeroData,
+  PageHeroSlideData,
+  PageSeoData,
+} from "@/lib/cms/pages/schema";
 import type { CmsPageEditorData } from "@/lib/cms/pages/types";
 import { PageLivePreview } from "./page-live-preview";
 
@@ -64,6 +74,105 @@ function HomeSlidesEditor({ slides, onChange }: { slides: PageHeroSlideData[]; o
   const move = (index: number, direction: -1 | 1) => { const next = index + direction; if (next < 0 || next >= slides.length) return; const reordered = [...slides]; [reordered[index], reordered[next]] = [reordered[next], reordered[index]]; onChange(reordered); };
   const update = (index: number, value: PageHeroSlideData) => onChange(slides.map((slide, current) => current === index ? value : slide));
   return <section className="border-t border-slate-100 pt-7"><p className="text-[10px]! font-bold uppercase tracking-[0.16em] text-[#157670]">Home slider</p><h3 className="mt-1 text-lg! leading-7! font-bold text-[#0f172a]">Four hero slides</h3><p className="mt-1 text-xs text-slate-500">All four slides are saved, versioned, previewed, and published with the Home page. Use the arrows to change their public order.</p><div className="mt-4 space-y-4">{slides.map((slide, index) => <article key={slide.id} className="rounded-2xl border border-slate-200 p-4"><div className="flex items-center gap-2"><p className="flex-1 text-xs font-bold">Slide {index + 1}</p><label className="flex items-center gap-1.5 text-[11px] font-bold text-slate-600"><input type="checkbox" aria-label={`Slide ${index + 1} enabled`} checked={slide.enabled} onChange={(event) => update(index, { ...slide, enabled: event.target.checked })} className="h-3.5 w-3.5 rounded border-slate-300" />Enabled</label><button type="button" aria-label="Move slide up" disabled={index === 0} onClick={() => move(index, -1)} className="rounded-lg border p-2 disabled:opacity-40"><ArrowUp className="h-3 w-3" /></button><button type="button" aria-label="Move slide down" disabled={index === slides.length - 1} onClick={() => move(index, 1)} className="rounded-lg border p-2 disabled:opacity-40"><ArrowDown className="h-3 w-3" /></button></div><div className="mt-3 grid gap-3 sm:grid-cols-2"><input aria-label={`Slide ${index + 1} tab label`} value={slide.name} onChange={(event) => update(index, { ...slide, name: event.target.value })} placeholder="Navigation label" className="h-10 rounded-xl border px-3 text-sm" /><input aria-label={`Slide ${index + 1} eyebrow`} value={slide.eyebrow} onChange={(event) => update(index, { ...slide, eyebrow: event.target.value })} placeholder="Eyebrow" className="h-10 rounded-xl border px-3 text-sm" /></div><input aria-label={`Slide ${index + 1} title`} value={slide.title} onChange={(event) => update(index, { ...slide, title: event.target.value })} placeholder="Title" className="mt-3 h-10 w-full rounded-xl border px-3 text-sm" /><textarea aria-label={`Slide ${index + 1} subtitle`} value={slide.subtitle} onChange={(event) => update(index, { ...slide, subtitle: event.target.value })} placeholder="Subtitle" rows={3} className="mt-3 w-full rounded-xl border px-3 py-2 text-sm" /><div className="mt-3 grid gap-3 sm:grid-cols-2"><input aria-label={`Slide ${index + 1} image URL`} value={slide.image.url} onChange={(event) => update(index, { ...slide, image: { ...slide.image, url: event.target.value } })} placeholder="Image URL" className="h-10 rounded-xl border px-3 text-sm" /><input aria-label={`Slide ${index + 1} image alt`} value={slide.image.alt} onChange={(event) => update(index, { ...slide, image: { ...slide.image, alt: event.target.value } })} placeholder="Image alt text" className="h-10 rounded-xl border px-3 text-sm" /></div><div className="mt-3 grid gap-3 sm:grid-cols-2"><input aria-label={`Slide ${index + 1} primary CTA`} value={slide.primaryCta.label} onChange={(event) => update(index, { ...slide, primaryCta: { ...slide.primaryCta, label: event.target.value } })} placeholder="Primary CTA label" className="h-10 rounded-xl border px-3 text-sm" /><input aria-label={`Slide ${index + 1} primary CTA URL`} value={slide.primaryCta.href} onChange={(event) => update(index, { ...slide, primaryCta: { ...slide.primaryCta, href: event.target.value } })} placeholder="Primary CTA URL" className="h-10 rounded-xl border px-3 text-sm" /></div><div className="mt-3 grid gap-3 sm:grid-cols-2"><input aria-label={`Slide ${index + 1} secondary CTA`} value={slide.secondaryCta.label} onChange={(event) => update(index, { ...slide, secondaryCta: { ...slide.secondaryCta, label: event.target.value } })} placeholder="Secondary CTA label" className="h-10 rounded-xl border px-3 text-sm" /><input aria-label={`Slide ${index + 1} secondary CTA URL`} value={slide.secondaryCta.href} onChange={(event) => update(index, { ...slide, secondaryCta: { ...slide.secondaryCta, href: event.target.value } })} placeholder="Secondary CTA URL" className="h-10 rounded-xl border px-3 text-sm" /></div></article>)}</div></section>;
+}
+
+const emptyStatItem: HomeStatItemData = { number: "", label: "" };
+const emptyCertification: HomeCertificationData = { name: "", desc: "", logo: "" };
+const emptyMapLocation: HomeMapLocationData = { id: "", name: "", top: "50%", left: "50%", details: "" };
+
+function HomeStatsEditor({ value, onChange }: { value: HomeStatsSectionData; onChange: (value: HomeStatsSectionData) => void }) {
+  const updateItem = (index: number, item: HomeStatItemData) => onChange({ ...value, items: value.items.map((current, i) => (i === index ? item : current)) });
+  const addItem = () => onChange({ ...value, items: [...value.items, emptyStatItem] });
+  const removeItem = (index: number) => onChange({ ...value, items: value.items.filter((_, i) => i !== index) });
+  const updateCert = (index: number, cert: HomeCertificationData) => onChange({ ...value, certifications: value.certifications.map((current, i) => (i === index ? cert : current)) });
+  const addCert = () => onChange({ ...value, certifications: [...value.certifications, emptyCertification] });
+  const removeCert = (index: number) => onChange({ ...value, certifications: value.certifications.filter((_, i) => i !== index) });
+  return (
+    <section className="border-t border-slate-100 pt-7">
+      <p className="text-[10px]! font-bold uppercase tracking-[0.16em] text-[#157670]">Home page</p>
+      <h3 className="mt-1 text-lg! leading-7! font-bold text-[#0f172a]">Scale &amp; certifications</h3>
+      <p className="mt-1 text-xs text-slate-500">The stat tiles and certification cards shown under the Home hero.</p>
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {value.items.map((item, index) => (
+          <div key={index} className="rounded-2xl border border-slate-200 p-3">
+            <div className="flex items-center justify-between"><p className="text-[10px] font-bold text-slate-500">Stat {index + 1}</p><button type="button" aria-label={`Remove stat ${index + 1}`} onClick={() => removeItem(index)} className="text-[10px] font-bold text-red-600">Remove</button></div>
+            <input aria-label={`Stat ${index + 1} number`} value={item.number} onChange={(event) => updateItem(index, { ...item, number: event.target.value })} placeholder="40+" className="mt-2 h-10 w-full rounded-xl border px-3 text-sm" />
+            <input aria-label={`Stat ${index + 1} label`} value={item.label} onChange={(event) => updateItem(index, { ...item, label: event.target.value })} placeholder="Years of Excellence" className="mt-2 h-10 w-full rounded-xl border px-3 text-sm" />
+          </div>
+        ))}
+        <button type="button" onClick={addItem} className="flex h-full min-h-[92px] items-center justify-center rounded-2xl border border-dashed border-slate-300 text-xs font-bold text-slate-500 hover:bg-slate-50">+ Add stat</button>
+      </div>
+
+      <label className="mt-5 block text-xs font-bold text-slate-700">Certifications intro
+        <textarea value={value.certificationsIntro} onChange={(event) => onChange({ ...value, certificationsIntro: event.target.value })} rows={2} className="mt-2 w-full rounded-xl border px-3 py-2 text-sm" />
+      </label>
+
+      <div className="mt-4 space-y-3">
+        {value.certifications.map((cert, index) => (
+          <article key={index} className="rounded-2xl border border-slate-200 p-4">
+            <div className="flex items-center justify-between"><p className="text-xs font-bold">Certification {index + 1}</p><button type="button" aria-label={`Remove certification ${index + 1}`} onClick={() => removeCert(index)} className="text-[10px] font-bold text-red-600">Remove</button></div>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <input aria-label={`Certification ${index + 1} name`} value={cert.name} onChange={(event) => updateCert(index, { ...cert, name: event.target.value })} placeholder="ISO 9001:2015" className="h-10 rounded-xl border px-3 text-sm" />
+              <input aria-label={`Certification ${index + 1} description`} value={cert.desc} onChange={(event) => updateCert(index, { ...cert, desc: event.target.value })} placeholder="Quality Management System" className="h-10 rounded-xl border px-3 text-sm" />
+            </div>
+            <input aria-label={`Certification ${index + 1} logo URL`} value={cert.logo} onChange={(event) => updateCert(index, { ...cert, logo: event.target.value })} placeholder="/images/certifications/iso-9001.png" className="mt-3 h-10 w-full rounded-xl border px-3 text-sm" />
+          </article>
+        ))}
+        <button type="button" onClick={addCert} className="w-full rounded-2xl border border-dashed border-slate-300 py-3 text-xs font-bold text-slate-500 hover:bg-slate-50">+ Add certification</button>
+      </div>
+    </section>
+  );
+}
+
+function HomeMapEditor({ value, onChange }: { value: HomeMapSectionData; onChange: (value: HomeMapSectionData) => void }) {
+  const updateChecklistItem = (index: number, text: string) => onChange({ ...value, checklist: value.checklist.map((current, i) => (i === index ? text : current)) });
+  const addChecklistItem = () => onChange({ ...value, checklist: [...value.checklist, ""] });
+  const removeChecklistItem = (index: number) => onChange({ ...value, checklist: value.checklist.filter((_, i) => i !== index) });
+  const updateLocation = (index: number, location: HomeMapLocationData) => onChange({ ...value, locations: value.locations.map((current, i) => (i === index ? location : current)) });
+  const addLocation = () => onChange({ ...value, locations: [...value.locations, emptyMapLocation] });
+  const removeLocation = (index: number) => onChange({ ...value, locations: value.locations.filter((_, i) => i !== index) });
+  return (
+    <section className="border-t border-slate-100 pt-7">
+      <p className="text-[10px]! font-bold uppercase tracking-[0.16em] text-[#157670]">Home page</p>
+      <h3 className="mt-1 text-lg! leading-7! font-bold text-[#0f172a]">Global infrastructure map</h3>
+      <p className="mt-1 text-xs text-slate-500">The intro copy, checklist, and pinned locations on the world map section.</p>
+
+      <label className="mt-4 block text-xs font-bold text-slate-700">Intro paragraph
+        <textarea value={value.intro} onChange={(event) => onChange({ ...value, intro: event.target.value })} rows={3} className="mt-2 w-full rounded-xl border px-3 py-2 text-sm" />
+      </label>
+
+      <div className="mt-4 space-y-2">
+        <p className="text-xs font-bold text-slate-700">Checklist</p>
+        {value.checklist.map((item, index) => (
+          <div key={index} className="flex items-center gap-2">
+            <input aria-label={`Checklist item ${index + 1}`} value={item} onChange={(event) => updateChecklistItem(index, event.target.value)} className="h-10 flex-1 rounded-xl border px-3 text-sm" />
+            <button type="button" aria-label={`Remove checklist item ${index + 1}`} onClick={() => removeChecklistItem(index)} className="text-[10px] font-bold text-red-600">Remove</button>
+          </div>
+        ))}
+        <button type="button" onClick={addChecklistItem} className="w-full rounded-xl border border-dashed border-slate-300 py-2 text-xs font-bold text-slate-500 hover:bg-slate-50">+ Add checklist item</button>
+      </div>
+
+      <div className="mt-5 space-y-3">
+        <p className="text-xs font-bold text-slate-700">Map locations</p>
+        {value.locations.map((location, index) => (
+          <article key={index} className="rounded-2xl border border-slate-200 p-4">
+            <div className="flex items-center justify-between"><p className="text-xs font-bold">Location {index + 1}</p><button type="button" aria-label={`Remove location ${index + 1}`} onClick={() => removeLocation(index)} className="text-[10px] font-bold text-red-600">Remove</button></div>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <input aria-label={`Location ${index + 1} id`} value={location.id} onChange={(event) => updateLocation(index, { ...location, id: event.target.value })} placeholder="egypt" className="h-10 rounded-xl border px-3 font-mono text-sm" />
+              <input aria-label={`Location ${index + 1} name`} value={location.name} onChange={(event) => updateLocation(index, { ...location, name: event.target.value })} placeholder="Egypt" className="h-10 rounded-xl border px-3 text-sm" />
+            </div>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <input aria-label={`Location ${index + 1} top position`} value={location.top} onChange={(event) => updateLocation(index, { ...location, top: event.target.value })} placeholder="45%" className="h-10 rounded-xl border px-3 text-sm" />
+              <input aria-label={`Location ${index + 1} left position`} value={location.left} onChange={(event) => updateLocation(index, { ...location, left: event.target.value })} placeholder="43.5%" className="h-10 rounded-xl border px-3 text-sm" />
+            </div>
+            <input aria-label={`Location ${index + 1} details`} value={location.details} onChange={(event) => updateLocation(index, { ...location, details: event.target.value })} placeholder="Global HQ • 7 Nile Cruises • 100+ VIP Fleet" className="mt-3 h-10 w-full rounded-xl border px-3 text-sm" />
+          </article>
+        ))}
+        <button type="button" onClick={addLocation} className="w-full rounded-2xl border border-dashed border-slate-300 py-3 text-xs font-bold text-slate-500 hover:bg-slate-50">+ Add location</button>
+      </div>
+    </section>
+  );
 }
 
 function formatRevisionDate(value: string) {
@@ -457,6 +566,8 @@ export function PageEditor({ page, canEdit, canPublish, canUpload }: PageEditorP
                     </div>
                   </div>
                   {page.path === "/" && <HomeSlidesEditor slides={draft.hero.slides.length === 4 ? draft.hero.slides : homeSlideDefaults} onChange={(slides) => updateHero("slides", slides)} />}
+                  {page.path === "/" && <HomeStatsEditor value={draft.hero.stats} onChange={(stats) => updateHero("stats", stats)} />}
+                  {page.path === "/" && <HomeMapEditor value={draft.hero.map} onChange={(map) => updateHero("map", map)} />}
                 </fieldset>
               </div>
             )}

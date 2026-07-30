@@ -3,8 +3,9 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import type { HomeStatsSectionData } from '@/lib/cms/pages/schema';
 
-const stats = [
+const defaultStats = [
   { number: "40+", label: "Years of Excellence" },
   { number: "1000+", label: "Global Experts" },
   { number: "100+", label: "Owned Fleet Assets" },
@@ -12,12 +13,19 @@ const stats = [
 ];
 
 // TODO: confirm public/images/certifications/iso-9001.png and iata.webp are the final official logo files before shipping.
-const certifications = [
+const defaultCertifications = [
   { name: "ISO 9001:2015", desc: "Quality Management System", logo: "/images/certifications/iso-9001.png" },
   { name: "IATA Accredited", desc: "International Air Transport Association", logo: "/images/certifications/iata.webp" },
 ];
 
-export default function StatsAndCerts() {
+type Props = { content?: HomeStatsSectionData };
+
+export default function StatsAndCerts({ content }: Props) {
+  const certificationsIntro =
+    content?.certificationsIntro ||
+    "Operating under certified international standards to give partners uncompromised quality, safety, and operational confidence.";
+  const stats = content?.items.length ? content.items : defaultStats;
+  const certifications = content?.certifications.length ? content.certifications : defaultCertifications;
   return (
     <section className="w-full bg-white pt-20 pb-24 relative z-20">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
@@ -60,7 +68,7 @@ export default function StatsAndCerts() {
             <div className="w-full md:w-1/3 text-center md:text-left">
               <h3 className="text-3xl font-bold text-white font-en mb-4">Certified <br/><span className="text-brand-gold">Excellence</span></h3>
               <p className="text-slate-400 font-en leading-relaxed">
-                Operating under certified international standards to give partners uncompromised quality, safety, and operational confidence.
+                {certificationsIntro}
               </p>
             </div>
 
