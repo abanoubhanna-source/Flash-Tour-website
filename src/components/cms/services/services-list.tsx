@@ -6,6 +6,7 @@ import { useActionState, useEffect, useMemo, useState, useTransition } from "rea
 import { ArrowRight, BriefcaseBusiness, Plus, Search, Trash2, X } from "lucide-react";
 import { createService, deleteService, type CreateServiceState } from "@/app/dashboard/services/actions";
 import type { CmsServiceSummary } from "@/lib/cms/services/types";
+import { EmptyState, StatusBadge, TypeAvatar } from "@/components/cms/collections/list-ui";
 
 const initialState: CreateServiceState = { status: "idle" };
 type Props = { services: CmsServiceSummary[]; canCreate: boolean; canEdit: boolean; canDelete: boolean };
@@ -54,14 +55,14 @@ export function ServicesList({ services, canCreate, canEdit, canDelete }: Props)
 
       <section className="overflow-hidden rounded-[1.5rem] border border-slate-200/80 bg-white shadow-sm">
         {filtered.length === 0 ? (
-          <div className="flex min-h-64 flex-col items-center justify-center p-8 text-center"><BriefcaseBusiness className="h-8 w-8 text-slate-300" /><p className="mt-3 text-sm font-bold text-slate-700">No services found</p></div>
+          <EmptyState icon={BriefcaseBusiness} label="No services found" />
         ) : (
           <div className="divide-y divide-slate-100">
             {filtered.map((service) => (
               <article key={service.id} className="flex flex-col gap-4 p-4 hover:bg-slate-50/70 sm:flex-row sm:items-center sm:p-5">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#157670]/8 text-[#157670]"><BriefcaseBusiness className="h-5 w-5" /></div>
+                <TypeAvatar icon={BriefcaseBusiness} />
                 <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2"><h3 className="truncate text-sm! font-bold text-slate-900">{service.title}</h3><span className={`rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider ${service.status === "published" ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"}`}>{service.status}</span></div>
+                  <div className="flex flex-wrap items-center gap-2"><h3 className="truncate text-sm! font-bold text-slate-900">{service.title}</h3><StatusBadge status={service.status} /></div>
                   <p className="mt-1 font-mono text-[10px]! text-slate-500">{service.slug} · order {service.sortOrder}</p>
                 </div>
                 <div className="flex items-center gap-2">
