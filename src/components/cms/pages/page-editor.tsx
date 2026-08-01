@@ -484,58 +484,62 @@ export function PageEditor({ page, canEdit, canPublish, canUpload }: PageEditorP
             {activeTab === "content" && (
               <div className="space-y-7">
                 <fieldset disabled={!canEdit} className="space-y-4 disabled:opacity-75">
-                  <CollapsibleSection eyebrow="Hero content" title="Page introduction" defaultOpen>
-                    <div className="space-y-5">
-                      <label className="block text-xs font-bold text-slate-700">
-                        Eyebrow
-                        <input value={draft.hero.eyebrow} onChange={(event) => updateHero("eyebrow", event.target.value)} maxLength={120} className="mt-2 h-11 w-full rounded-xl border border-slate-200 px-3.5 text-sm font-normal outline-none focus:border-[#157670] focus:ring-4 focus:ring-[#157670]/8" />
-                      </label>
-                      <label className="block text-xs font-bold text-slate-700">
-                        Page title
-                        <input value={draft.hero.title} onChange={(event) => updateHero("title", event.target.value)} required maxLength={140} className="mt-2 h-11 w-full rounded-xl border border-slate-200 px-3.5 text-sm font-normal outline-none focus:border-[#157670] focus:ring-4 focus:ring-[#157670]/8" />
-                        <span className="mt-1.5 block text-right text-[10px] font-normal text-slate-400">{draft.hero.title.length}/140</span>
-                      </label>
-                      <label className="block text-xs font-bold text-slate-700">
-                        Accent title <span className="font-normal text-slate-400">(shown in gold/teal after the title above)</span>
-                        <input value={draft.hero.accentTitle} onChange={(event) => updateHero("accentTitle", event.target.value)} maxLength={140} className="mt-2 h-11 w-full rounded-xl border border-slate-200 px-3.5 text-sm font-normal outline-none focus:border-[#157670] focus:ring-4 focus:ring-[#157670]/8" />
-                      </label>
-                      <label className="block text-xs font-bold text-slate-700">
-                        Subtitle
-                        <textarea value={draft.hero.subtitle} onChange={(event) => updateHero("subtitle", event.target.value)} maxLength={500} rows={4} className="mt-2 w-full resize-y rounded-xl border border-slate-200 px-3.5 py-3 text-sm font-normal leading-6 outline-none focus:border-[#157670] focus:ring-4 focus:ring-[#157670]/8" />
-                        <span className="mt-1.5 block text-right text-[10px] font-normal text-slate-400">{draft.hero.subtitle.length}/500</span>
-                      </label>
+                  {page.path !== "/" && (
+                    <CollapsibleSection eyebrow="Hero content" title="Page introduction" defaultOpen>
+                      <div className="space-y-5">
+                        <label className="block text-xs font-bold text-slate-700">
+                          Eyebrow
+                          <input value={draft.hero.eyebrow} onChange={(event) => updateHero("eyebrow", event.target.value)} maxLength={120} className="mt-2 h-11 w-full rounded-xl border border-slate-200 px-3.5 text-sm font-normal outline-none focus:border-[#157670] focus:ring-4 focus:ring-[#157670]/8" />
+                        </label>
+                        <label className="block text-xs font-bold text-slate-700">
+                          Page title
+                          <input value={draft.hero.title} onChange={(event) => updateHero("title", event.target.value)} required maxLength={140} className="mt-2 h-11 w-full rounded-xl border border-slate-200 px-3.5 text-sm font-normal outline-none focus:border-[#157670] focus:ring-4 focus:ring-[#157670]/8" />
+                          <span className="mt-1.5 block text-right text-[10px] font-normal text-slate-400">{draft.hero.title.length}/140</span>
+                        </label>
+                        <label className="block text-xs font-bold text-slate-700">
+                          Accent title <span className="font-normal text-slate-400">(shown in gold/teal after the title above)</span>
+                          <input value={draft.hero.accentTitle} onChange={(event) => updateHero("accentTitle", event.target.value)} maxLength={140} className="mt-2 h-11 w-full rounded-xl border border-slate-200 px-3.5 text-sm font-normal outline-none focus:border-[#157670] focus:ring-4 focus:ring-[#157670]/8" />
+                        </label>
+                        <label className="block text-xs font-bold text-slate-700">
+                          Subtitle
+                          <textarea value={draft.hero.subtitle} onChange={(event) => updateHero("subtitle", event.target.value)} maxLength={500} rows={4} className="mt-2 w-full resize-y rounded-xl border border-slate-200 px-3.5 py-3 text-sm font-normal leading-6 outline-none focus:border-[#157670] focus:ring-4 focus:ring-[#157670]/8" />
+                          <span className="mt-1.5 block text-right text-[10px] font-normal text-slate-400">{draft.hero.subtitle.length}/500</span>
+                        </label>
 
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        <div className="rounded-2xl border border-slate-200 p-4">
-                          <p className="text-xs! font-bold text-slate-800">Primary CTA</p>
-                          <div className="mt-3 space-y-3">
-                            <input aria-label="Primary CTA label" value={draft.hero.primaryCta.label} onChange={(event) => updateHero("primaryCta", { ...draft.hero.primaryCta, label: event.target.value })} placeholder="Button label" maxLength={80} className="h-10 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#157670]" />
-                            <input aria-label="Primary CTA link" value={draft.hero.primaryCta.href} onChange={(event) => updateHero("primaryCta", { ...draft.hero.primaryCta, href: event.target.value })} placeholder="/contact" maxLength={500} className="h-10 w-full rounded-xl border border-slate-200 px-3 font-mono text-xs outline-none focus:border-[#157670]" />
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <div className="rounded-2xl border border-slate-200 p-4">
+                            <p className="text-xs! font-bold text-slate-800">Primary CTA</p>
+                            <div className="mt-3 space-y-3">
+                              <input aria-label="Primary CTA label" value={draft.hero.primaryCta.label} onChange={(event) => updateHero("primaryCta", { ...draft.hero.primaryCta, label: event.target.value })} placeholder="Button label" maxLength={80} className="h-10 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#157670]" />
+                              <input aria-label="Primary CTA link" value={draft.hero.primaryCta.href} onChange={(event) => updateHero("primaryCta", { ...draft.hero.primaryCta, href: event.target.value })} placeholder="/contact" maxLength={500} className="h-10 w-full rounded-xl border border-slate-200 px-3 font-mono text-xs outline-none focus:border-[#157670]" />
+                            </div>
                           </div>
-                        </div>
-                        <div className="rounded-2xl border border-slate-200 p-4">
-                          <p className="text-xs! font-bold text-slate-800">Secondary CTA</p>
-                          <div className="mt-3 space-y-3">
-                            <input aria-label="Secondary CTA label" value={draft.hero.secondaryCta.label} onChange={(event) => updateHero("secondaryCta", { ...draft.hero.secondaryCta, label: event.target.value })} placeholder="Button label" maxLength={80} className="h-10 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#157670]" />
-                            <input aria-label="Secondary CTA link" value={draft.hero.secondaryCta.href} onChange={(event) => updateHero("secondaryCta", { ...draft.hero.secondaryCta, href: event.target.value })} placeholder="/brands" maxLength={500} className="h-10 w-full rounded-xl border border-slate-200 px-3 font-mono text-xs outline-none focus:border-[#157670]" />
+                          <div className="rounded-2xl border border-slate-200 p-4">
+                            <p className="text-xs! font-bold text-slate-800">Secondary CTA</p>
+                            <div className="mt-3 space-y-3">
+                              <input aria-label="Secondary CTA label" value={draft.hero.secondaryCta.label} onChange={(event) => updateHero("secondaryCta", { ...draft.hero.secondaryCta, label: event.target.value })} placeholder="Button label" maxLength={80} className="h-10 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#157670]" />
+                              <input aria-label="Secondary CTA link" value={draft.hero.secondaryCta.href} onChange={(event) => updateHero("secondaryCta", { ...draft.hero.secondaryCta, href: event.target.value })} placeholder="/brands" maxLength={500} className="h-10 w-full rounded-xl border border-slate-200 px-3 font-mono text-xs outline-none focus:border-[#157670]" />
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </CollapsibleSection>
+                    </CollapsibleSection>
+                  )}
 
-                  <CollapsibleSection eyebrow="Hero image" title="Background media">
-                    <MediaPicker
-                      label="Background image"
-                      value={draft.hero.image}
-                      canUpload={canUpload}
-                      onChange={(image) => updateHero("image", { assetId: image.assetId ?? draft.hero.image.assetId, url: image.url, alt: image.alt ?? draft.hero.image.alt })}
-                    />
-                    <label className="mt-4 block text-xs font-bold text-slate-700">
-                      Alternative text
-                      <input value={draft.hero.image.alt} onChange={(event) => updateHero("image", { ...draft.hero.image, alt: event.target.value })} maxLength={180} placeholder="Describe the image" className="mt-2 h-10 w-full rounded-xl border border-slate-200 px-3 text-sm font-normal outline-none focus:border-[#157670]" />
-                    </label>
-                  </CollapsibleSection>
+                  {page.path !== "/" && (
+                    <CollapsibleSection eyebrow="Hero image" title="Background media">
+                      <MediaPicker
+                        label="Background image"
+                        value={draft.hero.image}
+                        canUpload={canUpload}
+                        onChange={(image) => updateHero("image", { assetId: image.assetId ?? draft.hero.image.assetId, url: image.url, alt: image.alt ?? draft.hero.image.alt })}
+                      />
+                      <label className="mt-4 block text-xs font-bold text-slate-700">
+                        Alternative text
+                        <input value={draft.hero.image.alt} onChange={(event) => updateHero("image", { ...draft.hero.image, alt: event.target.value })} maxLength={180} placeholder="Describe the image" className="mt-2 h-10 w-full rounded-xl border border-slate-200 px-3 text-sm font-normal outline-none focus:border-[#157670]" />
+                      </label>
+                    </CollapsibleSection>
+                  )}
 
                   {page.path === "/" && <HomeSlidesEditor slides={draft.hero.slides.length === 4 ? draft.hero.slides : homeSlideDefaults} onChange={(slides) => updateHero("slides", slides)} canUpload={canUpload} />}
                   {page.path === "/" && <HomeStatsEditor value={draft.hero.stats} onChange={(stats) => updateHero("stats", stats)} canUpload={canUpload} />}
