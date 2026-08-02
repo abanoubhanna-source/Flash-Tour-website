@@ -32,6 +32,8 @@ import {
 } from "@/app/dashboard/pages/actions";
 import { MediaPicker } from "@/components/cms/media-picker";
 import type {
+  ContactOfficeData,
+  ContactPanelData,
   HomeCertificationData,
   HomeHospitalityCardData,
   HomeMapLocationData,
@@ -407,6 +409,61 @@ function HomeOwnedHospitalityEditor({ value, onChange, canUpload }: { value: Hom
         <label className="block text-xs font-bold text-slate-700">Button link
           <input value={value.ctaHref} onChange={(event) => onChange({ ...value, ctaHref: event.target.value })} placeholder="/hospitality" className="mt-2 h-11 w-full rounded-xl border px-3.5 font-mono text-sm" />
         </label>
+      </div>
+    </CollapsibleSection>
+  );
+}
+
+function ContactOfficesEditor({ value, onChange }: { value: ContactOfficeData[]; onChange: (value: ContactOfficeData[]) => void }) {
+  const updateOffice = (index: number, office: ContactOfficeData) => onChange(value.map((current, i) => (i === index ? office : current)));
+  const addOffice = () => onChange([...value, { id: `office-${value.length + 1}`, region: "", city: "", address: "", email: "", phone: "" }]);
+  const removeOffice = (index: number) => onChange(value.filter((_, i) => i !== index));
+  return (
+    <CollapsibleSection eyebrow="Contact page" title="Office cards" description="The office cards shown under the Contact hero.">
+      <div className="space-y-3">
+        {value.map((office, index) => (
+          <details key={office.id} className="rounded-2xl border border-slate-200 p-4" open={index === 0}>
+            <summary className="cursor-pointer text-xs font-bold text-slate-700 select-none">{office.city || `Office ${index + 1}`}</summary>
+            <div className="mt-4 space-y-3">
+              <div className="grid gap-3 sm:grid-cols-2">
+                <input aria-label={`Office ${index + 1} region`} value={office.region} onChange={(event) => updateOffice(index, { ...office, region: event.target.value })} placeholder="Global Headquarters" className="h-10 rounded-xl border px-3 text-sm" />
+                <input aria-label={`Office ${index + 1} city`} value={office.city} onChange={(event) => updateOffice(index, { ...office, city: event.target.value })} placeholder="Cairo, Egypt" className="h-10 rounded-xl border px-3 text-sm" />
+              </div>
+              <input aria-label={`Office ${index + 1} address`} value={office.address} onChange={(event) => updateOffice(index, { ...office, address: event.target.value })} placeholder="30 Thawra St., Heliopolis" className="h-10 w-full rounded-xl border px-3 text-sm" />
+              <div className="grid gap-3 sm:grid-cols-2">
+                <input aria-label={`Office ${index + 1} email`} value={office.email} onChange={(event) => updateOffice(index, { ...office, email: event.target.value })} placeholder="info@flashtour.travel" className="h-10 rounded-xl border px-3 text-sm" />
+                <input aria-label={`Office ${index + 1} phone`} value={office.phone} onChange={(event) => updateOffice(index, { ...office, phone: event.target.value })} placeholder="+202 26904654" className="h-10 rounded-xl border px-3 text-sm" />
+              </div>
+              {value.length > 1 && (
+                <button type="button" onClick={() => removeOffice(index)} className="text-[10px] font-bold text-red-600">Remove office</button>
+              )}
+            </div>
+          </details>
+        ))}
+        <button type="button" onClick={addOffice} className="w-full rounded-xl border border-dashed border-slate-300 py-2 text-xs font-bold text-slate-500 hover:bg-slate-50">+ Add office</button>
+      </div>
+    </CollapsibleSection>
+  );
+}
+
+function ContactPanelEditor({ value, onChange }: { value: ContactPanelData; onChange: (value: ContactPanelData) => void }) {
+  const updateBadge = (index: number, badge: { label: string; value: string }) => onChange({ ...value, trustBadges: value.trustBadges.map((current, i) => (i === index ? badge : current)) });
+  return (
+    <CollapsibleSection eyebrow="Contact page" title="Partnership panel" description="The dark left-hand panel next to the inquiry form.">
+      <label className="block text-xs font-bold text-slate-700">Heading
+        <input value={value.heading} onChange={(event) => onChange({ ...value, heading: event.target.value })} placeholder="Access the Group Network" className="mt-2 h-11 w-full rounded-xl border px-3.5 text-sm" />
+      </label>
+      <label className="mt-5 block text-xs font-bold text-slate-700">Intro
+        <textarea value={value.intro} onChange={(event) => onChange({ ...value, intro: event.target.value })} rows={3} className="mt-2 w-full rounded-xl border px-3 py-2 text-sm" />
+      </label>
+      <div className="mt-5 space-y-3">
+        <p className="text-xs font-bold text-slate-700">Trust badges</p>
+        {value.trustBadges.map((badge, index) => (
+          <div key={index} className="grid grid-cols-2 gap-2 rounded-xl border border-slate-200 p-3">
+            <input aria-label={`Trust badge ${index + 1} label`} value={badge.label} onChange={(event) => updateBadge(index, { ...badge, label: event.target.value })} placeholder="Global Reach" className="h-10 rounded-xl border px-3 text-sm" />
+            <input aria-label={`Trust badge ${index + 1} value`} value={badge.value} onChange={(event) => updateBadge(index, { ...badge, value: event.target.value })} placeholder="Operating in 5+ countries" className="h-10 rounded-xl border px-3 text-sm" />
+          </div>
+        ))}
       </div>
     </CollapsibleSection>
   );
@@ -798,6 +855,8 @@ export function PageEditor({ page, canEdit, canPublish, canUpload, embedded = fa
                     />
                   )}
                   {page.path === "/hospitality" && <HospitalityStatsEditor value={draft.hero.hospitalityStats} onChange={(hospitalityStats) => updateHero("hospitalityStats", hospitalityStats)} />}
+                  {page.path === "/contact" && <ContactOfficesEditor value={draft.hero.contactOffices} onChange={(contactOffices) => updateHero("contactOffices", contactOffices)} />}
+                  {page.path === "/contact" && <ContactPanelEditor value={draft.hero.contactPanel} onChange={(contactPanel) => updateHero("contactPanel", contactPanel)} />}
                   {page.path.startsWith("/hospitality/") && (
                     <HospitalityIntroCtaEditor
                       introHeading={draft.hero.introHeading}

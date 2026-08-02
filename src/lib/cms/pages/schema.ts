@@ -190,6 +190,39 @@ const defaultHomeHospitalityCards = [
   },
 ];
 
+export const contactOfficeSchema = z.object({
+  id: z.string().trim().min(1).max(40),
+  region: z.string().trim().max(80).default(""),
+  city: z.string().trim().max(120).default(""),
+  address: z.string().trim().max(200).default(""),
+  email: z.string().trim().max(120).default(""),
+  phone: z.string().trim().max(60).default(""),
+});
+
+const defaultContactOffices = [
+  { id: "cairo", region: "Global Headquarters", city: "Cairo, Egypt", address: "30 Thawra St., Heliopolis", email: "info@flashtour.travel", phone: "+202 26904654" },
+  { id: "dubai", region: "Gulf Region", city: "Dubai, UAE", address: "Business Bay, Executive Towers", email: "uae@flashtour.travel", phone: "+971 4 123 4567" },
+  { id: "zanzibar", region: "Indian Ocean", city: "Zanzibar, Tanzania", address: "Stone Town, Coastal Road", email: "zanzibar@flashtour.travel", phone: "+255 24 123 456" },
+];
+
+export const contactTrustBadgeSchema = z.object({
+  label: z.string().trim().max(80).default(""),
+  value: z.string().trim().max(120).default(""),
+});
+
+const defaultContactTrustBadges = [
+  { label: "Global Reach", value: "Operating in 5+ countries" },
+  { label: "Certified Excellence", value: "ISO & IATA Certified" },
+];
+
+export const contactPanelSchema = z.object({
+  heading: z.string().trim().max(140).default("Access the Group Network"),
+  intro: z.string().trim().max(400).default(
+    "Tell us what your organization needs. Our corporate relations team will route your inquiry to the right business unit within 24 hours.",
+  ),
+  trustBadges: z.array(contactTrustBadgeSchema).length(2).default(defaultContactTrustBadges),
+});
+
 export const homeOwnedHospitalitySchema = z.object({
   heading: z.string().trim().max(140).default("Owned Hospitality"),
   intro: z.string().trim().max(400).default(
@@ -246,6 +279,12 @@ export const pageHeroSchema = z.object({
   introBody: z.string().trim().max(800).default(""),
   ctaHeading: z.string().trim().max(140).default(""),
   ctaBody: z.string().trim().max(400).default(""),
+  contactOffices: z.array(contactOfficeSchema).min(1).max(6).default(defaultContactOffices),
+  contactPanel: contactPanelSchema.default({
+    heading: "Access the Group Network",
+    intro: "Tell us what your organization needs. Our corporate relations team will route your inquiry to the right business unit within 24 hours.",
+    trustBadges: defaultContactTrustBadges,
+  }),
   enterpriseSolutions: homeEnterpriseSolutionsSchema.default({
     heading: "Enterprise Solutions",
     intro: "Tailored operational capabilities for global travel agencies, event organizers, and corporate entities seeking flawless execution.",
@@ -305,6 +344,9 @@ export type HospitalityTransportationSectionData = z.infer<typeof hospitalityTra
 export type HospitalityRegionCardData = z.infer<typeof hospitalityRegionCardSchema>;
 export type HomeEnterpriseSolutionsData = z.infer<typeof homeEnterpriseSolutionsSchema>;
 export type HomeOwnedHospitalityData = z.infer<typeof homeOwnedHospitalitySchema>;
+export type ContactOfficeData = z.infer<typeof contactOfficeSchema>;
+export type ContactTrustBadgeData = z.infer<typeof contactTrustBadgeSchema>;
+export type ContactPanelData = z.infer<typeof contactPanelSchema>;
 export type HomeHospitalityCardData = z.infer<typeof homeHospitalityCardSchema>;
 
 export const defaultPageHero: PageHeroData = {
@@ -342,6 +384,12 @@ export const defaultPageHero: PageHeroData = {
   introBody: "",
   ctaHeading: "",
   ctaBody: "",
+  contactOffices: defaultContactOffices,
+  contactPanel: {
+    heading: "Access the Group Network",
+    intro: "Tell us what your organization needs. Our corporate relations team will route your inquiry to the right business unit within 24 hours.",
+    trustBadges: defaultContactTrustBadges,
+  },
   enterpriseSolutions: {
     heading: "Enterprise Solutions",
     intro: "Tailored operational capabilities for global travel agencies, event organizers, and corporate entities seeking flawless execution.",

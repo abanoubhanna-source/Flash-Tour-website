@@ -8,14 +8,22 @@ import Footer from "@/components/Footer";
 import { trackContactFormSubmit, trackEmailClick } from '@/lib/analytics';
 import { usePublishedPage } from "@/lib/cms/pages/use-published-page";
 
-const offices = [
-  { region: "Global Headquarters", city: "Cairo, Egypt", address: "30 Thawra St., Heliopolis", email: "info@flashtour.travel", phone: "+202 26904654" },
-  { region: "Gulf Region", city: "Dubai, UAE", address: "Business Bay, Executive Towers", email: "uae@flashtour.travel", phone: "+971 4 123 4567" },
-  { region: "Indian Ocean", city: "Zanzibar, Tanzania", address: "Stone Town, Coastal Road", email: "zanzibar@flashtour.travel", phone: "+255 24 123 456" },
+const defaultOffices = [
+  { id: "cairo", region: "Global Headquarters", city: "Cairo, Egypt", address: "30 Thawra St., Heliopolis", email: "info@flashtour.travel", phone: "+202 26904654" },
+  { id: "dubai", region: "Gulf Region", city: "Dubai, UAE", address: "Business Bay, Executive Towers", email: "uae@flashtour.travel", phone: "+971 4 123 4567" },
+  { id: "zanzibar", region: "Indian Ocean", city: "Zanzibar, Tanzania", address: "Stone Town, Coastal Road", email: "zanzibar@flashtour.travel", phone: "+255 24 123 456" },
+];
+
+const defaultTrustBadges = [
+  { label: "Global Reach", value: "Operating in 5+ countries" },
+  { label: "Certified Excellence", value: "ISO & IATA Certified" },
 ];
 
 export default function ContactPage() {
   const cms = usePublishedPage('/contact');
+  const offices = cms?.hero?.contactOffices?.length ? cms.hero.contactOffices : defaultOffices;
+  const panel = cms?.hero?.contactPanel;
+  const trustBadges = panel?.trustBadges?.length ? panel.trustBadges : defaultTrustBadges;
   return (
     <main className="flex min-h-screen flex-col items-center justify-between w-full bg-slate-50 overflow-hidden">
 
@@ -52,8 +60,8 @@ export default function ContactPage() {
         <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {offices.map((office, idx) => (
-              <motion.div 
-                key={idx}
+              <motion.div
+                key={office.id}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -96,30 +104,26 @@ export default function ContactPage() {
               <div className="absolute inset-0 opacity-10 bg-[url('/images/pattern.png')] bg-repeat"></div>
               
               <div className="relative z-10">
-                <h2 className="text-4xl font-bold font-en mb-6">Access the Group Network</h2>
+                <h2 className="text-4xl font-bold font-en mb-6">{panel?.heading || "Access the Group Network"}</h2>
                 <p className="text-slate-400 font-en leading-relaxed mb-10 text-lg">
-                  Tell us what your organization needs. Our corporate relations team will route your inquiry to the right business unit within 24 hours.
+                  {panel?.intro || "Tell us what your organization needs. Our corporate relations team will route your inquiry to the right business unit within 24 hours."}
                 </p>
-                
+
                 <div className="space-y-6">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
-                      <Globe2 className="w-5 h-5 text-teal-400" />
-                    </div>
-                    <div>
-                      <p className="font-en font-bold">Global Reach</p>
-                      <p className="text-sm text-slate-400 font-en">Operating in 5+ countries</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
-                      <ShieldCheck className="w-5 h-5 text-amber-400" />
-                    </div>
-                    <div>
-                      <p className="font-en font-bold">Certified Excellence</p>
-                      <p className="text-sm text-slate-400 font-en">ISO & IATA Certified</p>
-                    </div>
-                  </div>
+                  {trustBadges.map((badge, index) => {
+                    const Icon = index === 0 ? Globe2 : ShieldCheck;
+                    return (
+                      <div key={badge.label} className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
+                          <Icon className={`w-5 h-5 ${index === 0 ? "text-teal-400" : "text-amber-400"}`} />
+                        </div>
+                        <div>
+                          <p className="font-en font-bold">{badge.label}</p>
+                          <p className="text-sm text-slate-400 font-en">{badge.value}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
