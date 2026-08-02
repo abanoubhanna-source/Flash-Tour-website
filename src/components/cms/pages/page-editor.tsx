@@ -37,6 +37,7 @@ import type {
   HomeMapSectionData,
   HomeStatItemData,
   HomeStatsSectionData,
+  HospitalityTransportationSectionData,
   PageDraftData,
   PageHeroData,
   PageHeroSlideData,
@@ -223,6 +224,42 @@ function HomeMapEditor({ value, onChange }: { value: HomeMapSectionData; onChang
           </article>
         ))}
         <button type="button" onClick={addLocation} className="w-full rounded-2xl border border-dashed border-slate-300 py-3 text-xs font-bold text-slate-500 hover:bg-slate-50">+ Add location</button>
+      </div>
+    </CollapsibleSection>
+  );
+}
+
+function HospitalityTransportationEditor({ value, onChange, canUpload }: { value: HospitalityTransportationSectionData; onChange: (value: HospitalityTransportationSectionData) => void; canUpload: boolean }) {
+  const updateFeature = (index: number, text: string) => onChange({ ...value, features: value.features.map((current, i) => (i === index ? text : current)) });
+  const addFeature = () => onChange({ ...value, features: [...value.features, ""] });
+  const removeFeature = (index: number) => onChange({ ...value, features: value.features.filter((_, i) => i !== index) });
+  return (
+    <CollapsibleSection eyebrow="Hospitality page" title="Transportation section" description="The VIP transportation section shown on the Hospitality page. The Home page's Transportation card links here.">
+      <label className="block text-xs font-bold text-slate-700">Section heading
+        <input value={value.heading} onChange={(event) => onChange({ ...value, heading: event.target.value })} placeholder="Unmatched VIP Transportation" className="mt-2 h-11 w-full rounded-xl border px-3.5 text-sm" />
+      </label>
+      <label className="mt-5 block text-xs font-bold text-slate-700">Description
+        <textarea value={value.description} onChange={(event) => onChange({ ...value, description: event.target.value })} rows={3} className="mt-2 w-full rounded-xl border px-3 py-2 text-sm" />
+      </label>
+
+      <div className="mt-4 space-y-2">
+        <p className="text-xs font-bold text-slate-700">Features</p>
+        {value.features.map((item, index) => (
+          <div key={index} className="flex items-center gap-2">
+            <input aria-label={`Feature ${index + 1}`} value={item} onChange={(event) => updateFeature(index, event.target.value)} className="h-10 flex-1 rounded-xl border px-3 text-sm" />
+            <button type="button" aria-label={`Remove feature ${index + 1}`} onClick={() => removeFeature(index)} className="text-[10px] font-bold text-red-600">Remove</button>
+          </div>
+        ))}
+        <button type="button" onClick={addFeature} className="w-full rounded-xl border border-dashed border-slate-300 py-2 text-xs font-bold text-slate-500 hover:bg-slate-50">+ Add feature</button>
+      </div>
+
+      <div className="mt-5">
+        <MediaPicker
+          label="Section image"
+          value={value.image}
+          canUpload={canUpload}
+          onChange={(image) => onChange({ ...value, image: { assetId: image.assetId ?? value.image.assetId, url: image.url, alt: image.alt ?? value.image.alt } })}
+        />
       </div>
     </CollapsibleSection>
   );
@@ -544,6 +581,7 @@ export function PageEditor({ page, canEdit, canPublish, canUpload }: PageEditorP
                   {page.path === "/" && <HomeSlidesEditor slides={draft.hero.slides.length === 4 ? draft.hero.slides : homeSlideDefaults} onChange={(slides) => updateHero("slides", slides)} canUpload={canUpload} />}
                   {page.path === "/" && <HomeStatsEditor value={draft.hero.stats} onChange={(stats) => updateHero("stats", stats)} canUpload={canUpload} />}
                   {page.path === "/" && <HomeMapEditor value={draft.hero.map} onChange={(map) => updateHero("map", map)} />}
+                  {page.path === "/hospitality" && <HospitalityTransportationEditor value={draft.hero.transportation} onChange={(transportation) => updateHero("transportation", transportation)} canUpload={canUpload} />}
                 </fieldset>
               </div>
             )}

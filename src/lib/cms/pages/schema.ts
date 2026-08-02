@@ -57,6 +57,21 @@ export const homeMapSectionSchema = z.object({
   locations: z.array(homeMapLocationSchema).min(0).max(12).default([]),
 });
 
+export const hospitalityTransportationSectionSchema = z.object({
+  heading: z.string().trim().max(140).default("Unmatched VIP Transportation"),
+  description: z.string().trim().max(600).default(
+    "Corporate travel requires precision. Our massive, fully-owned fleet of VIP coaches, luxury sedans, and 4x4s ensures that your delegates are moved with absolute safety, punctuality, and prestige.",
+  ),
+  features: z.array(z.string().trim().max(120)).min(0).max(8).default([
+    "Over 150+ owned vehicles globally",
+    "Latest luxury models",
+    "In-house maintenance",
+    "GPS tracked operations",
+    "Highly trained chauffeurs",
+  ]),
+  image: imageSchema.default({ assetId: null, url: "/images/fleet-showcase.jpg", alt: "Flash Group VIP Fleet" }),
+});
+
 export const pageHeroSchema = z.object({
   eyebrow: z.string().trim().max(120).default(""),
   title: z.string().trim().min(1, "Page title is required.").max(140),
@@ -78,6 +93,19 @@ export const pageHeroSchema = z.object({
     intro: "",
     checklist: [],
     locations: [],
+  }),
+  transportation: hospitalityTransportationSectionSchema.default({
+    heading: "Unmatched VIP Transportation",
+    description:
+      "Corporate travel requires precision. Our massive, fully-owned fleet of VIP coaches, luxury sedans, and 4x4s ensures that your delegates are moved with absolute safety, punctuality, and prestige.",
+    features: [
+      "Over 150+ owned vehicles globally",
+      "Latest luxury models",
+      "In-house maintenance",
+      "GPS tracked operations",
+      "Highly trained chauffeurs",
+    ],
+    image: { assetId: null, url: "/images/fleet-showcase.jpg", alt: "Flash Group VIP Fleet" },
   }),
 });
 
@@ -109,6 +137,7 @@ export type HomeStatItemData = z.infer<typeof homeStatItemSchema>;
 export type HomeCertificationData = z.infer<typeof homeCertificationSchema>;
 export type HomeMapSectionData = z.infer<typeof homeMapSectionSchema>;
 export type HomeMapLocationData = z.infer<typeof homeMapLocationSchema>;
+export type HospitalityTransportationSectionData = z.infer<typeof hospitalityTransportationSectionSchema>;
 
 export const defaultPageHero: PageHeroData = {
   eyebrow: "",
@@ -121,6 +150,19 @@ export const defaultPageHero: PageHeroData = {
   slides: [],
   stats: { heading: "Scale That Builds Trust", items: [], certificationsHeading: "Certified Excellence", certificationsIntro: "", certifications: [] },
   map: { heading: "Our Global Infrastructure", intro: "", checklist: [], locations: [] },
+  transportation: {
+    heading: "Unmatched VIP Transportation",
+    description:
+      "Corporate travel requires precision. Our massive, fully-owned fleet of VIP coaches, luxury sedans, and 4x4s ensures that your delegates are moved with absolute safety, punctuality, and prestige.",
+    features: [
+      "Over 150+ owned vehicles globally",
+      "Latest luxury models",
+      "In-house maintenance",
+      "GPS tracked operations",
+      "Highly trained chauffeurs",
+    ],
+    image: { assetId: null, url: "/images/fleet-showcase.jpg", alt: "Flash Group VIP Fleet" },
+  },
 };
 
 export const defaultPageSeo: PageSeoData = {

@@ -172,7 +172,50 @@ export default function HospitalityPage() {
         </div>
       </div>
 
-      {/* 3. Bottom CTA Section */}
+      {/* 3. VIP Transportation */}
+      <section id="transportation" className="w-full bg-brand-navy py-28 relative z-20 overflow-hidden">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+              <span className="text-brand-gold font-bold tracking-[0.2em] uppercase text-sm block mb-4 font-en flex items-center gap-2">
+                Executive Mobility
+              </span>
+              <h2 className="text-4xl md:text-5xl font-bold text-white font-en mb-6 leading-tight">
+                {cms?.hero?.transportation?.heading || "Unmatched VIP Transportation"}
+              </h2>
+              <p className="text-slate-300 font-en text-lg leading-relaxed mb-8">
+                {cms?.hero?.transportation?.description ||
+                  "Corporate travel requires precision. Our massive, fully-owned fleet of VIP coaches, luxury sedans, and 4x4s ensures that your delegates are moved with absolute safety, punctuality, and prestige."}
+              </p>
+              <ul className="space-y-4 mb-10">
+                {(cms?.hero?.transportation?.features?.length
+                  ? cms.hero.transportation.features
+                  : ["Over 150+ owned vehicles globally", "Latest luxury models", "In-house maintenance", "GPS tracked operations", "Highly trained chauffeurs"]
+                ).map((feature) => (
+                  <li key={feature} className="flex items-center gap-3 font-en text-slate-200">
+                    <div className="bg-brand-teal rounded-full p-1"><CheckCircle className="w-4 h-4 text-white" /></div>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative h-[500px] w-full">
+              <div className="absolute inset-0 bg-gradient-to-tr from-brand-teal/20 to-transparent rounded-[1.5rem] border border-white/10 overflow-hidden">
+                <Image
+                  src={cms?.hero?.transportation?.image?.url || "/images/fleet-showcase.jpg"}
+                  alt={cms?.hero?.transportation?.image?.alt || "Flash Group VIP Fleet"}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover opacity-90"
+                />
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. Bottom CTA Section */}
       <section className="w-full py-24 bg-brand-navy-deep relative overflow-hidden">
         <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'radial-gradient(var(--color-brand-gold) 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
         

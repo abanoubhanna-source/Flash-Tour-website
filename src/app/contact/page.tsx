@@ -108,7 +108,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <p className="font-en font-bold">Global Reach</p>
-                      <p className="text-sm text-slate-400 font-en">Operating in 4+ countries</p>
+                      <p className="text-sm text-slate-400 font-en">Operating in 5+ countries</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4">

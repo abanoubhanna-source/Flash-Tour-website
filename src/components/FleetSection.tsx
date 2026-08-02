@@ -66,7 +66,7 @@ export default function FleetSection() {
             </ul>
 
             <div className="flex items-center gap-6">
-              <Link href="/services" className="px-8 py-4 bg-brand-gold text-brand-navy font-bold font-en rounded-full hover:bg-white transition-colors shadow-lg">
+              <Link href="/hospitality#transportation" className="px-8 py-4 bg-brand-gold text-brand-navy font-bold font-en rounded-full hover:bg-white transition-colors shadow-lg">
                 View Fleet Specs
               </Link>
               <div className="flex items-center gap-2 text-slate-400 font-en text-sm">
