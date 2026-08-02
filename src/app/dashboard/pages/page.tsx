@@ -5,9 +5,15 @@ import { PagesList } from "@/components/cms/pages/pages-list";
 
 export const metadata: Metadata = { title: "Pages" };
 
+const EMBEDDED_ELSEWHERE_KEYS = new Set(["destinations", "hospitality", "services"]);
+
 export default async function PagesModulePage() {
   const user = await requireCmsUser();
-  const pages = await getCmsPages();
+  const allPages = await getCmsPages();
+  // Destinations/Hospitality/Services now edit their page header inline on their own
+  // collection screens (Dashboard → Destinations/Hospitality/Services), so they're
+  // hidden here to avoid two separate places to edit what feels like one page.
+  const pages = allPages.filter((page) => !EMBEDDED_ELSEWHERE_KEYS.has(page.key));
 
   return (
     <PagesList

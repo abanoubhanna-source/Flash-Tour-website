@@ -78,6 +78,13 @@ export async function getCmsPage(pageId: string): Promise<CmsPageEditorData | nu
   };
 }
 
+export async function getPageIdByKey(key: string): Promise<string | null> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.from("pages").select("id").eq("key", key).maybeSingle();
+  if (error) throw new Error(`Unable to load the page: ${error.message}`);
+  return data?.id ?? null;
+}
+
 export async function getPageKey(pageId: string): Promise<string | null> {
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase.from("pages").select("key").eq("id", pageId).maybeSingle();

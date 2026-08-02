@@ -54,6 +54,8 @@ type PageEditorProps = {
   canEdit: boolean;
   canPublish: boolean;
   canUpload: boolean;
+  /** Hides the back-link and page title/status bar when nested inside another screen that already provides that context (e.g. a collection list's "Page header" section). */
+  embedded?: boolean;
 };
 
 const homeSlideDefaults: PageHeroSlideData[] = [
@@ -279,7 +281,7 @@ function eventLabel(event: CmsPageEditorData["revisions"][number]["event"]) {
   }[event];
 }
 
-export function PageEditor({ page, canEdit, canPublish, canUpload }: PageEditorProps) {
+export function PageEditor({ page, canEdit, canPublish, canUpload, embedded = false }: PageEditorProps) {
   const router = useRouter();
   const [draft, setDraft] = useState<PageDraftData>({ hero: page.hero, seo: page.seo });
   const [activeTab, setActiveTab] = useState<EditorTab>("content");
@@ -438,17 +440,26 @@ export function PageEditor({ page, canEdit, canPublish, canUpload }: PageEditorP
       <section className="rounded-[1.5rem] border border-slate-200/80 bg-white p-4 shadow-sm sm:p-5">
         <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
           <div className="flex min-w-0 items-start gap-3">
-            <Link href="/dashboard/pages" className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50" aria-label="Back to pages">
-              <ArrowLeft className="h-4 w-4" />
-            </Link>
+            {!embedded && (
+              <Link href="/dashboard/pages" className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50" aria-label="Back to pages">
+                <ArrowLeft className="h-4 w-4" />
+              </Link>
+            )}
             <div className="min-w-0">
-              <div className="flex flex-wrap items-center gap-2">
-                <h2 className="truncate text-xl! leading-7! font-bold text-[#0f172a]">{page.name}</h2>
-                <span className={`rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.12em] ${enabled ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"}`}>
-                  {enabled ? "Published" : "Draft"}
-                </span>
-              </div>
+              {!embedded && (
+                <div className="flex flex-wrap items-center gap-2">
+                  <h2 className="truncate text-xl! leading-7! font-bold text-[#0f172a]">{page.name}</h2>
+                  <span className={`rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.12em] ${enabled ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"}`}>
+                    {enabled ? "Published" : "Draft"}
+                  </span>
+                </div>
+              )}
               <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
+                {embedded && (
+                  <span className={`rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.12em] ${enabled ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"}`}>
+                    {enabled ? "Published" : "Draft"}
+                  </span>
+                )}
                 <span className="font-mono text-xs text-slate-500">{page.path}</span>
                 <span className={`inline-flex items-center gap-1.5 text-[10px] font-bold ${statusDetails.className}`} aria-live="polite">
                   <StatusIcon className={`h-3.5 w-3.5 ${saveStatus === "saving" ? "animate-spin" : ""}`} /> {statusDetails.label}
