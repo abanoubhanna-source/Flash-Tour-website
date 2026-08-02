@@ -152,11 +152,52 @@ export const homeEnterpriseSolutionsSchema = z.object({
   ctaLabel: z.string().trim().max(80).default("Explore Services"),
 });
 
+export const homeHospitalityCardIconSchema = z.enum(["Anchor", "Palmtree", "Building", "Ship", "Building2"]);
+
+export const homeHospitalityCardSchema = z.object({
+  id: z.string().trim().min(1).max(40),
+  name: z.string().trim().max(120).default(""),
+  subtitle: z.string().trim().max(200).default(""),
+  description: z.string().trim().max(400).default(""),
+  icon: homeHospitalityCardIconSchema.default("Ship"),
+  image: imageSchema.default({ assetId: null, url: "", alt: "" }),
+});
+
+const defaultHomeHospitalityCards = [
+  {
+    id: "nile-serenity",
+    name: "Nile Serenity",
+    subtitle: "Setting the absolute benchmark for river cruising.",
+    description: "Designed for the global elite, offering uninterrupted panoramic views and uncompromised luxury on the Nile.",
+    icon: "Ship" as const,
+    image: { assetId: null, url: "/images/cruise-1.jpg", alt: "Nile Serenity" },
+  },
+  {
+    id: "nile-excellence",
+    name: "Nile Excellence",
+    subtitle: "A seamless blend of contemporary design and classic river heritage.",
+    description: "Featuring expansive sun decks and premium culinary experiences along the historic waters.",
+    icon: "Ship" as const,
+    image: { assetId: null, url: "/images/cruise-2.jpg", alt: "Nile Excellence" },
+  },
+  {
+    id: "true-beach-resort",
+    name: "True Beach Resort",
+    subtitle: "Our signature hospitality shines at Marsa Alam.",
+    description: "Thoughtfully divided into a vibrant family-friendly resort and an exclusive adults-only village for ultimate serenity.",
+    icon: "Palmtree" as const,
+    image: { assetId: null, url: "/images/true-beach.jpg", alt: "True Beach Resort" },
+  },
+];
+
 export const homeOwnedHospitalitySchema = z.object({
   heading: z.string().trim().max(140).default("Owned Hospitality"),
   intro: z.string().trim().max(400).default(
     "By owning our supply chain, we guarantee our B2B partners priority allocation, strict quality control, and unbeatable contracted rates.",
   ),
+  cards: z.array(homeHospitalityCardSchema).length(3).default(defaultHomeHospitalityCards),
+  ctaLabel: z.string().trim().max(80).default("Explore Hospitality"),
+  ctaHref: z.string().trim().max(200).default("/hospitality"),
 });
 
 export const pageHeroSchema = z.object({
@@ -203,6 +244,22 @@ export const pageHeroSchema = z.object({
   ownedHospitality: homeOwnedHospitalitySchema.default({
     heading: "Owned Hospitality",
     intro: "By owning our supply chain, we guarantee our B2B partners priority allocation, strict quality control, and unbeatable contracted rates.",
+    cards: defaultHomeHospitalityCards,
+    ctaLabel: "Explore Hospitality",
+    ctaHref: "/hospitality",
+  }),
+  homeTransportation: hospitalityTransportationSectionSchema.default({
+    heading: "Unmatched VIP Transportation",
+    description:
+      "Corporate travel requires precision. Our massive, fully-owned fleet of VIP coaches, luxury sedans, and 4x4s ensures that your delegates are moved with absolute safety, punctuality, and prestige.",
+    features: [
+      "Over 150+ owned vehicles globally",
+      "Latest luxury models",
+      "In-house maintenance",
+      "GPS tracked operations",
+      "Highly trained chauffeurs",
+    ],
+    image: { assetId: null, url: "/images/fleet-showcase.jpg", alt: "Flash Group VIP Fleet" },
   }),
 });
 
@@ -238,6 +295,7 @@ export type HospitalityTransportationSectionData = z.infer<typeof hospitalityTra
 export type HospitalityRegionCardData = z.infer<typeof hospitalityRegionCardSchema>;
 export type HomeEnterpriseSolutionsData = z.infer<typeof homeEnterpriseSolutionsSchema>;
 export type HomeOwnedHospitalityData = z.infer<typeof homeOwnedHospitalitySchema>;
+export type HomeHospitalityCardData = z.infer<typeof homeHospitalityCardSchema>;
 
 export const defaultPageHero: PageHeroData = {
   eyebrow: "",
@@ -272,6 +330,22 @@ export const defaultPageHero: PageHeroData = {
   ownedHospitality: {
     heading: "Owned Hospitality",
     intro: "By owning our supply chain, we guarantee our B2B partners priority allocation, strict quality control, and unbeatable contracted rates.",
+    cards: defaultHomeHospitalityCards,
+    ctaLabel: "Explore Hospitality",
+    ctaHref: "/hospitality",
+  },
+  homeTransportation: {
+    heading: "Unmatched VIP Transportation",
+    description:
+      "Corporate travel requires precision. Our massive, fully-owned fleet of VIP coaches, luxury sedans, and 4x4s ensures that your delegates are moved with absolute safety, punctuality, and prestige.",
+    features: [
+      "Over 150+ owned vehicles globally",
+      "Latest luxury models",
+      "In-house maintenance",
+      "GPS tracked operations",
+      "Highly trained chauffeurs",
+    ],
+    image: { assetId: null, url: "/images/fleet-showcase.jpg", alt: "Flash Group VIP Fleet" },
   },
 };
 

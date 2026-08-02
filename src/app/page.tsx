@@ -41,7 +41,7 @@ export default async function Home() {
       <B2BSolutions content={content?.hero.enterpriseSolutions} />
 
       {/* 7. VIP Transportation */}
-      <FleetSection />
+      <FleetSection content={content?.hero.homeTransportation} />
 
       {/* 8. Footer */}
       <Footer />

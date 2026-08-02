@@ -1,47 +1,31 @@
 // src/components/FleetSection.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Car, ShieldCheck, Cog, Check } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import type { HospitalityTransportationSectionData } from '@/lib/cms/pages/schema';
 
-export default function FleetSection() {
-  const [fleetData, setFleetData] = useState({
-    fleet_title: "Unmatched VIP Transportation",
-    fleet_desc: "Corporate travel requires precision. Our massive, fully-owned fleet of VIP coaches, luxury sedans, and 4x4s ensures that your delegates are moved with absolute safety, punctuality, and prestige.",
-    fleet_features: [
-      "Over 150+ owned vehicles globally",
-      "Latest luxury models",
-      "In-house maintenance",
-      "GPS tracked operations",
-      "Highly trained chauffeurs"
-    ],
-    fleet_image: "/images/fleet-showcase.jpg"
-  });
+type Props = { content?: HospitalityTransportationSectionData };
 
-  useEffect(() => {
-    fetch('/api/about')
-      .then(res => res.json())
-      .then(data => {
-        if(data && !data.error && data.fleet_title) {
-          setFleetData({
-            fleet_title: data.fleet_title,
-            fleet_desc: data.fleet_desc,
-            fleet_features: data.fleet_features,
-            fleet_image: data.fleet_image || "/images/fleet-showcase.jpg"
-          });
-        }
-      });
-  }, []);
+const defaultFeatures = [
+  "Over 150+ owned vehicles globally",
+  "Latest luxury models",
+  "In-house maintenance",
+  "GPS tracked operations",
+  "Highly trained chauffeurs",
+];
+
+export default function FleetSection({ content }: Props) {
+  const features = content?.features?.length ? content.features : defaultFeatures;
 
   return (
     <section className="w-full bg-brand-navy py-28 relative z-20 overflow-hidden">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          
-          <motion.div 
+
+          <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -50,15 +34,15 @@ export default function FleetSection() {
               <Car className="w-5 h-5" /> Executive Mobility
             </span>
             <h2 className="text-4xl md:text-5xl font-bold text-white font-en mb-6 leading-tight">
-              {fleetData.fleet_title}
+              {content?.heading || "Unmatched VIP Transportation"}
             </h2>
             <p className="text-slate-300 font-en text-lg leading-relaxed mb-8">
-              {fleetData.fleet_desc}
+              {content?.description || "Corporate travel requires precision. Our massive, fully-owned fleet of VIP coaches, luxury sedans, and 4x4s ensures that your delegates are moved with absolute safety, punctuality, and prestige."}
             </p>
 
             <ul className="space-y-4 mb-10">
-              {fleetData.fleet_features.map((feature, idx) => (
-                <li key={idx} className="flex items-center gap-3 font-en text-slate-200">
+              {features.map((feature) => (
+                <li key={feature} className="flex items-center gap-3 font-en text-slate-200">
                   <div className="bg-brand-teal rounded-full p-1"><Check className="w-4 h-4 text-white" /></div>
                   {feature}
                 </li>
@@ -75,7 +59,7 @@ export default function FleetSection() {
             </div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -83,8 +67,8 @@ export default function FleetSection() {
           >
             <div className="absolute inset-0 bg-gradient-to-tr from-brand-teal/20 to-transparent rounded-[1.5rem] border border-white/10 overflow-hidden">
               <Image
-                src={fleetData.fleet_image}
-                alt="Flash Group VIP Fleet"
+                src={content?.image.url || "/images/fleet-showcase.jpg"}
+                alt={content?.image.alt || "Flash Group VIP Fleet"}
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover opacity-90 mix-blend-luminosity hover:mix-blend-normal transition-all duration-700"

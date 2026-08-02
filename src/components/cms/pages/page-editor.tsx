@@ -33,6 +33,7 @@ import {
 import { MediaPicker } from "@/components/cms/media-picker";
 import type {
   HomeCertificationData,
+  HomeHospitalityCardData,
   HomeMapLocationData,
   HomeEnterpriseSolutionsData,
   HomeMapSectionData,
@@ -234,12 +235,26 @@ function HomeMapEditor({ value, onChange }: { value: HomeMapSectionData; onChang
   );
 }
 
-function HospitalityTransportationEditor({ value, onChange, canUpload }: { value: HospitalityTransportationSectionData; onChange: (value: HospitalityTransportationSectionData) => void; canUpload: boolean }) {
+function HospitalityTransportationEditor({
+  value,
+  onChange,
+  canUpload,
+  eyebrow = "Hospitality page",
+  title = "Transportation section",
+  description = "The VIP transportation section shown on the Hospitality page. The Home page's Transportation card links here.",
+}: {
+  value: HospitalityTransportationSectionData;
+  onChange: (value: HospitalityTransportationSectionData) => void;
+  canUpload: boolean;
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+}) {
   const updateFeature = (index: number, text: string) => onChange({ ...value, features: value.features.map((current, i) => (i === index ? text : current)) });
   const addFeature = () => onChange({ ...value, features: [...value.features, ""] });
   const removeFeature = (index: number) => onChange({ ...value, features: value.features.filter((_, i) => i !== index) });
   return (
-    <CollapsibleSection eyebrow="Hospitality page" title="Transportation section" description="The VIP transportation section shown on the Hospitality page. The Home page's Transportation card links here.">
+    <CollapsibleSection eyebrow={eyebrow} title={title} description={description}>
       <label className="block text-xs font-bold text-slate-700">Section heading
         <input value={value.heading} onChange={(event) => onChange({ ...value, heading: event.target.value })} placeholder="Unmatched VIP Transportation" className="mt-2 h-11 w-full rounded-xl border px-3.5 text-sm" />
       </label>
@@ -345,15 +360,54 @@ function HomeEnterpriseSolutionsEditor({ value, onChange }: { value: HomeEnterpr
   );
 }
 
-function HomeOwnedHospitalityEditor({ value, onChange }: { value: HomeOwnedHospitalityData; onChange: (value: HomeOwnedHospitalityData) => void }) {
+const homeHospitalityCardIcons = ["Anchor", "Palmtree", "Building", "Ship", "Building2"] as const;
+
+function HomeOwnedHospitalityEditor({ value, onChange, canUpload }: { value: HomeOwnedHospitalityData; onChange: (value: HomeOwnedHospitalityData) => void; canUpload: boolean }) {
+  const updateCard = (index: number, card: HomeHospitalityCardData) => onChange({ ...value, cards: value.cards.map((current, i) => (i === index ? card : current)) });
   return (
-    <CollapsibleSection eyebrow="Home page" title="Owned Hospitality" description="The heading and intro above the 3 featured brand cards. The cards themselves pull the first 3 published brands.">
+    <CollapsibleSection eyebrow="Home page" title="Owned Hospitality" description="The heading, intro, 3 featured property cards, and the button below them. These cards are independent from the Brands module.">
       <label className="block text-xs font-bold text-slate-700">Section heading
         <input value={value.heading} onChange={(event) => onChange({ ...value, heading: event.target.value })} placeholder="Owned Hospitality" className="mt-2 h-11 w-full rounded-xl border px-3.5 text-sm" />
       </label>
       <label className="mt-5 block text-xs font-bold text-slate-700">Intro paragraph
         <textarea value={value.intro} onChange={(event) => onChange({ ...value, intro: event.target.value })} rows={2} className="mt-2 w-full rounded-xl border px-3 py-2 text-sm" />
       </label>
+
+      <div className="mt-5 space-y-3">
+        <p className="text-xs font-bold text-slate-700">Property cards</p>
+        {value.cards.map((card, index) => (
+          <details key={card.id} className="rounded-2xl border border-slate-200 p-4" open={index === 0}>
+            <summary className="cursor-pointer text-xs font-bold text-slate-700 select-none">{card.name || `Card ${index + 1}`}</summary>
+            <div className="mt-4 space-y-3">
+              <div className="grid gap-3 sm:grid-cols-2">
+                <input aria-label={`Card ${index + 1} name`} value={card.name} onChange={(event) => updateCard(index, { ...card, name: event.target.value })} placeholder="Nile Serenity" className="h-10 rounded-xl border px-3 text-sm" />
+                <select aria-label={`Card ${index + 1} icon`} value={card.icon} onChange={(event) => updateCard(index, { ...card, icon: event.target.value as HomeHospitalityCardData["icon"] })} className="h-10 rounded-xl border px-3 text-sm">
+                  {homeHospitalityCardIcons.map((icon) => (
+                    <option key={icon} value={icon}>{icon}</option>
+                  ))}
+                </select>
+              </div>
+              <input aria-label={`Card ${index + 1} subtitle`} value={card.subtitle} onChange={(event) => updateCard(index, { ...card, subtitle: event.target.value })} placeholder="Setting the absolute benchmark for river cruising." className="h-10 w-full rounded-xl border px-3 text-sm" />
+              <textarea aria-label={`Card ${index + 1} description`} value={card.description} onChange={(event) => updateCard(index, { ...card, description: event.target.value })} rows={2} className="w-full rounded-xl border px-3 py-2 text-sm" placeholder="Shown when the card is hovered" />
+              <MediaPicker
+                label="Card image"
+                value={card.image}
+                canUpload={canUpload}
+                onChange={(image) => updateCard(index, { ...card, image: { assetId: image.assetId ?? card.image.assetId, url: image.url, alt: image.alt ?? card.image.alt } })}
+              />
+            </div>
+          </details>
+        ))}
+      </div>
+
+      <div className="mt-5 grid gap-3 sm:grid-cols-2">
+        <label className="block text-xs font-bold text-slate-700">Button label
+          <input value={value.ctaLabel} onChange={(event) => onChange({ ...value, ctaLabel: event.target.value })} placeholder="Explore Hospitality" className="mt-2 h-11 w-full rounded-xl border px-3.5 text-sm" />
+        </label>
+        <label className="block text-xs font-bold text-slate-700">Button link
+          <input value={value.ctaHref} onChange={(event) => onChange({ ...value, ctaHref: event.target.value })} placeholder="/hospitality" className="mt-2 h-11 w-full rounded-xl border px-3.5 font-mono text-sm" />
+        </label>
+      </div>
     </CollapsibleSection>
   );
 }
@@ -683,8 +737,18 @@ export function PageEditor({ page, canEdit, canPublish, canUpload, embedded = fa
                   {page.path === "/" && <HomeSlidesEditor slides={draft.hero.slides.length === 4 ? draft.hero.slides : homeSlideDefaults} onChange={(slides) => updateHero("slides", slides)} canUpload={canUpload} />}
                   {page.path === "/" && <HomeStatsEditor value={draft.hero.stats} onChange={(stats) => updateHero("stats", stats)} canUpload={canUpload} />}
                   {page.path === "/" && <HomeMapEditor value={draft.hero.map} onChange={(map) => updateHero("map", map)} />}
-                  {page.path === "/" && <HomeOwnedHospitalityEditor value={draft.hero.ownedHospitality} onChange={(ownedHospitality) => updateHero("ownedHospitality", ownedHospitality)} />}
+                  {page.path === "/" && <HomeOwnedHospitalityEditor value={draft.hero.ownedHospitality} onChange={(ownedHospitality) => updateHero("ownedHospitality", ownedHospitality)} canUpload={canUpload} />}
                   {page.path === "/" && <HomeEnterpriseSolutionsEditor value={draft.hero.enterpriseSolutions} onChange={(enterpriseSolutions) => updateHero("enterpriseSolutions", enterpriseSolutions)} />}
+                  {page.path === "/" && (
+                    <HospitalityTransportationEditor
+                      value={draft.hero.homeTransportation}
+                      onChange={(homeTransportation) => updateHero("homeTransportation", homeTransportation)}
+                      canUpload={canUpload}
+                      eyebrow="Home page"
+                      title="Transportation section"
+                      description="The VIP Transportation section shown on the Home page, above the footer."
+                    />
+                  )}
                   {page.path === "/hospitality" && <HospitalityRegionsEditor value={draft.hero.hospitalityRegions} onChange={(hospitalityRegions) => updateHero("hospitalityRegions", hospitalityRegions)} canUpload={canUpload} />}
                   {page.path === "/hospitality" && <HospitalityTransportationEditor value={draft.hero.transportation} onChange={(transportation) => updateHero("transportation", transportation)} canUpload={canUpload} />}
                 </fieldset>
