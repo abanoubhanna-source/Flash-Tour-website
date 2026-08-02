@@ -29,13 +29,14 @@ import {
 import { MediaPicker } from "@/components/cms/media-picker";
 import type {
   AboutBodySectionData,
+  AboutBodyWithBulletsData,
   AboutCeoMessageData,
   AboutExpansionJourneyData,
   AboutHeroIntroData,
-  AboutHighlightsData,
   AboutListData,
   AboutSectionsData,
   AboutTeamData,
+  AboutWorkProcessData,
 } from "@/lib/cms/pages/about-schema";
 import type { CmsAboutPageEditorData } from "@/lib/cms/pages/types";
 import type { PageSeoData } from "@/lib/cms/pages/schema";
@@ -101,24 +102,56 @@ function HeroIntroFields({ value, onChange }: { value: AboutHeroIntroData; onCha
   );
 }
 
-function HighlightsFields({ value, onChange }: { value: AboutHighlightsData; onChange: (value: AboutHighlightsData) => void }) {
-  const update = (index: number, item: { label: string; value: string }) => onChange({ ...value, items: value.items.map((current, i) => (i === index ? item : current)) });
-  const add = () => onChange({ ...value, items: [...value.items, { label: "", value: "" }] });
-  const remove = (index: number) => onChange({ ...value, items: value.items.filter((_, i) => i !== index) });
+function BodyWithBulletsFields({ value, onChange }: { value: AboutBodyWithBulletsData; onChange: (value: AboutBodyWithBulletsData) => void }) {
+  const update = (index: number, text: string) => onChange({ ...value, bullets: value.bullets.map((current, i) => (i === index ? text : current)) });
+  const add = () => onChange({ ...value, bullets: [...value.bullets, ""] });
+  const remove = (index: number) => onChange({ ...value, bullets: value.bullets.filter((_, i) => i !== index) });
   return (
     <div className="space-y-4">
       <label className="block text-xs font-bold text-slate-700">Title
         <input value={value.title} onChange={(event) => onChange({ ...value, title: event.target.value })} className="mt-2 h-11 w-full rounded-xl border px-3.5 text-sm" />
       </label>
+      <label className="block text-xs font-bold text-slate-700">Body
+        <textarea value={value.body} onChange={(event) => onChange({ ...value, body: event.target.value })} rows={4} className="mt-2 w-full rounded-xl border px-3 py-2 text-sm" />
+      </label>
       <div className="space-y-2">
-        {value.items.map((item, index) => (
-          <div key={index} className="flex items-center gap-2 rounded-xl border border-slate-200 p-3">
-            <input aria-label={`Highlight ${index + 1} label`} value={item.label} onChange={(event) => update(index, { ...item, label: event.target.value })} placeholder="Label" className="h-10 flex-1 rounded-xl border px-3 text-sm" />
-            <input aria-label={`Highlight ${index + 1} value`} value={item.value} onChange={(event) => update(index, { ...item, value: event.target.value })} placeholder="Value" className="h-10 flex-1 rounded-xl border px-3 text-sm" />
-            <button type="button" aria-label={`Remove highlight ${index + 1}`} onClick={() => remove(index)} className="text-[10px] font-bold text-red-600">Remove</button>
+        <p className="text-xs font-bold text-slate-700">Bullets</p>
+        {value.bullets.map((bullet, index) => (
+          <div key={index} className="flex items-center gap-2">
+            <input aria-label={`Bullet ${index + 1}`} value={bullet} onChange={(event) => update(index, event.target.value)} placeholder="e.g. Luxury Nile Cruises" className="h-10 flex-1 rounded-xl border px-3 text-sm" />
+            <button type="button" aria-label={`Remove bullet ${index + 1}`} onClick={() => remove(index)} className="text-[10px] font-bold text-red-600">Remove</button>
           </div>
         ))}
-        <button type="button" onClick={add} className="w-full rounded-xl border border-dashed border-slate-300 py-2 text-xs font-bold text-slate-500 hover:bg-slate-50">+ Add highlight</button>
+        <button type="button" onClick={add} className="w-full rounded-xl border border-dashed border-slate-300 py-2 text-xs font-bold text-slate-500 hover:bg-slate-50">+ Add bullet</button>
+      </div>
+    </div>
+  );
+}
+
+function WorkProcessFields({ value, onChange }: { value: AboutWorkProcessData; onChange: (value: AboutWorkProcessData) => void }) {
+  const update = (index: number, bullet: AboutWorkProcessData["bullets"][number]) => onChange({ ...value, bullets: value.bullets.map((current, i) => (i === index ? bullet : current)) });
+  const add = () => onChange({ ...value, bullets: [...value.bullets, { title: "", desc: "" }] });
+  const remove = (index: number) => onChange({ ...value, bullets: value.bullets.filter((_, i) => i !== index) });
+  return (
+    <div className="space-y-4">
+      <label className="block text-xs font-bold text-slate-700">Title
+        <input value={value.title} onChange={(event) => onChange({ ...value, title: event.target.value })} className="mt-2 h-11 w-full rounded-xl border px-3.5 text-sm" />
+      </label>
+      <label className="block text-xs font-bold text-slate-700">Body
+        <textarea value={value.body} onChange={(event) => onChange({ ...value, body: event.target.value })} rows={4} className="mt-2 w-full rounded-xl border px-3 py-2 text-sm" />
+      </label>
+      <div className="space-y-2">
+        <p className="text-xs font-bold text-slate-700">Bullets</p>
+        {value.bullets.map((bullet, index) => (
+          <div key={index} className="space-y-2 rounded-xl border border-slate-200 p-3">
+            <div className="flex items-center gap-2">
+              <input aria-label={`Bullet ${index + 1} title`} value={bullet.title} onChange={(event) => update(index, { ...bullet, title: event.target.value })} placeholder="e.g. Localized Excellence" className="h-10 flex-1 rounded-xl border px-3 text-sm" />
+              <button type="button" aria-label={`Remove bullet ${index + 1}`} onClick={() => remove(index)} className="text-[10px] font-bold text-red-600">Remove</button>
+            </div>
+            <textarea aria-label={`Bullet ${index + 1} description`} value={bullet.desc} onChange={(event) => update(index, { ...bullet, desc: event.target.value })} placeholder="Short description" rows={2} className="w-full rounded-xl border px-3 py-2 text-sm" />
+          </div>
+        ))}
+        <button type="button" onClick={add} className="w-full rounded-xl border border-dashed border-slate-300 py-2 text-xs font-bold text-slate-500 hover:bg-slate-50">+ Add bullet</button>
       </div>
     </div>
   );
@@ -438,9 +471,6 @@ export function AboutPageEditor({ page, canEdit, canPublish, canUpload }: AboutP
           </div>
         )}
 
-        <div className="mt-4 rounded-xl bg-amber-50 px-3.5 py-3 text-xs text-amber-800">
-          The public /about page still renders fixed content and does not read from these sections yet — that wiring is a separate pass. This editor lets you draft and publish the content so it&apos;s ready when it does.
-        </div>
       </section>
 
       <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(280px,0.4fr)]">
@@ -477,31 +507,26 @@ export function AboutPageEditor({ page, canEdit, canPublish, canUpload }: AboutP
                 <CollapsibleSection eyebrow="3. Vision & Mission" title="Mission">
                   <BodySectionFields value={draft.sections.mission} onChange={(value) => updateSection("mission", value)} />
                 </CollapsibleSection>
-                <CollapsibleSection eyebrow="4. The Evolution" title="Expansion journey (timeline)" description="Each milestone can have its own photo.">
-                  <ExpansionJourneyFields value={draft.sections.expansion_journey} onChange={(value) => updateSection("expansion_journey", value)} canUpload={canUpload} />
-                </CollapsibleSection>
-                <CollapsibleSection eyebrow="5. CEO & Team" title="CEO message">
-                  <CeoMessageFields value={draft.sections.ceo_message} onChange={(value) => updateSection("ceo_message", value)} />
-                </CollapsibleSection>
-                <CollapsibleSection eyebrow="6. CEO & Team" title="Team">
-                  <TeamFields value={draft.sections.team} onChange={(value) => updateSection("team", value)} />
-                </CollapsibleSection>
-
-                <p className="pt-4 text-[10px] font-bold uppercase tracking-[0.16em] text-amber-600">Not shown on the live page yet</p>
-                <CollapsibleSection eyebrow="Not wired to the page" title="Experience">
-                  <BodySectionFields value={draft.sections.experience} onChange={(value) => updateSection("experience", value)} />
-                </CollapsibleSection>
-                <CollapsibleSection eyebrow="Not wired to the page" title="Highlights">
-                  <HighlightsFields value={draft.sections.highlights} onChange={(value) => updateSection("highlights", value)} />
-                </CollapsibleSection>
-                <CollapsibleSection eyebrow="Not wired to the page" title="Services summary">
+                <CollapsibleSection eyebrow="4. Services & Languages" title="Services summary">
                   <ListFields value={draft.sections.services_summary} onChange={(value) => updateSection("services_summary", value)} itemLabel="Service" />
                 </CollapsibleSection>
-                <CollapsibleSection eyebrow="Not wired to the page" title="Languages">
+                <CollapsibleSection eyebrow="5. Services & Languages" title="Languages">
                   <ListFields value={draft.sections.languages} onChange={(value) => updateSection("languages", value)} itemLabel="Language" />
                 </CollapsibleSection>
-                <CollapsibleSection eyebrow="Not wired to the page" title="Work process">
-                  <BodySectionFields value={draft.sections.work_process} onChange={(value) => updateSection("work_process", value)} />
+                <CollapsibleSection eyebrow="6. The Experience" title="Experience" description="Body paragraph plus the bullet list shown beside it.">
+                  <BodyWithBulletsFields value={draft.sections.experience} onChange={(value) => updateSection("experience", value)} />
+                </CollapsibleSection>
+                <CollapsibleSection eyebrow="7. The Evolution" title="Expansion journey (timeline)" description="Each milestone can have its own photo.">
+                  <ExpansionJourneyFields value={draft.sections.expansion_journey} onChange={(value) => updateSection("expansion_journey", value)} canUpload={canUpload} />
+                </CollapsibleSection>
+                <CollapsibleSection eyebrow="8. Operational Command Centers" title="Work process" description="Body paragraph plus the two bullet cards shown beside it.">
+                  <WorkProcessFields value={draft.sections.work_process} onChange={(value) => updateSection("work_process", value)} />
+                </CollapsibleSection>
+                <CollapsibleSection eyebrow="9. CEO & Team" title="CEO message">
+                  <CeoMessageFields value={draft.sections.ceo_message} onChange={(value) => updateSection("ceo_message", value)} />
+                </CollapsibleSection>
+                <CollapsibleSection eyebrow="10. CEO & Team" title="Team">
+                  <TeamFields value={draft.sections.team} onChange={(value) => updateSection("team", value)} />
                 </CollapsibleSection>
               </fieldset>
             )}
@@ -572,7 +597,7 @@ export function AboutPageEditor({ page, canEdit, canPublish, canUpload }: AboutP
           <div className="space-y-3 xl:sticky xl:top-0 rounded-[1.5rem] border border-slate-200/80 bg-white p-5 shadow-sm">
             <p className="text-xs font-bold text-slate-700">About this editor</p>
             <p className="text-xs leading-5 text-slate-500">
-              These 11 sections hold the About page&apos;s written content (bio, highlights, timeline, services, languages). Draft and publish here; wiring the public page to read them is a separate follow-up.
+              These 10 sections hold the About page&apos;s written content — bio, timeline, services, languages — in the same order they appear on the live page. Draft and publish here to update it.
             </p>
           </div>
         </aside>

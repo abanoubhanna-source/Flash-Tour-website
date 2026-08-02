@@ -19,6 +19,18 @@ export async function GET() {
     },
     vision: sections.vision.body || fallback.vision,
     mission: sections.mission.body || fallback.mission,
+    services: sections.services_summary.items.length
+      ? { title: sections.services_summary.title || fallback.services.title, items: sections.services_summary.items }
+      : fallback.services,
+    languages: sections.languages.items.length
+      ? { title: sections.languages.title || fallback.languages.title, items: sections.languages.items }
+      : fallback.languages,
+    experience: sections.experience.body
+      ? { title: sections.experience.title, body: sections.experience.body, bullets: sections.experience.bullets }
+      : fallback.experience,
+    work_process: sections.work_process.body
+      ? { title: sections.work_process.title, body: sections.work_process.body, bullets: sections.work_process.bullets }
+      : fallback.work_process,
     ceo_message: sections.ceo_message.body || fallback.ceo_message,
     director_name: sections.ceo_message.directorName || fallback.director_name,
     director_title: sections.ceo_message.directorTitle || fallback.director_title,

@@ -7,6 +7,27 @@
   },
   "vision": "To be the ultimate global benchmark in the tourism and hospitality industry, crafting impeccable experiences that inspire and endure.",
   "mission": "To provide unparalleled, end-to-end travel solutions by leveraging our owned assets, ensuring absolute quality, safety, and luxury at every step of the journey.",
+  "services": {
+    "title": "Our Services",
+    "items": ["Transportation", "Hajj and Umrah", "Hotel Booking", "MICE Management", "Golf", "Tour Guiding Service", "Leisure Travel for FITs, Individuals & Groups", "FIT, Family & Group Leisure Travel"]
+  },
+  "languages": {
+    "title": "Languages",
+    "items": ["Arabic", "English", "German", "French", "Russian", "Italian", "Dutch"]
+  },
+  "experience": {
+    "title": "We Don't Just Plan Trips. We Own The Experience.",
+    "body": "What sets Flash Group apart is our massive infrastructure. We own and operate our fleet, our cruises, and our hotels. This absolute control over the supply chain guarantees uncompromised 5-star quality at every touchpoint.",
+    "bullets": ["Luxury Nile Cruises", "5-Star Resorts & Hotels", "100+ VIP Fleet", "Award-Winning Dining"]
+  },
+  "work_process": {
+    "title": "Operational Command Centers",
+    "body": "To guarantee uncompromised quality, we do not rely on third-party agencies. Flash Group establishes its own physical strongholds in key international markets. From our nerve centers in the Middle East to our tropical outposts, these hubs ensure flawless 24/7 logistical execution.",
+    "bullets": [
+      { "title": "Localized Excellence", "desc": "Direct oversight of all ground operations, VIP fleets, and hospitality assets without intermediaries." },
+      { "title": "24/7 Precision Control", "desc": "Dedicated regional teams providing round-the-clock support for elite corporate events and high-net-worth clients." }
+    ]
+  },
   "ceo_message": "Our commitment to excellence has driven Flash Group's growth for over 40 years. We believe in creating memories, setting benchmarks in hospitality, and leading the industry with integrity and passion.",
   "director_name": "Amgad Hassoun",
   "director_title": "Chairman",

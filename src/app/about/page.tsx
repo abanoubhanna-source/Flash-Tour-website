@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Building2, Ship, Bus, UtensilsCrossed, Eye, Target, Quote, Globe2, ShieldCheck, Loader2 } from 'lucide-react';
+import { Building2, Ship, Bus, UtensilsCrossed, Eye, Target, Quote, Globe2, ShieldCheck, CheckCircle2, Languages, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import Footer from "@/components/Footer";
 import FlawlessProcess from '@/components/FlawlessProcess';
@@ -15,6 +15,8 @@ type AboutTimelineEntry = {
   img?: string;
 };
 
+type AboutWorkProcessBullet = { title: string; desc: string };
+
 type AboutContent = {
   hero: {
     tag: string;
@@ -24,6 +26,10 @@ type AboutContent = {
   };
   vision: string;
   mission: string;
+  services: { title: string; items: string[] };
+  languages: { title: string; items: string[] };
+  experience: { title: string; body: string; bullets: string[] };
+  work_process: { title: string; body: string; bullets: AboutWorkProcessBullet[] };
   ceo_message: string;
   director_name: string;
   director_title: string;
@@ -31,6 +37,9 @@ type AboutContent = {
   team_stats: string;
   timeline: AboutTimelineEntry[];
 };
+
+const experienceIcons = [Ship, Building2, Bus, UtensilsCrossed];
+const workProcessIcons = [Globe2, ShieldCheck, CheckCircle2];
 
 export default function AboutPage() {
   const [aboutData, setAboutData] = useState<AboutContent | null>(null);
@@ -115,35 +124,75 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 3. The Flawless Process */}
+      {/* 3. Services & Languages */}
+      {(aboutData.services.items.length > 0 || aboutData.languages.items.length > 0) && (
+        <section className="w-full py-24 bg-slate-50 border-y border-slate-100">
+          <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+              {aboutData.services.items.length > 0 && (
+                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-white p-12 rounded-[1.5rem] border border-slate-100 shadow-sm">
+                  <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mb-8">
+                    <CheckCircle2 className="w-8 h-8 text-teal-700" />
+                  </div>
+                  <h2 className="text-3xl font-bold text-slate-900 font-en mb-6">{aboutData.services.title || "Our Services"}</h2>
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {aboutData.services.items.map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-3">
+                        <CheckCircle2 className="w-5 h-5 text-teal-700 shrink-0 mt-0.5" />
+                        <span className="text-slate-600 font-en leading-snug">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              )}
+
+              {aboutData.languages.items.length > 0 && (
+                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }} className="bg-white p-12 rounded-[1.5rem] border border-slate-100 shadow-sm">
+                  <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mb-8">
+                    <Languages className="w-8 h-8 text-teal-700" />
+                  </div>
+                  <h2 className="text-3xl font-bold text-slate-900 font-en mb-6">{aboutData.languages.title || "Languages"}</h2>
+                  <div className="flex flex-wrap gap-3">
+                    {aboutData.languages.items.map((item, idx) => (
+                      <span key={idx} className="px-4 py-2 rounded-full bg-teal-50 border border-teal-100 text-teal-800 font-en font-bold text-sm">{item}</span>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 4. The Flawless Process */}
       <FlawlessProcess />
 
-      {/* 4. The Asset Portfolio */}
+      {/* 5. Experience (Dynamic) */}
       <section className="w-full py-24 bg-slate-50 border-y border-slate-100">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-              <h2 className="text-4xl font-bold text-slate-900 font-en mb-6">We Don&apos;t Just Plan Trips.<br/>We Own The Experience.</h2>
+              <h2 className="text-4xl font-bold text-slate-900 font-en mb-6">{aboutData.experience.title}</h2>
               <p className="text-lg text-slate-600 font-en leading-relaxed mb-8">
-                What sets Flash Group apart is our massive infrastructure. We own and operate our fleet, our cruises, and our hotels. This absolute control over the supply chain guarantees uncompromised 5-star quality at every touchpoint.
+                {aboutData.experience.body}
               </p>
-              <div className="grid grid-cols-2 gap-6">
-                {[
-                  { icon: Ship, label: "Luxury Nile Cruises" },
-                  { icon: Building2, label: "5-Star Resorts & Hotels" },
-                  { icon: Bus, label: "100+ VIP Fleet" },
-                  { icon: UtensilsCrossed, label: "Award-Winning Dining" }
-                ].map((item, idx) => (
-                  <div key={idx} className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center border border-slate-200 shadow-sm">
-                      <item.icon className="w-5 h-5 text-teal-700" />
-                    </div>
-                    <span className="font-en font-bold text-slate-800">{item.label}</span>
-                  </div>
-                ))}
-              </div>
+              {aboutData.experience.bullets.length > 0 && (
+                <div className="grid grid-cols-2 gap-6">
+                  {aboutData.experience.bullets.map((label, idx) => {
+                    const Icon = experienceIcons[idx % experienceIcons.length];
+                    return (
+                      <div key={idx} className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center border border-slate-200 shadow-sm">
+                          <Icon className="w-5 h-5 text-teal-700" />
+                        </div>
+                        <span className="font-en font-bold text-slate-800">{label}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </motion.div>
-            
+
             <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative h-[600px] rounded-[1.5rem] overflow-hidden shadow-2xl border border-slate-100">
               <Image src="/images/vip-bus.jpg" alt="Flash Group Infrastructure" fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
             </motion.div>
@@ -151,7 +200,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 5. The Heritage Timeline (Dynamic) */}
+      {/* 6. The Heritage Timeline (Dynamic) */}
       <section className="w-full py-32 bg-white">
         <div className="max-w-[1200px] mx-auto px-6 lg:px-8 relative">
 
@@ -208,42 +257,40 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 6. Global Operations Centers */}
+      {/* 7. Work Process (Dynamic) */}
       <section className="w-full py-32 bg-slate-50 border-t border-slate-100 overflow-hidden">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-            
+
             <motion.div initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
               <span className="text-teal-700 font-bold tracking-[0.2em] uppercase text-sm block mb-4 font-en">
                 Global Infrastructure
               </span>
               <h2 className="text-4xl md:text-5xl font-bold text-slate-900 font-en mb-6 leading-tight">
-                Operational <span className="text-teal-700">Command</span> Centers
+                {aboutData.work_process.title}
               </h2>
               <p className="text-slate-600 font-en text-lg leading-relaxed mb-10">
-                To guarantee uncompromised quality, we do not rely on third-party agencies. Flash Group establishes its own physical strongholds in key international markets. From our nerve centers in the Middle East to our tropical outposts, these hubs ensure flawless 24/7 logistical execution.
+                {aboutData.work_process.body}
               </p>
 
-              <ul className="space-y-6">
-                <li className="flex items-start gap-5">
-                  <div className="w-12 h-12 bg-teal-50 rounded-xl flex items-center justify-center shrink-0 border border-teal-100 mt-1">
-                    <Globe2 className="w-6 h-6 text-teal-700" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-slate-900 font-en mb-2">Localized Excellence</h3>
-                    <p className="text-slate-500 font-en leading-relaxed">Direct oversight of all ground operations, VIP fleets, and hospitality assets without intermediaries.</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-5">
-                  <div className="w-12 h-12 bg-teal-50 rounded-xl flex items-center justify-center shrink-0 border border-teal-100 mt-1">
-                    <ShieldCheck className="w-6 h-6 text-teal-700" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-slate-900 font-en mb-2">24/7 Precision Control</h3>
-                    <p className="text-slate-500 font-en leading-relaxed">Dedicated regional teams providing round-the-clock support for elite corporate events and high-net-worth clients.</p>
-                  </div>
-                </li>
-              </ul>
+              {aboutData.work_process.bullets.length > 0 && (
+                <ul className="space-y-6">
+                  {aboutData.work_process.bullets.map((bullet, idx) => {
+                    const Icon = workProcessIcons[idx % workProcessIcons.length];
+                    return (
+                      <li key={idx} className="flex items-start gap-5">
+                        <div className="w-12 h-12 bg-teal-50 rounded-xl flex items-center justify-center shrink-0 border border-teal-100 mt-1">
+                          <Icon className="w-6 h-6 text-teal-700" />
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-bold text-slate-900 font-en mb-2">{bullet.title}</h3>
+                          <p className="text-slate-500 font-en leading-relaxed">{bullet.desc}</p>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
             </motion.div>
 
             <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative h-[500px] lg:h-[650px] w-full flex justify-end">
@@ -259,7 +306,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 7. CEO Message, Team & Signature (Dynamic) */}
+      {/* 8. CEO Message, Team & Signature (Dynamic) */}
       <section className="w-full py-24 bg-slate-950 text-white">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">

@@ -11,14 +11,21 @@ export const aboutHeroIntroSchema = z.object({
   body: z.string().trim().max(2000).default(""),
 });
 
-export const aboutHighlightItemSchema = z.object({
-  label: z.string().trim().max(80).default(""),
-  value: z.string().trim().max(80).default(""),
+export const aboutBodyWithBulletsSchema = z.object({
+  title: z.string().trim().max(140).default(""),
+  body: z.string().trim().max(2000).default(""),
+  bullets: z.array(z.string().trim().max(120)).min(0).max(8).default([]),
 });
 
-export const aboutHighlightsSchema = z.object({
-  title: z.string().trim().max(140).default("Highlights"),
-  items: z.array(aboutHighlightItemSchema).min(0).max(10).default([]),
+export const aboutWorkProcessBulletSchema = z.object({
+  title: z.string().trim().max(120).default(""),
+  desc: z.string().trim().max(300).default(""),
+});
+
+export const aboutWorkProcessSchema = z.object({
+  title: z.string().trim().max(140).default(""),
+  body: z.string().trim().max(2000).default(""),
+  bullets: z.array(aboutWorkProcessBulletSchema).min(0).max(6).default([]),
 });
 
 export const aboutListSchema = z.object({
@@ -66,7 +73,8 @@ export const aboutTeamSchema = z.object({
 
 const emptyBody = { title: "", body: "" };
 const emptyHeroIntro = { eyebrow: "", title: "", body: "" };
-const emptyHighlights = { title: "Highlights", items: [] };
+const emptyBodyWithBullets = { title: "", body: "", bullets: [] };
+const emptyWorkProcess = { title: "", body: "", bullets: [] };
 const emptyList = { title: "", items: [] };
 const emptyExpansionJourney = { title: "", subtitle: "", body: "", milestones: [] };
 const emptyCeoMessage = { title: "", body: "", directorName: "", directorTitle: "", signatureImageUrl: "" };
@@ -74,21 +82,21 @@ const emptyTeam = { title: "", body: "", stats: "" };
 
 export const aboutSectionsSchema = z.object({
   hero_intro: aboutHeroIntroSchema.default(emptyHeroIntro),
-  experience: aboutBodySectionSchema.default(emptyBody),
-  highlights: aboutHighlightsSchema.default(emptyHighlights),
   vision: aboutBodySectionSchema.default(emptyBody),
   mission: aboutBodySectionSchema.default(emptyBody),
   services_summary: aboutListSchema.default(emptyList),
+  languages: aboutListSchema.default(emptyList),
+  experience: aboutBodyWithBulletsSchema.default(emptyBodyWithBullets),
   expansion_journey: aboutExpansionJourneySchema.default(emptyExpansionJourney),
+  work_process: aboutWorkProcessSchema.default(emptyWorkProcess),
   ceo_message: aboutCeoMessageSchema.default(emptyCeoMessage),
   team: aboutTeamSchema.default(emptyTeam),
-  languages: aboutListSchema.default(emptyList),
-  work_process: aboutBodySectionSchema.default(emptyBody),
 });
 
 export type AboutBodySectionData = z.infer<typeof aboutBodySectionSchema>;
 export type AboutHeroIntroData = z.infer<typeof aboutHeroIntroSchema>;
-export type AboutHighlightsData = z.infer<typeof aboutHighlightsSchema>;
+export type AboutBodyWithBulletsData = z.infer<typeof aboutBodyWithBulletsSchema>;
+export type AboutWorkProcessData = z.infer<typeof aboutWorkProcessSchema>;
 export type AboutListData = z.infer<typeof aboutListSchema>;
 export type AboutExpansionJourneyData = z.infer<typeof aboutExpansionJourneySchema>;
 export type AboutMilestoneData = z.infer<typeof aboutMilestoneSchema>;
@@ -98,30 +106,28 @@ export type AboutSectionsData = z.infer<typeof aboutSectionsSchema>;
 
 export const aboutSectionKeys = [
   "hero_intro",
-  "experience",
-  "highlights",
   "vision",
   "mission",
   "services_summary",
+  "languages",
+  "experience",
   "expansion_journey",
+  "work_process",
   "ceo_message",
   "team",
-  "languages",
-  "work_process",
 ] as const satisfies readonly (keyof AboutSectionsData)[];
 
 export const defaultAboutSections: AboutSectionsData = {
   hero_intro: emptyHeroIntro,
-  experience: emptyBody,
-  highlights: emptyHighlights,
   vision: emptyBody,
   mission: emptyBody,
   services_summary: emptyList,
+  languages: emptyList,
+  experience: emptyBodyWithBullets,
   expansion_journey: emptyExpansionJourney,
+  work_process: emptyWorkProcess,
   ceo_message: emptyCeoMessage,
   team: emptyTeam,
-  languages: emptyList,
-  work_process: emptyBody,
 };
 
 export function parseAboutSections(bySectionKey: Record<string, unknown>): AboutSectionsData {

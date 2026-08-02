@@ -394,7 +394,7 @@ select is(
 );
 select is(
   (select draft_data ->> 'title' from public.page_sections where page_id = (select id from public.pages where key = 'about') and key = 'experience'),
-  '40 Years of Experience',
+  'We Don''t Just Plan Trips. We Own The Experience.',
   'About draft save leaves sections outside the payload untouched'
 );
 select lives_ok(
