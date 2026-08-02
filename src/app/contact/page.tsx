@@ -2,12 +2,16 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useActionState, useEffect, useRef } from 'react';
 import { MapPin, Phone, Mail, Globe2, SendHorizontal, Building2, ShieldCheck, ArrowUpRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Footer from "@/components/Footer";
 import { trackContactFormSubmit, trackEmailClick } from '@/lib/analytics';
 import { usePublishedPage } from "@/lib/cms/pages/use-published-page";
+import { submitContactInquiry, type ContactFormState } from './actions';
+
+const initialContactState: ContactFormState = { status: "idle" };
 
 const defaultOffices = [
   { id: "cairo", region: "Global Headquarters", city: "Cairo, Egypt", address: "30 Thawra St., Heliopolis", email: "info@flashtour.travel", phone: "+202 26904654" },
@@ -25,6 +29,11 @@ export default function ContactPage() {
   const offices = cms?.hero?.contactOffices?.length ? cms.hero.contactOffices : defaultOffices;
   const panel = cms?.hero?.contactPanel;
   const trustBadges = panel?.trustBadges?.length ? panel.trustBadges : defaultTrustBadges;
+  const [state, formAction, isPending] = useActionState(submitContactInquiry, initialContactState);
+  const formRef = useRef<HTMLFormElement>(null);
+  useEffect(() => {
+    if (state.status === "success") formRef.current?.reset();
+  }, [state]);
   return (
     <main className="flex min-h-screen flex-col items-center justify-between w-full bg-slate-50 overflow-hidden">
 
@@ -136,47 +145,58 @@ export default function ContactPage() {
 
             {/* Right Side: The Form */}
             <div className="lg:w-7/12 p-12 md:p-16">
-              <form className="space-y-8" onSubmit={(e) => { e.preventDefault(); trackContactFormSubmit(); }}>
+              <form
+                action={formAction}
+                ref={formRef}
+                className="space-y-8"
+                onSubmit={() => trackContactFormSubmit()}
+              >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-2">
                     <label htmlFor="contact-first-name" className="text-sm font-bold text-slate-700 font-en">First Name *</label>
-                    <input id="contact-first-name" type="text" required className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900" placeholder="John" />
+                    <input id="contact-first-name" name="firstName" type="text" required className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900" placeholder="John" />
                   </div>
                   <div className="space-y-2">
                     <label htmlFor="contact-last-name" className="text-sm font-bold text-slate-700 font-en">Last Name *</label>
-                    <input id="contact-last-name" type="text" required className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900" placeholder="Doe" />
+                    <input id="contact-last-name" name="lastName" type="text" required className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900" placeholder="Doe" />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-2">
                     <label htmlFor="contact-email" className="text-sm font-bold text-slate-700 font-en">Corporate Email *</label>
-                    <input id="contact-email" type="email" required className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900" placeholder="john@company.com" />
+                    <input id="contact-email" name="email" type="email" required className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900" placeholder="john@company.com" />
                   </div>
                   <div className="space-y-2">
                     <label htmlFor="contact-phone" className="text-sm font-bold text-slate-700 font-en">Phone Number</label>
-                    <input id="contact-phone" type="tel" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900" placeholder="+1 (555) 000-0000" />
+                    <input id="contact-phone" name="phone" type="tel" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900" placeholder="+1 (555) 000-0000" />
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <label htmlFor="contact-inquiry-type" className="text-sm font-bold text-slate-700 font-en">Inquiry Type *</label>
-                  <select id="contact-inquiry-type" required className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900 appearance-none">
+                  <select id="contact-inquiry-type" name="inquiryType" required defaultValue="" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900 appearance-none">
                     <option value="">Select a topic...</option>
-                    <option value="partnership">B2B Partnership</option>
-                    <option value="booking">Corporate Booking (Cruises/Hotels)</option>
-                    <option value="fleet">Fleet & Transportation Services</option>
-                    <option value="other">Other Inquiry</option>
+                    <option value="B2B Partnership">B2B Partnership</option>
+                    <option value="Corporate Booking (Cruises/Hotels)">Corporate Booking (Cruises/Hotels)</option>
+                    <option value="Fleet & Transportation Services">Fleet & Transportation Services</option>
+                    <option value="Other Inquiry">Other Inquiry</option>
                   </select>
                 </div>
 
                 <div className="space-y-2">
                   <label htmlFor="contact-message" className="text-sm font-bold text-slate-700 font-en">Message *</label>
-                  <textarea id="contact-message" required rows={5} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900 resize-none" placeholder="Tell us about your business needs..."></textarea>
+                  <textarea id="contact-message" name="message" required rows={5} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all font-en text-slate-900 resize-none" placeholder="Tell us about your business needs..."></textarea>
                 </div>
 
-                <button type="submit" className="w-full bg-teal-700 hover:bg-teal-800 text-white font-bold py-5 rounded-xl transition-all flex items-center justify-center gap-3 group shadow-xl shadow-teal-700/20 font-en text-lg">
-                  Submit Inquiry 
+                {state.status !== "idle" && (
+                  <p role="status" className={`rounded-xl px-5 py-3 text-sm font-en ${state.status === "success" ? "bg-teal-50 text-teal-800" : "bg-red-50 text-red-700"}`}>
+                    {state.message}
+                  </p>
+                )}
+
+                <button type="submit" disabled={isPending} className="w-full bg-teal-700 hover:bg-teal-800 disabled:opacity-60 text-white font-bold py-5 rounded-xl transition-all flex items-center justify-center gap-3 group shadow-xl shadow-teal-700/20 font-en text-lg">
+                  {isPending ? "Sending..." : "Submit Inquiry"}
                   <SendHorizontal className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
                 </button>
               </form>

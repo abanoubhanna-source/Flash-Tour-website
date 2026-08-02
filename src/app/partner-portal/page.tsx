@@ -2,13 +2,22 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useActionState, useEffect, useRef } from 'react';
 import { Briefcase, Building2, Mail, Phone, MapPin, Send, ShieldCheck, UserCheck } from 'lucide-react';
 import Footer from "@/components/Footer";
 import { trackPartnerInquirySubmit } from '@/lib/analytics';
 import { usePublishedPage } from "@/lib/cms/pages/use-published-page";
+import { submitPartnerInquiry, type PartnerFormState } from './actions';
+
+const initialPartnerState: PartnerFormState = { status: "idle" };
 
 export default function PartnerPortal() {
   const cms = usePublishedPage('/partner-portal');
+  const [state, formAction, isPending] = useActionState(submitPartnerInquiry, initialPartnerState);
+  const formRef = useRef<HTMLFormElement>(null);
+  useEffect(() => {
+    if (state.status === "success") formRef.current?.reset();
+  }, [state]);
   return (
     <main className="flex min-h-screen flex-col items-center w-full bg-slate-50 overflow-hidden">
       {/* 1. Header Section */}
@@ -99,16 +108,16 @@ export default function PartnerPortal() {
                 <h2 className="text-3xl font-bold text-brand-navy font-en mb-2">Request a Proposal (RFP)</h2>
                 <p className="text-slate-500 font-en mb-8">Fill out the details below. Our corporate relations team will respond with a tailored proposal within 24 hours.</p>
 
-                <form className="space-y-6">
+                <form action={formAction} ref={formRef} className="space-y-6" onSubmit={() => trackPartnerInquirySubmit()}>
                   {/* Row 1: Names */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label htmlFor="rfp-first-name" className="text-sm font-bold text-slate-700 font-en">First Name *</label>
-                      <input id="rfp-first-name" type="text" required className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors" placeholder="John" />
+                      <input id="rfp-first-name" name="firstName" type="text" required className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors" placeholder="John" />
                     </div>
                     <div className="space-y-2">
                       <label htmlFor="rfp-last-name" className="text-sm font-bold text-slate-700 font-en">Last Name *</label>
-                      <input id="rfp-last-name" type="text" required className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors" placeholder="Doe" />
+                      <input id="rfp-last-name" name="lastName" type="text" required className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors" placeholder="Doe" />
                     </div>
                   </div>
 
@@ -116,11 +125,11 @@ export default function PartnerPortal() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label htmlFor="rfp-company-name" className="text-sm font-bold text-slate-700 font-en">Company Name *</label>
-                      <input id="rfp-company-name" type="text" required className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors" placeholder="Flash Partners LLC" />
+                      <input id="rfp-company-name" name="companyName" type="text" required className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors" placeholder="Flash Partners LLC" />
                     </div>
                     <div className="space-y-2">
                       <label htmlFor="rfp-email" className="text-sm font-bold text-slate-700 font-en">Corporate Email *</label>
-                      <input id="rfp-email" type="email" required className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors" placeholder="john@company.com" />
+                      <input id="rfp-email" name="email" type="email" required className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors" placeholder="john@company.com" />
                     </div>
                   </div>
 
@@ -128,7 +137,7 @@ export default function PartnerPortal() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label htmlFor="rfp-inquiry-type" className="text-sm font-bold text-slate-700 font-en">Inquiry Type *</label>
-                      <select id="rfp-inquiry-type" required className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors bg-white appearance-none">
+                      <select id="rfp-inquiry-type" name="inquiryType" required defaultValue="DMC Partnership" className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors bg-white appearance-none">
                         <option>DMC Partnership</option>
                         <option>MICE / Corporate Event</option>
                         <option>VIP Fleet & Mobility</option>
@@ -138,7 +147,7 @@ export default function PartnerPortal() {
                     </div>
                     <div className="space-y-2">
                       <label htmlFor="rfp-destination" className="text-sm font-bold text-slate-700 font-en">Target Destination</label>
-                      <select id="rfp-destination" className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors bg-white appearance-none">
+                      <select id="rfp-destination" name="destination" defaultValue="Egypt" className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors bg-white appearance-none">
                         <option>Egypt</option>
                         <option>United Arab Emirates</option>
                         <option>Italy (Sardinia / Sicily)</option>
@@ -153,6 +162,7 @@ export default function PartnerPortal() {
                     <label htmlFor="rfp-message" className="text-sm font-bold text-slate-700 font-en">Project Details / Message *</label>
                     <textarea
                       id="rfp-message"
+                      name="message"
                       required
                       rows={5}
                       className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-colors resize-none"
@@ -160,13 +170,19 @@ export default function PartnerPortal() {
                     ></textarea>
                   </div>
 
+                  {state.status !== "idle" && (
+                    <p role="status" className={`rounded-xl px-4 py-3 text-sm font-en ${state.status === "success" ? "bg-teal-50 text-teal-800" : "bg-red-50 text-red-700"}`}>
+                      {state.message}
+                    </p>
+                  )}
+
                   {/* Submit Button */}
                   <button
-                    type="button"
-                    onClick={() => trackPartnerInquirySubmit()}
-                    className="w-full bg-brand-navy hover:bg-brand-teal text-white font-bold font-en text-lg py-4 rounded-xl transition-all duration-300 shadow-lg flex items-center justify-center gap-3 group"
+                    type="submit"
+                    disabled={isPending}
+                    className="w-full bg-brand-navy hover:bg-brand-teal disabled:opacity-60 text-white font-bold font-en text-lg py-4 rounded-xl transition-all duration-300 shadow-lg flex items-center justify-center gap-3 group"
                   >
-                    Submit Proposal Request 
+                    {isPending ? "Sending..." : "Submit Proposal Request"}
                     <Send className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                   </button>
 
