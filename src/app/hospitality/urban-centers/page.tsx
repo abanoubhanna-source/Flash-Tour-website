@@ -1,249 +1,40 @@
 // src/app/hospitality/urban-centers/page.tsx
 'use client';
 
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import Image from 'next/image';
-import Link from 'next/link';
-import Footer from "@/components/Footer";
-import { ArrowUpRight, CheckCircle2, Building2, UtensilsCrossed, Wine, Crown, Landmark } from 'lucide-react';
+import { useEffect } from 'react';
+import { Crown, Landmark, UtensilsCrossed, Wine } from 'lucide-react';
 import { trackHospitalityPropertyView } from '@/lib/analytics';
+import { HospitalityRegionPageTemplate, useHospitalityShowcase, type HospitalityShowcaseItem } from '@/components/hospitality/HospitalityRegionPageTemplate';
+import { regionNav } from '@/components/hospitality/region-nav';
 
-const defaultUrbanData = [
-  { 
-    id: '01', 
-    name: '1920s Boutique Hotel', 
-    slug: '1920s-boutique-hotel',
-    tag: 'HISTORIC STAY',
-    desc: 'Step back in time in the prestigious district of Heliopolis. We preserve history through this meticulously restored 100-year-old historic villa, offering a seamless blend of classic 1920s architecture, antique charm, and modern sophistication.', 
-    img: '/images/1920s-hotel.jpg', // تأكد من اسم الصورة
-    icon: Landmark,
-    specs: ['Restored 1920s Villa', 'Classic Architecture', 'Luxury Boutique Suites', 'Heart of Heliopolis']
-  },
-  { 
-    id: '02', 
-    name: 'Carlo\'s Restaurant', 
-    slug: 'carlo-heliopolis',
-    tag: 'HISTORIC GARDENS',
-    desc: 'Nestled within the lush, historic gardens of our boutique villa. Carlo\'s elevates the premium casual dining scene, serving a masterful variety of Oriental, Asian, and international dishes in an atmosphere of unparalleled elegance.', 
-    img: '/images/carlos.jpg', // تأكد من اسم الصورة
-    icon: UtensilsCrossed,
-    specs: ['Historic Garden Setting', 'Premium Casual Dining', 'Oriental & Asian Fusion', 'Elite Atmosphere']
-  },
-  { 
-    id: '03', 
-    name: 'Rossini Fine Dining', 
-    slug: 'rossini',
-    tag: 'AWARD-WINNING CULINARY',
-    desc: 'A true landmark in Cairo\'s fine dining scene since 1993. Proud bearer of the prestigious Chaine des Rotisseurs certification, Rossini offers authentic Italian and Mediterranean gastronomy for the most discerning palates.', 
-    img: '/images/rossini.jpg', // تأكد من اسم الصورة
-    icon: Wine,
-    specs: ['Chaine des Rotisseurs', 'Italian & Mediterranean', 'Established in 1993', 'Gourmet Gastronomy']
-  },
-  { 
-    id: '04', 
-    name: 'Personalized VIP Concierge', 
-    tag: 'BESPOKE SERVICE',
-    desc: 'Our urban hospitality is defined by absolute attention to detail. From securing exclusive dining reservations to arranging private chauffeured city tours, our dedicated VIP concierge ensures a flawless, highly personalized Cairo experience.', 
-    img: '/images/vip-concierge.jpg', // تأكد من اسم الصورة
-    icon: Crown,
-    specs: ['24/7 VIP Assistance', 'Private City Tours', 'Exclusive Reservations', 'Chauffeur Services']
-  }
+const defaultUrbanData: HospitalityShowcaseItem[] = [
+  { id: '01', name: '1920s Boutique Hotel', slug: '1920s-boutique-hotel', tag: 'HISTORIC STAY', desc: '1920s Boutique Hotel: Step back in time in the prestigious district of Heliopolis. We preserve history through this meticulously restored 100-year-old historic villa, offering a seamless blend of classic 1920s architecture, antique charm, and modern sophistication.', img: '/images/1920s-hotel.jpg', icon: Landmark, specs: ['Restored 1920s Villa', 'Classic Architecture', 'Luxury Boutique Suites', 'Heart of Heliopolis'] },
+  { id: '02', name: "Carlo's Restaurant", slug: 'carlo-heliopolis', tag: 'HISTORIC GARDENS', desc: "Nestled within the lush, historic gardens of our boutique villa. Carlo's elevates the premium casual dining scene, serving a masterful variety of Oriental, Asian, and international dishes in an atmosphere of unparalleled elegance.", img: '/images/carlos.jpg', icon: UtensilsCrossed, specs: ['Historic Garden Setting', 'Premium Casual Dining', 'Oriental & Asian Fusion', 'Elite Atmosphere'] },
+  { id: '03', name: 'Rossini Fine Dining', slug: 'rossini', tag: 'AWARD-WINNING CULINARY', desc: "A true landmark in Cairo's fine dining scene since 1993. Proud bearer of the prestigious Chaine des Rotisseurs certification, Rossini offers authentic Italian and Mediterranean gastronomy for the most discerning palates.", img: '/images/rossini.jpg', icon: Wine, specs: ['Chaine des Rotisseurs', 'Italian & Mediterranean', 'Established in 1993', 'Gourmet Gastronomy'] },
+  { id: '04', name: 'Personalized VIP Concierge', tag: 'BESPOKE SERVICE', desc: 'Our urban hospitality is defined by absolute attention to detail. From securing exclusive dining reservations to arranging private chauffeured city tours, our dedicated VIP concierge ensures a flawless, highly personalized Cairo experience.', img: '/images/vip-concierge.jpg', icon: Crown, specs: ['24/7 VIP Assistance', 'Private City Tours', 'Exclusive Reservations', 'Chauffeur Services'] },
 ];
 
-type CmsProperty = { slug: string; name: string; tag: string; desc: string; roomsOrCabins: number | null; facilities: string[]; diningOptions: string[] };
-
-function buildSpecs(item: CmsProperty): string[] {
-  const specs: string[] = [];
-  if (item.roomsOrCabins) specs.push(`${item.roomsOrCabins} Rooms`);
-  specs.push(...item.diningOptions.slice(0, 1), ...item.facilities.slice(0, 3));
-  return specs.slice(0, 4);
-}
-
 export default function UrbanCentersPage() {
-  const [urbanData, setUrbanData] = useState(defaultUrbanData);
   useEffect(() => { trackHospitalityPropertyView('Urban Centers'); }, []);
-  useEffect(() => {
-    const slugs = defaultUrbanData.map((item) => ('slug' in item ? (item as { slug?: string }).slug : undefined)).filter(Boolean).join(',');
-    if (!slugs) return;
-    fetch(`/api/hospitality/properties?slugs=${slugs}`)
-      .then((r) => (r.ok ? r.json() : []))
-      .then((items: CmsProperty[]) => {
-        if (!items.length) return;
-        const bySlug = new Map(items.map((item) => [item.slug, item]));
-        setUrbanData((current) => current.map((entry) => {
-          const slug = 'slug' in entry ? (entry as { slug?: string }).slug : undefined;
-          const match = slug ? bySlug.get(slug) : undefined;
-          if (!match) return entry;
-          const specs = buildSpecs(match);
-          return { ...entry, name: match.name, tag: match.tag || entry.tag, desc: match.desc || entry.desc, specs: specs.length ? specs : entry.specs };
-        }));
-      })
-      .catch(() => undefined);
-  }, []);
+  const urbanData = useHospitalityShowcase(defaultUrbanData);
 
   return (
-    <main className="flex min-h-screen flex-col items-center w-full bg-white overflow-hidden">
-      
-      {/* 1. Epic Hero Section */}
-      <section className="relative w-full h-[85vh] flex flex-col items-center justify-center bg-brand-navy">
-        <div className="absolute inset-0 z-0">
-          <Image 
-            src="/images/1920s-hotel.jpg" 
-            alt="Urban Centers - Cairo" 
-            sizes="100vw"
-            fill 
-            className="object-cover opacity-50"
-            loading="eager"
-            fetchPriority="high"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-brand-navy/70 to-white z-10"></div>
-        </div>
-        
-        <div className="relative z-20 text-center px-6 mt-16 max-w-4xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <span className="text-brand-gold font-bold tracking-[0.25em] uppercase text-xs md:text-sm block mb-6 font-en flex items-center justify-center gap-2">
-              <Landmark className="w-4 h-4 text-brand-gold" /> A CENTURY OF ELEGANCE IN CAIRO
-            </span>
-            <h1 className="text-6xl md:text-8xl font-bold text-white font-en mb-6 tracking-tight drop-shadow-2xl uppercase">
-              Urban <br/> <span className="text-brand-gold">Centers</span>
-            </h1>
-            <p className="text-lg md:text-xl text-brand-navy font-en leading-relaxed max-w-2xl mx-auto font-bold bg-white/70 backdrop-blur-md py-3 px-8 rounded-full shadow-lg">
-              Heritage & Fine Dining. In the heart of the city, our hospitality takes a profound cultural form.
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* 2. Intro Statement */}
-      <section className="w-full py-20 bg-white relative z-20">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <Building2 className="w-12 h-12 text-brand-teal mx-auto mb-6 opacity-50" />
-            <h2 className="text-3xl md:text-4xl font-bold text-brand-navy font-en leading-tight mb-6">
-              Preserving History, Elevating Taste
-            </h2>
-            <p className="text-lg text-slate-500 font-en leading-relaxed">
-              We preserve history through meticulously restored 100-year-old boutique villas and elevate the culinary scene with our award-winning dining lounges. Discover a sophisticated urban retreat designed for travelers who appreciate heritage, art, and world-class gastronomy.
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* 3. The Urban Showcase (Alternating Editorial Layout) */}
-      <section className="w-full bg-white relative z-20 pb-32">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-8 space-y-32">
-          
-          {urbanData.map((item, idx) => {
-            const isEven = idx % 2 === 0;
-            return (
-              <div key={item.id} className="relative group">
-                
-                {/* Text & Main Image Container */}
-                <div className={`flex flex-col lg:flex-row items-center gap-16 ${isEven ? '' : 'lg:flex-row-reverse'}`}>
-                  
-                  {/* Text Side */}
-                  <motion.div 
-                    initial={{ opacity: 0, x: isEven ? -40 : 40 }} 
-                    whileInView={{ opacity: 1, x: 0 }} 
-                    viewport={{ once: true, margin: "-100px" }} 
-                    className="w-full lg:w-5/12 flex flex-col justify-center"
-                  >
-                    <div className="flex items-center gap-3 mb-6">
-                      <div className="w-12 h-12 rounded-full bg-brand-teal/10 flex items-center justify-center border border-brand-teal/20">
-                        <item.icon className="w-6 h-6 text-brand-teal" />
-                      </div>
-                      <span className="text-brand-gold font-bold uppercase tracking-widest text-sm font-en">
-                        {item.tag}
-                      </span>
-                    </div>
-                    
-                    <h2 className="text-4xl md:text-5xl font-bold text-brand-navy font-en tracking-tight uppercase mb-6">
-                      {item.name}
-                    </h2>
-                    
-                    <p className="text-slate-600 font-en leading-relaxed text-lg mb-8">
-                      {item.desc}
-                    </p>
-
-                    {/* Specs Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10 pt-6 border-t border-slate-100">
-                      {item.specs.map((spec, sIdx) => (
-                        <div key={sIdx} className="flex items-center gap-3">
-                          <CheckCircle2 className="w-5 h-5 text-brand-teal" />
-                          <span className="text-slate-700 font-en font-medium">{spec}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    <Link href="/contact" className="w-fit flex items-center gap-3 text-brand-teal hover:text-brand-gold uppercase tracking-widest text-sm font-bold font-en transition-colors group/btn">
-                      Request B2B Rates 
-                      <span className="w-10 h-10 rounded-full border border-brand-teal/30 flex items-center justify-center group-hover/btn:border-brand-gold transition-colors bg-slate-50 group-hover/btn:bg-white">
-                        <ArrowUpRight className="w-4 h-4" />
-                      </span>
-                    </Link>
-                  </motion.div>
-
-                  {/* Image Side */}
-                  <motion.div 
-                    initial={{ opacity: 0, x: isEven ? 40 : -40 }} 
-                    whileInView={{ opacity: 1, x: 0 }} 
-                    viewport={{ once: true, margin: "-100px" }} 
-                    className="w-full lg:w-7/12 relative h-[500px] lg:h-[600px] rounded-[1.5rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.1)] group-hover:shadow-[0_20px_60px_rgba(21,118,112,0.15)] transition-all duration-700"
-                  >
-                    <Image 
-                      src={item.img} 
-                      alt={item.name} 
-                      sizes="(max-width: 1024px) 100vw, 58vw"
-                      fill 
-                      className="object-cover group-hover:scale-105 transition-transform duration-[2s] ease-out" 
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/60 via-transparent to-transparent"></div>
-                    
-                    {/* Floating ID Badge */}
-                    <div className="absolute top-8 right-8 bg-white/90 backdrop-blur-md w-16 h-16 rounded-full flex items-center justify-center shadow-lg">
-                      <span className="text-brand-teal font-bold text-xl font-en">{item.id}</span>
-                    </div>
-
-                    <div className="absolute bottom-8 left-8 text-white font-bold font-en text-xl flex items-center gap-3">
-                      Discover {item.name}
-                    </div>
-                  </motion.div>
-
-                </div>
-
-                {/* Separator Line */}
-                {idx !== urbanData.length - 1 && (
-                  <div className="w-full max-w-3xl mx-auto h-px bg-slate-200 mt-32"></div>
-                )}
-              </div>
-            );
-          })}
-
-        </div>
-      </section>
-
-      {/* 4. Grand CTA Section */}
-      <section className="w-full bg-brand-teal py-24 relative z-20 overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[url('/images/pattern.png')] bg-repeat z-0"></div>
-        
-        <div className="max-w-4xl mx-auto px-6 relative z-10 text-center">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <Landmark className="w-16 h-16 text-brand-gold mx-auto mb-8" />
-            <h2 className="text-4xl md:text-6xl font-bold text-white font-en tracking-tight uppercase mb-6">
-              Partner With Heritage.
-            </h2>
-            <p className="text-teal-100 text-lg md:text-xl font-medium leading-relaxed mb-10 font-en max-w-2xl mx-auto">
-              Offer your elite clients an unforgettable journey through history and culinary mastery. Connect with our corporate relations team today.
-            </p>
-            <Link href="/partner-portal" className="inline-block bg-brand-navy text-white px-10 py-5 rounded-full font-bold font-en text-sm uppercase tracking-widest hover:bg-brand-gold hover:text-brand-navy transition-all duration-300 shadow-xl hover:shadow-2xl">
-              Access B2B Portal
-            </Link>
-          </motion.div>
-        </div>
-      </section>
-
-      <Footer />
-    </main>
+    <HospitalityRegionPageTemplate
+      path="/hospitality/urban-centers"
+      eyebrowIcon={Landmark}
+      nav={regionNav('urban-centers')}
+      showcase={urbanData}
+      fallback={{
+        eyebrow: 'A Century of Elegance in Cairo',
+        title: 'Urban',
+        accentTitle: 'Centers',
+        subtitle: 'Heritage & Fine Dining. In the heart of the city, our hospitality takes a profound cultural form.',
+        heroImage: '/images/1920s-hotel.jpg',
+        introHeading: 'Preserving History, Elevating Taste',
+        introBody: 'We preserve history through meticulously restored 100-year-old boutique villas and elevate the culinary scene with our award-winning dining lounges. Discover a sophisticated urban retreat designed for travelers who appreciate heritage, art, and world-class gastronomy.',
+        ctaHeading: 'Partner With Heritage.',
+        ctaBody: 'Offer your elite clients an unforgettable journey through history and culinary mastery. Connect with our corporate relations team today.',
+      }}
+    />
   );
 }

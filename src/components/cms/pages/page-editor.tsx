@@ -429,6 +429,37 @@ function HospitalityStatsEditor({ value, onChange }: { value: HomeStatItemData[]
   );
 }
 
+function HospitalityIntroCtaEditor({
+  introHeading,
+  introBody,
+  ctaHeading,
+  ctaBody,
+  onChange,
+}: {
+  introHeading: string;
+  introBody: string;
+  ctaHeading: string;
+  ctaBody: string;
+  onChange: (value: { introHeading: string; introBody: string; ctaHeading: string; ctaBody: string }) => void;
+}) {
+  return (
+    <CollapsibleSection eyebrow="Hospitality region page" title="Intro & closing CTA" description="The centered intro statement below the hero, and the closing 'Partner With...' section at the bottom of the page. The showcase cards below the intro pull each property's real content from the Hospitality collection.">
+      <label className="block text-xs font-bold text-slate-700">Intro heading
+        <input value={introHeading} onChange={(event) => onChange({ introHeading: event.target.value, introBody, ctaHeading, ctaBody })} className="mt-2 h-11 w-full rounded-xl border px-3.5 text-sm" />
+      </label>
+      <label className="mt-5 block text-xs font-bold text-slate-700">Intro body
+        <textarea value={introBody} onChange={(event) => onChange({ introHeading, introBody: event.target.value, ctaHeading, ctaBody })} rows={3} className="mt-2 w-full rounded-xl border px-3 py-2 text-sm" />
+      </label>
+      <label className="mt-5 block text-xs font-bold text-slate-700">Closing CTA heading
+        <input value={ctaHeading} onChange={(event) => onChange({ introHeading, introBody, ctaHeading: event.target.value, ctaBody })} className="mt-2 h-11 w-full rounded-xl border px-3.5 text-sm" />
+      </label>
+      <label className="mt-5 block text-xs font-bold text-slate-700">Closing CTA body
+        <textarea value={ctaBody} onChange={(event) => onChange({ introHeading, introBody, ctaHeading, ctaBody: event.target.value })} rows={2} className="mt-2 w-full rounded-xl border px-3 py-2 text-sm" />
+      </label>
+    </CollapsibleSection>
+  );
+}
+
 function formatRevisionDate(value: string) {
   return new Intl.DateTimeFormat("en", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
 }
@@ -767,6 +798,20 @@ export function PageEditor({ page, canEdit, canPublish, canUpload, embedded = fa
                     />
                   )}
                   {page.path === "/hospitality" && <HospitalityStatsEditor value={draft.hero.hospitalityStats} onChange={(hospitalityStats) => updateHero("hospitalityStats", hospitalityStats)} />}
+                  {page.path.startsWith("/hospitality/") && (
+                    <HospitalityIntroCtaEditor
+                      introHeading={draft.hero.introHeading}
+                      introBody={draft.hero.introBody}
+                      ctaHeading={draft.hero.ctaHeading}
+                      ctaBody={draft.hero.ctaBody}
+                      onChange={(value) => {
+                        updateHero("introHeading", value.introHeading);
+                        updateHero("introBody", value.introBody);
+                        updateHero("ctaHeading", value.ctaHeading);
+                        updateHero("ctaBody", value.ctaBody);
+                      }}
+                    />
+                  )}
                   {page.path === "/hospitality" && <HospitalityRegionsEditor value={draft.hero.hospitalityRegions} onChange={(hospitalityRegions) => updateHero("hospitalityRegions", hospitalityRegions)} canUpload={canUpload} />}
                   {page.path === "/hospitality" && <HospitalityTransportationEditor value={draft.hero.transportation} onChange={(transportation) => updateHero("transportation", transportation)} canUpload={canUpload} />}
                 </fieldset>

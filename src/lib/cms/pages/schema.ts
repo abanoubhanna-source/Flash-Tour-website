@@ -242,6 +242,10 @@ export const pageHeroSchema = z.object({
     { number: "7", label: "Luxury Cruises" },
     { number: "1", label: "Unmatched Standard" },
   ]),
+  introHeading: z.string().trim().max(140).default(""),
+  introBody: z.string().trim().max(800).default(""),
+  ctaHeading: z.string().trim().max(140).default(""),
+  ctaBody: z.string().trim().max(400).default(""),
   enterpriseSolutions: homeEnterpriseSolutionsSchema.default({
     heading: "Enterprise Solutions",
     intro: "Tailored operational capabilities for global travel agencies, event organizers, and corporate entities seeking flawless execution.",
@@ -334,6 +338,10 @@ export const defaultPageHero: PageHeroData = {
     { number: "7", label: "Luxury Cruises" },
     { number: "1", label: "Unmatched Standard" },
   ],
+  introHeading: "",
+  introBody: "",
+  ctaHeading: "",
+  ctaBody: "",
   enterpriseSolutions: {
     heading: "Enterprise Solutions",
     intro: "Tailored operational capabilities for global travel agencies, event organizers, and corporate entities seeking flawless execution.",
