@@ -15,7 +15,13 @@ export async function GET(request: NextRequest) {
     getPublishedCollection("cruise").then((entries) => entries.map((entry) => ({ ...entry, type: "cruise" as const }))),
   ]);
 
-  const items = [...hospitality, ...cruises]
+  // Hospitality and Cruises are twin content types — the same physical vessel
+  // (e.g. Nile Majestic) often exists as both, sharing the same slug. Keep the
+  // hospitality copy when both exist rather than showing the same property twice.
+  const bySlug = new Map<string, (typeof hospitality)[number] | (typeof cruises)[number]>();
+  for (const entry of [...cruises, ...hospitality]) bySlug.set(entry.slug, entry);
+
+  const items = [...bySlug.values()]
     .filter((entry) => {
       const data = publicData(entry);
       return typeof data.country === "string" && data.country.toLowerCase() === country.toLowerCase();
@@ -36,7 +42,7 @@ export async function GET(request: NextRequest) {
         image: typeof firstImage === "string" && firstImage ? firstImage : "",
       };
     })
-    .slice(0, 8);
+    .slice(0, 12);
 
   return NextResponse.json(items);
 }
