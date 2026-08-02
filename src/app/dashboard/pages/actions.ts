@@ -10,10 +10,13 @@ import {
   defaultPageHero,
   defaultPageSeo,
   pageDraftSchema,
+  pageSeoSchema,
   parsePageHero,
   parsePageSeo,
 } from "@/lib/cms/pages/schema";
-import type { PageDraftData } from "@/lib/cms/pages/schema";
+import type { PageDraftData, PageSeoData } from "@/lib/cms/pages/schema";
+import { aboutSectionsSchema, parseAboutSections } from "@/lib/cms/pages/about-schema";
+import type { AboutSectionsData } from "@/lib/cms/pages/about-schema";
 import type { PageMutationResult } from "@/lib/cms/pages/types";
 
 const mutationInputSchema = z.object({
@@ -29,6 +32,18 @@ const rpcResultSchema = z.object({
 
 const restoredResultSchema = rpcResultSchema.extend({
   hero: z.unknown(),
+  seo: z.unknown(),
+});
+
+const aboutMutationInputSchema = z.object({
+  pageId: z.uuid(),
+  lockVersion: z.number().int().positive(),
+  sections: aboutSectionsSchema,
+  seo: pageSeoSchema,
+});
+
+const aboutRestoredResultSchema = rpcResultSchema.extend({
+  sections: z.unknown(),
   seo: z.unknown(),
 });
 
@@ -246,6 +261,94 @@ export async function restorePageRevision(
     updatedAt: result.data.updatedAt,
     message: "Version restored as a draft.",
     draft: { hero: parsePageHero(result.data.hero), seo: parsePageSeo(result.data.seo) },
+  };
+}
+
+export async function saveAboutDraft(
+  pageId: string,
+  lockVersion: number,
+  sections: AboutSectionsData,
+  seo: PageSeoData,
+  createRevision = false,
+): Promise<PageMutationResult> {
+  await requireCmsPermission("content.edit");
+  await requireCmsPermission("seo.edit");
+  const parsed = aboutMutationInputSchema.safeParse({ pageId, lockVersion, sections, seo });
+  if (!parsed.success) return { ok: false, message: "Some page fields are invalid." };
+
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.rpc("cms_save_about_draft", {
+    requested_page_id: parsed.data.pageId,
+    expected_lock_version: parsed.data.lockVersion,
+    sections_data: asJson(parsed.data.sections),
+    seo_data: asJson(parsed.data.seo),
+    create_revision: createRevision,
+  });
+  if (error) return mutationError(error);
+
+  const result = rpcResultSchema.safeParse(data);
+  if (!result.success) return { ok: false, message: "The server returned an invalid save result." };
+  revalidatePath(`/dashboard/pages/${pageId}`);
+  return { ok: true, ...result.data, message: createRevision ? "Version saved." : undefined };
+}
+
+export async function publishAboutPage(
+  pageId: string,
+  lockVersion: number,
+  sections: AboutSectionsData,
+  seo: PageSeoData,
+): Promise<PageMutationResult> {
+  await requireCmsPermission("content.publish");
+  await requireCmsPermission("seo.publish");
+  const parsed = aboutMutationInputSchema.safeParse({ pageId, lockVersion, sections, seo });
+  if (!parsed.success) return { ok: false, message: "Some page fields are invalid." };
+
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.rpc("cms_publish_about_page", {
+    requested_page_id: parsed.data.pageId,
+    expected_lock_version: parsed.data.lockVersion,
+    sections_data: asJson(parsed.data.sections),
+    seo_data: asJson(parsed.data.seo),
+  });
+  if (error) return mutationError(error);
+
+  const result = rpcResultSchema.safeParse(data);
+  if (!result.success) return { ok: false, message: "The server returned an invalid publish result." };
+  const { data: publishedPage } = await supabase.from("pages").select("path").eq("id", pageId).maybeSingle();
+  if (publishedPage?.path) revalidatePath(publishedPage.path);
+  revalidatePath("/dashboard/pages");
+  revalidatePath(`/dashboard/pages/${pageId}`);
+  return { ok: true, ...result.data, message: "Page published." };
+}
+
+export async function restoreAboutRevision(
+  pageId: string,
+  revisionId: string,
+  lockVersion: number,
+): Promise<PageMutationResult & { sections?: AboutSectionsData; seo?: PageSeoData }> {
+  await requireCmsPermission("content.edit");
+  await requireCmsPermission("seo.edit");
+  const parsed = z.object({ pageId: z.uuid(), revisionId: z.uuid(), lockVersion: z.number().int().positive() }).safeParse({ pageId, revisionId, lockVersion });
+  if (!parsed.success) return { ok: false, message: "The selected version is invalid." };
+
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.rpc("cms_restore_about_revision", {
+    requested_page_id: parsed.data.pageId,
+    requested_revision_id: parsed.data.revisionId,
+    expected_lock_version: parsed.data.lockVersion,
+  });
+  if (error) return mutationError(error);
+
+  const result = aboutRestoredResultSchema.safeParse(data);
+  if (!result.success) return { ok: false, message: "The restored version is invalid." };
+  revalidatePath(`/dashboard/pages/${pageId}`);
+  return {
+    ok: true,
+    lockVersion: result.data.lockVersion,
+    updatedAt: result.data.updatedAt,
+    message: "Version restored as a draft.",
+    sections: parseAboutSections((result.data.sections as Record<string, unknown>) ?? {}),
+    seo: parsePageSeo(result.data.seo),
   };
 }
 

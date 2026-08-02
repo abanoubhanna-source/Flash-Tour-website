@@ -1,7 +1,7 @@
 begin;
 
 create extension if not exists pgtap with schema extensions;
-select plan(63);
+select plan(69);
 
 select is((select count(*)::integer from public.roles), 4, 'four system roles are seeded');
 select is((select count(*)::integer from public.permissions), 22, 'the permission catalog is seeded');
@@ -371,6 +371,68 @@ select is(
   'Test Page',
   'restoring history changes the draft without republishing'
 );
+
+select lives_ok(
+  $$
+    select public.cms_save_about_draft(
+      (select id from public.pages where key = 'about'),
+      (select lock_version from public.pages where key = 'about'),
+      jsonb_build_object(
+        'hero_intro',
+        (select draft_data from public.page_sections where page_id = (select id from public.pages where key = 'about') and key = 'hero_intro') || '{"title":"Updated About Title"}'::jsonb
+      ),
+      (select draft_data from public.seo_entries where page_id = (select id from public.pages where key = 'about')),
+      true
+    )
+  $$,
+  'an authorized editor can autosave a subset of About page sections'
+);
+select is(
+  (select draft_data ->> 'title' from public.page_sections where page_id = (select id from public.pages where key = 'about') and key = 'hero_intro'),
+  'Updated About Title',
+  'About draft save updates only the section keys provided'
+);
+select is(
+  (select draft_data ->> 'title' from public.page_sections where page_id = (select id from public.pages where key = 'about') and key = 'experience'),
+  '40 Years of Experience',
+  'About draft save leaves sections outside the payload untouched'
+);
+select lives_ok(
+  $$
+    select public.cms_publish_about_page(
+      (select id from public.pages where key = 'about'),
+      (select lock_version from public.pages where key = 'about'),
+      jsonb_build_object(
+        'hero_intro',
+        (select draft_data from public.page_sections where page_id = (select id from public.pages where key = 'about') and key = 'hero_intro')
+      ),
+      (select draft_data from public.seo_entries where page_id = (select id from public.pages where key = 'about'))
+    )
+  $$,
+  'an authorized editor can publish a subset of About page sections'
+);
+select is(
+  (select published_data ->> 'title' from public.page_sections where page_id = (select id from public.pages where key = 'about') and key = 'hero_intro'),
+  'Updated About Title',
+  'publishing About copies the given section drafts into the published projection'
+);
+select lives_ok(
+  $$
+    select public.cms_restore_about_revision(
+      (select id from public.pages where key = 'about'),
+      (
+        select id from public.content_revisions
+        where resource_type = 'page'
+          and resource_id = (select id from public.pages where key = 'about')
+        order by version desc
+        limit 1
+      ),
+      (select lock_version from public.pages where key = 'about')
+    )
+  $$,
+  'an authorized editor can restore a previous About page version to draft'
+);
+
 select is(
   (select lock_version from public.content_entries where id = '20000000-0000-0000-0000-000000000001'),
   2,

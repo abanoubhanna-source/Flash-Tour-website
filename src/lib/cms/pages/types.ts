@@ -1,5 +1,6 @@
 import type { Json } from "@/types/database.generated";
 import type { PageHeroData, PageSeoData } from "./schema";
+import type { AboutSectionsData } from "./about-schema";
 
 export type CmsPageSummary = {
   id: string;
@@ -26,6 +27,17 @@ export type CmsPageEditorData = CmsPageSummary & {
   heroSectionId: string;
   hero: PageHeroData;
   publishedHero: PageHeroData | null;
+  seoEntryId: string;
+  seo: PageSeoData;
+  publishedSeo: PageSeoData | null;
+  revisions: CmsPageRevision[];
+};
+
+export type CmsAboutPageEditorData = CmsPageSummary & {
+  templateKey: string;
+  lockVersion: number;
+  sections: AboutSectionsData;
+  publishedSections: AboutSectionsData | null;
   seoEntryId: string;
   seo: PageSeoData;
   publishedSeo: PageSeoData | null;

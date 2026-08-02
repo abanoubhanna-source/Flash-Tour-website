@@ -1280,6 +1280,15 @@ export type Database = {
         }
         Returns: string
       }
+      cms_publish_about_page: {
+        Args: {
+          expected_lock_version: number
+          requested_page_id: string
+          sections_data: Json
+          seo_data: Json
+        }
+        Returns: Json
+      }
       cms_publish_destination: {
         Args: {
           content_data: Json
@@ -1307,6 +1316,14 @@ export type Database = {
         }
         Returns: Json
       }
+      cms_restore_about_revision: {
+        Args: {
+          expected_lock_version: number
+          requested_page_id: string
+          requested_revision_id: string
+        }
+        Returns: Json
+      }
       cms_restore_destination_revision: {
         Args: {
           expected_lock_version: number
@@ -1328,6 +1345,16 @@ export type Database = {
           expected_lock_version: number
           requested_revision_id: string
           requested_service_id: string
+        }
+        Returns: Json
+      }
+      cms_save_about_draft: {
+        Args: {
+          create_revision?: boolean
+          expected_lock_version: number
+          requested_page_id: string
+          sections_data: Json
+          seo_data: Json
         }
         Returns: Json
       }
