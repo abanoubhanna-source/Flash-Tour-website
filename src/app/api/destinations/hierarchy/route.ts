@@ -41,13 +41,23 @@ export async function GET(request: NextRequest) {
         : typeof source.summary === "string" ? source.summary : "";
     };
 
+    const imageUrl = (data: unknown): string => {
+      const source = data && typeof data === "object" ? (data as Record<string, unknown>) : {};
+      const gallery = Array.isArray(source.gallery) ? source.gallery : [];
+      const first = gallery[0];
+      return first && typeof first === "object" && typeof (first as { url?: unknown }).url === "string"
+        ? (first as { url: string }).url
+        : "";
+    };
+
     const places = placeRows.map((place) => ({
       slug: place.slug,
       title: place.title,
       desc: describe(place.data),
+      image: imageUrl(place.data),
       attractions: (attractionRows ?? [])
         .filter((attraction) => attraction.parent_slug === place.slug)
-        .map((attraction) => ({ slug: attraction.slug, title: attraction.title, desc: describe(attraction.data) })),
+        .map((attraction) => ({ slug: attraction.slug, title: attraction.title, desc: describe(attraction.data), image: imageUrl(attraction.data) })),
     }));
 
     return NextResponse.json({ places });

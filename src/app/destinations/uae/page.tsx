@@ -89,11 +89,13 @@ export default function UAEDestinationPage() {
           if (!cmsCity) return city;
           return {
             ...city,
+            name: cmsCity.title ? cmsCity.title.toUpperCase() : city.name,
             desc: cmsCity.desc || city.desc,
+            mainImg: cmsCity.image || city.mainImg,
             places: city.places.map((spot) => {
               const spotSlug = 'slug' in spot ? (spot as { slug?: string }).slug : undefined;
               const cmsSpot = spotSlug ? cmsCity.attractions.find((a: { slug: string }) => a.slug === spotSlug) : undefined;
-              return cmsSpot ? { ...spot, desc: cmsSpot.desc || spot.desc } : spot;
+              return cmsSpot ? { ...spot, name: cmsSpot.title || spot.name, desc: cmsSpot.desc || spot.desc, img: cmsSpot.image || spot.img } : spot;
             }),
           };
         }));
