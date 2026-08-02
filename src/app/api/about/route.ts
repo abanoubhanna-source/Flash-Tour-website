@@ -29,6 +29,7 @@ export async function GET() {
           year: String(milestone.year),
           title: milestone.title,
           desc: milestone.desc,
+          img: milestone.image.url || undefined,
         }))
       : fallback.timeline,
   });

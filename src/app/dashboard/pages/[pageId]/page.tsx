@@ -18,7 +18,7 @@ export default async function EditPage({ params }: PageProps<"/dashboard/pages/[
   if (key === "about") {
     const page = await getAboutPage(pageId);
     if (!page) notFound();
-    return <AboutPageEditor page={page} canEdit={canEdit} canPublish={canPublish} />;
+    return <AboutPageEditor page={page} canEdit={canEdit} canPublish={canPublish} canUpload={user.permissions.includes("media.create")} />;
   }
 
   const page = await getCmsPage(pageId);

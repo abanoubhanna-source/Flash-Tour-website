@@ -26,12 +26,21 @@ export const aboutListSchema = z.object({
   items: z.array(z.string().trim().max(120)).min(0).max(20).default([]),
 });
 
+const aboutImageSchema = z.object({
+  assetId: z.uuid().nullable().default(null),
+  url: z.string().trim().max(2000).default(""),
+  alt: z.string().trim().max(180).default(""),
+});
+
+const emptyAboutImage = { assetId: null, url: "", alt: "" };
+
 export const aboutMilestoneSchema = z.object({
   year: z.coerce.number().int().min(1900).max(2100).default(2000),
   brand: z.string().trim().max(120).default(""),
   country: z.string().trim().max(120).default(""),
   title: z.string().trim().max(140).default(""),
   desc: z.string().trim().max(600).default(""),
+  image: aboutImageSchema.default(emptyAboutImage),
 });
 
 export const aboutExpansionJourneySchema = z.object({
@@ -82,6 +91,7 @@ export type AboutHeroIntroData = z.infer<typeof aboutHeroIntroSchema>;
 export type AboutHighlightsData = z.infer<typeof aboutHighlightsSchema>;
 export type AboutListData = z.infer<typeof aboutListSchema>;
 export type AboutExpansionJourneyData = z.infer<typeof aboutExpansionJourneySchema>;
+export type AboutMilestoneData = z.infer<typeof aboutMilestoneSchema>;
 export type AboutCeoMessageData = z.infer<typeof aboutCeoMessageSchema>;
 export type AboutTeamData = z.infer<typeof aboutTeamSchema>;
 export type AboutSectionsData = z.infer<typeof aboutSectionsSchema>;

@@ -26,6 +26,7 @@ import {
   saveAboutDraft,
   unpublishPage,
 } from "@/app/dashboard/pages/actions";
+import { MediaPicker } from "@/components/cms/media-picker";
 import type {
   AboutBodySectionData,
   AboutCeoMessageData,
@@ -46,6 +47,7 @@ type AboutPageEditorProps = {
   page: CmsAboutPageEditorData;
   canEdit: boolean;
   canPublish: boolean;
+  canUpload: boolean;
 };
 
 type AboutDraftData = { sections: AboutSectionsData; seo: PageSeoData };
@@ -144,9 +146,9 @@ function ListFields({ value, onChange, itemLabel }: { value: AboutListData; onCh
   );
 }
 
-function ExpansionJourneyFields({ value, onChange }: { value: AboutExpansionJourneyData; onChange: (value: AboutExpansionJourneyData) => void }) {
+function ExpansionJourneyFields({ value, onChange, canUpload }: { value: AboutExpansionJourneyData; onChange: (value: AboutExpansionJourneyData) => void; canUpload: boolean }) {
   const update = (index: number, milestone: AboutExpansionJourneyData["milestones"][number]) => onChange({ ...value, milestones: value.milestones.map((current, i) => (i === index ? milestone : current)) });
-  const add = () => onChange({ ...value, milestones: [...value.milestones, { year: new Date().getFullYear(), brand: "", country: "", title: "", desc: "" }] });
+  const add = () => onChange({ ...value, milestones: [...value.milestones, { year: new Date().getFullYear(), brand: "", country: "", title: "", desc: "", image: { assetId: null, url: "", alt: "" } }] });
   const remove = (index: number) => onChange({ ...value, milestones: value.milestones.filter((_, i) => i !== index) });
   return (
     <div className="space-y-4">
@@ -171,6 +173,12 @@ function ExpansionJourneyFields({ value, onChange }: { value: AboutExpansionJour
             </div>
             <input aria-label={`Milestone ${index + 1} title`} value={milestone.title} onChange={(event) => update(index, { ...milestone, title: event.target.value })} placeholder="Timeline title (e.g. THE FOUNDATION)" className="h-10 w-full rounded-xl border px-3 text-sm" />
             <textarea aria-label={`Milestone ${index + 1} description`} value={milestone.desc} onChange={(event) => update(index, { ...milestone, desc: event.target.value })} placeholder="Timeline description" rows={2} className="w-full rounded-xl border px-3 py-2 text-sm" />
+            <MediaPicker
+              label="Milestone photo"
+              value={milestone.image}
+              canUpload={canUpload}
+              onChange={(image) => update(index, { ...milestone, image: { assetId: image.assetId ?? milestone.image.assetId, url: image.url, alt: image.alt ?? milestone.image.alt } })}
+            />
           </div>
         ))}
         <button type="button" onClick={add} className="w-full rounded-xl border border-dashed border-slate-300 py-2 text-xs font-bold text-slate-500 hover:bg-slate-50">+ Add milestone</button>
@@ -233,7 +241,7 @@ function eventLabel(event: CmsAboutPageEditorData["revisions"][number]["event"])
   }[event];
 }
 
-export function AboutPageEditor({ page, canEdit, canPublish }: AboutPageEditorProps) {
+export function AboutPageEditor({ page, canEdit, canPublish, canUpload }: AboutPageEditorProps) {
   const router = useRouter();
   const [draft, setDraft] = useState<AboutDraftData>({ sections: page.sections, seo: page.seo });
   const [activeTab, setActiveTab] = useState<EditorTab>("content");
@@ -459,37 +467,40 @@ export function AboutPageEditor({ page, canEdit, canPublish }: AboutPageEditorPr
           <div className="p-4 sm:p-6">
             {activeTab === "content" && (
               <fieldset disabled={!canEdit} className="space-y-4 disabled:opacity-75">
-                <CollapsibleSection eyebrow="About page" title="Hero intro" defaultOpen>
+                <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#157670]">Shown on the live page, in page order</p>
+                <CollapsibleSection eyebrow="1. Hero" title="Hero intro" defaultOpen>
                   <HeroIntroFields value={draft.sections.hero_intro} onChange={(value) => updateSection("hero_intro", value)} />
                 </CollapsibleSection>
-                <CollapsibleSection eyebrow="About page" title="Experience">
-                  <BodySectionFields value={draft.sections.experience} onChange={(value) => updateSection("experience", value)} />
-                </CollapsibleSection>
-                <CollapsibleSection eyebrow="About page" title="Highlights">
-                  <HighlightsFields value={draft.sections.highlights} onChange={(value) => updateSection("highlights", value)} />
-                </CollapsibleSection>
-                <CollapsibleSection eyebrow="About page" title="Vision">
+                <CollapsibleSection eyebrow="2. Vision & Mission" title="Vision">
                   <BodySectionFields value={draft.sections.vision} onChange={(value) => updateSection("vision", value)} />
                 </CollapsibleSection>
-                <CollapsibleSection eyebrow="About page" title="Mission">
+                <CollapsibleSection eyebrow="3. Vision & Mission" title="Mission">
                   <BodySectionFields value={draft.sections.mission} onChange={(value) => updateSection("mission", value)} />
                 </CollapsibleSection>
-                <CollapsibleSection eyebrow="About page" title="Services summary">
-                  <ListFields value={draft.sections.services_summary} onChange={(value) => updateSection("services_summary", value)} itemLabel="Service" />
+                <CollapsibleSection eyebrow="4. The Evolution" title="Expansion journey (timeline)" description="Each milestone can have its own photo.">
+                  <ExpansionJourneyFields value={draft.sections.expansion_journey} onChange={(value) => updateSection("expansion_journey", value)} canUpload={canUpload} />
                 </CollapsibleSection>
-                <CollapsibleSection eyebrow="About page" title="Expansion journey">
-                  <ExpansionJourneyFields value={draft.sections.expansion_journey} onChange={(value) => updateSection("expansion_journey", value)} />
-                </CollapsibleSection>
-                <CollapsibleSection eyebrow="About page" title="CEO message">
+                <CollapsibleSection eyebrow="5. CEO & Team" title="CEO message">
                   <CeoMessageFields value={draft.sections.ceo_message} onChange={(value) => updateSection("ceo_message", value)} />
                 </CollapsibleSection>
-                <CollapsibleSection eyebrow="About page" title="Team">
+                <CollapsibleSection eyebrow="6. CEO & Team" title="Team">
                   <TeamFields value={draft.sections.team} onChange={(value) => updateSection("team", value)} />
                 </CollapsibleSection>
-                <CollapsibleSection eyebrow="About page" title="Languages">
+
+                <p className="pt-4 text-[10px] font-bold uppercase tracking-[0.16em] text-amber-600">Not shown on the live page yet</p>
+                <CollapsibleSection eyebrow="Not wired to the page" title="Experience">
+                  <BodySectionFields value={draft.sections.experience} onChange={(value) => updateSection("experience", value)} />
+                </CollapsibleSection>
+                <CollapsibleSection eyebrow="Not wired to the page" title="Highlights">
+                  <HighlightsFields value={draft.sections.highlights} onChange={(value) => updateSection("highlights", value)} />
+                </CollapsibleSection>
+                <CollapsibleSection eyebrow="Not wired to the page" title="Services summary">
+                  <ListFields value={draft.sections.services_summary} onChange={(value) => updateSection("services_summary", value)} itemLabel="Service" />
+                </CollapsibleSection>
+                <CollapsibleSection eyebrow="Not wired to the page" title="Languages">
                   <ListFields value={draft.sections.languages} onChange={(value) => updateSection("languages", value)} itemLabel="Language" />
                 </CollapsibleSection>
-                <CollapsibleSection eyebrow="About page" title="Work process">
+                <CollapsibleSection eyebrow="Not wired to the page" title="Work process">
                   <BodySectionFields value={draft.sections.work_process} onChange={(value) => updateSection("work_process", value)} />
                 </CollapsibleSection>
               </fieldset>

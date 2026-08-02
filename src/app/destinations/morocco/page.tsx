@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, ChevronRight, Compass, Mountain, Building2 } from 'lucide-react';
+import { MapPin, ChevronRight, Waves, Building2 } from 'lucide-react';
 import Image from 'next/image';
 import Footer from "@/components/Footer";
 import { trackDestinationView } from '@/lib/analytics';
@@ -26,30 +26,14 @@ const defaultMoroccoData = [
     ]
   },
   {
-    id: "atlas-mountains",
-    name: "ATLAS MOUNTAINS",
-    icon: Mountain,
-    desc: "Just a short drive from the vibrant cities lies the serene majesty of the Atlas Mountains. Perfect for exclusive corporate retreats and VIP leisure, offering breathtaking valleys, authentic Berber villages, and luxury eco-lodges that blend seamlessly with nature.",
-    // TODO: no photograph assets exist for the Atlas Mountains yet — add real ones once available.
+    id: "agadir",
+    slug: "agadir",
+    name: "AGADIR",
+    icon: Waves,
+    desc: "Agadir is included in the official Morocco destination content.",
+    // TODO: no photograph assets or attraction details exist for Agadir yet — add real ones once available.
     mainImg: "",
-    places: [
-      { name: "Luxury Eco-Lodges", desc: "Unwind in high-end mountain retreats offering panoramic views, premium spa services, and absolute tranquility away from the city.", img: "" },
-      { name: "Ourika Valley", desc: "A stunning valley offering exclusive guided excursions, pristine waterfalls, and a chance to experience the authentic lifestyle of the Berber people.", img: "" },
-      { name: "Mount Toubkal", desc: "The highest peak in North Africa. We organize bespoke, fully-serviced hiking and climbing expeditions for the adventurous elite.", img: "" }
-    ]
-  },
-  {
-    id: "sahara",
-    name: "THE SAHARA DESERT",
-    icon: Compass,
-    desc: "A journey into the endless golden dunes. We redefine desert exploration by providing ultra-luxury glamping experiences. Imagine dining under a canopy of stars with world-class service, private nomadic tents, and VIP mobility across the majestic Sahara.",
-    // TODO: no photograph assets exist for the Sahara yet — add real ones once available.
-    mainImg: "",
-    places: [
-      { name: "Luxury Glamping", desc: "Bespoke desert camps featuring king-size beds, en-suite facilities, and gourmet dining, ensuring 5-star comfort in the heart of the dunes.", img: "" },
-      { name: "Merzouga Dunes", desc: "Famous for the towering Erg Chebbi dunes. Experience private sunset camel treks and exclusive 4x4 dune bashing adventures.", img: "" },
-      { name: "Ait Benhaddou", desc: "A historic fortified village (Ksar) and UNESCO World Heritage site, famous as a backdrop for numerous Hollywood masterpieces.", img: "" }
-    ]
+    places: []
   }
 ];
 

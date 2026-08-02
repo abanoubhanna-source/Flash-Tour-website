@@ -12,6 +12,7 @@ type AboutTimelineEntry = {
   year: string;
   title: string;
   desc: string;
+  img?: string;
 };
 
 type AboutContent = {
@@ -174,8 +175,19 @@ export default function AboutPage() {
               const isEven = index % 2 === 0;
               return (
                 <div key={item.year} className={`flex flex-col md:flex-row items-center justify-between w-full ${isEven ? 'md:flex-row-reverse' : ''}`}>
-                  <div className="hidden md:block w-5/12"></div>
-                  
+                  <div className="hidden md:block w-5/12">
+                    {item.img && (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true, margin: "-100px" }}
+                        className="relative h-64 w-full overflow-hidden rounded-[1.5rem] shadow-xl"
+                      >
+                        <Image src={item.img} alt={item.title} fill sizes="41vw" className="object-cover" />
+                      </motion.div>
+                    )}
+                  </div>
+
                   <div className="absolute left-6 md:left-1/2 -translate-x-1/2 flex items-center justify-center w-8 h-8 rounded-full border-4 border-white bg-teal-700 shadow-lg z-20"></div>
 
                   <motion.div 
