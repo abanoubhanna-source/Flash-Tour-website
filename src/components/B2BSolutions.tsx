@@ -5,14 +5,18 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Building2, Globe2, Car, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import type { HomeEnterpriseSolutionsData } from '@/lib/cms/pages/schema';
 
 type ServiceSummary = {
   title: string;
   desc: string;
 };
 
-export default function B2BSolutions() {
+type Props = { content?: HomeEnterpriseSolutionsData };
+
+export default function B2BSolutions({ content }: Props) {
   const [services, setServices] = useState<ServiceSummary[]>([]);
+  const ctaLabel = content?.ctaLabel || "Explore Services";
 
   useEffect(() => {
     fetch('/api/services')
@@ -36,10 +40,13 @@ export default function B2BSolutions() {
         {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-brand-navy font-en mb-4 tracking-tight">
-            Enterprise <span className="text-brand-gold">Solutions</span>
+            {(() => {
+              const words = (content?.heading || "Enterprise Solutions").split(" ");
+              return <>{words.slice(0, -1).join(" ")} <span className="text-brand-gold">{words.slice(-1).join(" ")}</span></>;
+            })()}
           </h2>
           <p className="text-slate-500 font-en text-lg max-w-2xl mx-auto">
-            Tailored operational capabilities for global travel agencies, event organizers, and corporate entities seeking flawless execution.
+            {content?.intro || "Tailored operational capabilities for global travel agencies, event organizers, and corporate entities seeking flawless execution."}
           </p>
         </div>
 
@@ -55,7 +62,7 @@ export default function B2BSolutions() {
               {displayServices[0]?.desc}
             </p>
             <Link href="/services" className="text-brand-teal font-bold font-en flex items-center gap-2 group-hover:translate-x-2 transition-transform">
-              Explore Services <ArrowRight className="w-5 h-5"/>
+              {ctaLabel} <ArrowRight className="w-5 h-5"/>
             </Link>
           </motion.div>
 
@@ -69,7 +76,7 @@ export default function B2BSolutions() {
                 {displayServices[1]?.desc}
               </p>
               <Link href="/services" className="text-brand-gold font-bold font-en flex items-center gap-2 hover:translate-x-2 transition-transform">
-                View Case Studies <ArrowRight className="w-5 h-5"/>
+                {ctaLabel} <ArrowRight className="w-5 h-5"/>
               </Link>
             </div>
           </motion.div>
@@ -83,7 +90,7 @@ export default function B2BSolutions() {
               {displayServices[2]?.desc}
             </p>
             <Link href="/services" className="text-brand-teal font-bold font-en flex items-center gap-2 group-hover:translate-x-2 transition-transform">
-              Our Fleet Assets <ArrowRight className="w-5 h-5"/>
+              {ctaLabel} <ArrowRight className="w-5 h-5"/>
             </Link>
           </motion.div>
 

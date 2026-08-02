@@ -34,7 +34,9 @@ import { MediaPicker } from "@/components/cms/media-picker";
 import type {
   HomeCertificationData,
   HomeMapLocationData,
+  HomeEnterpriseSolutionsData,
   HomeMapSectionData,
+  HomeOwnedHospitalityData,
   HomeStatItemData,
   HomeStatsSectionData,
   HospitalityRegionCardData,
@@ -323,6 +325,35 @@ function HospitalityRegionsEditor({ value, onChange, canUpload }: { value: Hospi
           </details>
         ))}
       </div>
+    </CollapsibleSection>
+  );
+}
+
+function HomeEnterpriseSolutionsEditor({ value, onChange }: { value: HomeEnterpriseSolutionsData; onChange: (value: HomeEnterpriseSolutionsData) => void }) {
+  return (
+    <CollapsibleSection eyebrow="Home page" title="Enterprise Solutions" description="The heading, intro, and unified button label for the 3 service cards shown below the Home hero. The cards themselves pull the first 3 published services.">
+      <label className="block text-xs font-bold text-slate-700">Section heading
+        <input value={value.heading} onChange={(event) => onChange({ ...value, heading: event.target.value })} placeholder="Enterprise Solutions" className="mt-2 h-11 w-full rounded-xl border px-3.5 text-sm" />
+      </label>
+      <label className="mt-5 block text-xs font-bold text-slate-700">Intro paragraph
+        <textarea value={value.intro} onChange={(event) => onChange({ ...value, intro: event.target.value })} rows={2} className="mt-2 w-full rounded-xl border px-3 py-2 text-sm" />
+      </label>
+      <label className="mt-5 block text-xs font-bold text-slate-700">Card button label <span className="font-normal text-slate-400">(shown on all 3 cards)</span>
+        <input value={value.ctaLabel} onChange={(event) => onChange({ ...value, ctaLabel: event.target.value })} placeholder="Explore Services" className="mt-2 h-11 w-full rounded-xl border px-3.5 text-sm" />
+      </label>
+    </CollapsibleSection>
+  );
+}
+
+function HomeOwnedHospitalityEditor({ value, onChange }: { value: HomeOwnedHospitalityData; onChange: (value: HomeOwnedHospitalityData) => void }) {
+  return (
+    <CollapsibleSection eyebrow="Home page" title="Owned Hospitality" description="The heading and intro above the 3 featured brand cards. The cards themselves pull the first 3 published brands.">
+      <label className="block text-xs font-bold text-slate-700">Section heading
+        <input value={value.heading} onChange={(event) => onChange({ ...value, heading: event.target.value })} placeholder="Owned Hospitality" className="mt-2 h-11 w-full rounded-xl border px-3.5 text-sm" />
+      </label>
+      <label className="mt-5 block text-xs font-bold text-slate-700">Intro paragraph
+        <textarea value={value.intro} onChange={(event) => onChange({ ...value, intro: event.target.value })} rows={2} className="mt-2 w-full rounded-xl border px-3 py-2 text-sm" />
+      </label>
     </CollapsibleSection>
   );
 }
@@ -652,6 +683,8 @@ export function PageEditor({ page, canEdit, canPublish, canUpload, embedded = fa
                   {page.path === "/" && <HomeSlidesEditor slides={draft.hero.slides.length === 4 ? draft.hero.slides : homeSlideDefaults} onChange={(slides) => updateHero("slides", slides)} canUpload={canUpload} />}
                   {page.path === "/" && <HomeStatsEditor value={draft.hero.stats} onChange={(stats) => updateHero("stats", stats)} canUpload={canUpload} />}
                   {page.path === "/" && <HomeMapEditor value={draft.hero.map} onChange={(map) => updateHero("map", map)} />}
+                  {page.path === "/" && <HomeOwnedHospitalityEditor value={draft.hero.ownedHospitality} onChange={(ownedHospitality) => updateHero("ownedHospitality", ownedHospitality)} />}
+                  {page.path === "/" && <HomeEnterpriseSolutionsEditor value={draft.hero.enterpriseSolutions} onChange={(enterpriseSolutions) => updateHero("enterpriseSolutions", enterpriseSolutions)} />}
                   {page.path === "/hospitality" && <HospitalityRegionsEditor value={draft.hero.hospitalityRegions} onChange={(hospitalityRegions) => updateHero("hospitalityRegions", hospitalityRegions)} canUpload={canUpload} />}
                   {page.path === "/hospitality" && <HospitalityTransportationEditor value={draft.hero.transportation} onChange={(transportation) => updateHero("transportation", transportation)} canUpload={canUpload} />}
                 </fieldset>

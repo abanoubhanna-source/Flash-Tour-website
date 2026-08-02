@@ -144,6 +144,21 @@ const defaultHospitalityRegions = [
   },
 ];
 
+export const homeEnterpriseSolutionsSchema = z.object({
+  heading: z.string().trim().max(140).default("Enterprise Solutions"),
+  intro: z.string().trim().max(400).default(
+    "Tailored operational capabilities for global travel agencies, event organizers, and corporate entities seeking flawless execution.",
+  ),
+  ctaLabel: z.string().trim().max(80).default("Explore Services"),
+});
+
+export const homeOwnedHospitalitySchema = z.object({
+  heading: z.string().trim().max(140).default("Owned Hospitality"),
+  intro: z.string().trim().max(400).default(
+    "By owning our supply chain, we guarantee our B2B partners priority allocation, strict quality control, and unbeatable contracted rates.",
+  ),
+});
+
 export const pageHeroSchema = z.object({
   eyebrow: z.string().trim().max(120).default(""),
   title: z.string().trim().min(1, "Page title is required.").max(140),
@@ -180,6 +195,15 @@ export const pageHeroSchema = z.object({
     image: { assetId: null, url: "/images/fleet-showcase.jpg", alt: "Flash Group VIP Fleet" },
   }),
   hospitalityRegions: z.array(hospitalityRegionCardSchema).length(5).default(defaultHospitalityRegions),
+  enterpriseSolutions: homeEnterpriseSolutionsSchema.default({
+    heading: "Enterprise Solutions",
+    intro: "Tailored operational capabilities for global travel agencies, event organizers, and corporate entities seeking flawless execution.",
+    ctaLabel: "Explore Services",
+  }),
+  ownedHospitality: homeOwnedHospitalitySchema.default({
+    heading: "Owned Hospitality",
+    intro: "By owning our supply chain, we guarantee our B2B partners priority allocation, strict quality control, and unbeatable contracted rates.",
+  }),
 });
 
 export const pageSeoSchema = z.object({
@@ -212,6 +236,8 @@ export type HomeMapSectionData = z.infer<typeof homeMapSectionSchema>;
 export type HomeMapLocationData = z.infer<typeof homeMapLocationSchema>;
 export type HospitalityTransportationSectionData = z.infer<typeof hospitalityTransportationSectionSchema>;
 export type HospitalityRegionCardData = z.infer<typeof hospitalityRegionCardSchema>;
+export type HomeEnterpriseSolutionsData = z.infer<typeof homeEnterpriseSolutionsSchema>;
+export type HomeOwnedHospitalityData = z.infer<typeof homeOwnedHospitalitySchema>;
 
 export const defaultPageHero: PageHeroData = {
   eyebrow: "",
@@ -238,6 +264,15 @@ export const defaultPageHero: PageHeroData = {
     image: { assetId: null, url: "/images/fleet-showcase.jpg", alt: "Flash Group VIP Fleet" },
   },
   hospitalityRegions: defaultHospitalityRegions,
+  enterpriseSolutions: {
+    heading: "Enterprise Solutions",
+    intro: "Tailored operational capabilities for global travel agencies, event organizers, and corporate entities seeking flawless execution.",
+    ctaLabel: "Explore Services",
+  },
+  ownedHospitality: {
+    heading: "Owned Hospitality",
+    intro: "By owning our supply chain, we guarantee our B2B partners priority allocation, strict quality control, and unbeatable contracted rates.",
+  },
 };
 
 export const defaultPageSeo: PageSeoData = {

@@ -35,10 +35,10 @@ export default async function Home() {
       <InteractiveMap content={content?.hero.map} />
 
       {/* 5. Group Assets / Owned Hospitality */}
-      <HospitalityBrands />
+      <HospitalityBrands content={content?.hero.ownedHospitality} />
 
       {/* 6. Enterprise Solutions */}
-      <B2BSolutions />
+      <B2BSolutions content={content?.hero.enterpriseSolutions} />
 
       {/* 7. VIP Transportation */}
       <FleetSection />

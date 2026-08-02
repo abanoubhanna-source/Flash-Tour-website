@@ -4,6 +4,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Ship, Building2, Anchor, Palmtree, Building, type LucideIcon } from 'lucide-react';
+import type { HomeOwnedHospitalityData } from '@/lib/cms/pages/schema';
 
 const iconMap: Record<string, LucideIcon> = {
   Anchor: Anchor,
@@ -22,7 +23,9 @@ type HospitalityBrand = {
   description: string;
 };
 
-export default function HospitalityBrands() {
+type Props = { content?: HomeOwnedHospitalityData };
+
+export default function HospitalityBrands({ content }: Props) {
   const [brands, setBrands] = useState<HospitalityBrand[]>([]);
 
   useEffect(() => {
@@ -35,18 +38,21 @@ export default function HospitalityBrands() {
 
   // بناخد أول 3 براندات لعرضهم في الرئيسية
   const displayBrands = brands.slice(0, 3);
+  const headingWords = (content?.heading || "Owned Hospitality").split(" ");
+  const headingLead = headingWords.slice(0, -1).join(" ");
+  const headingAccent = headingWords.slice(-1).join(" ");
 
   return (
     <section className="w-full bg-white py-24 relative z-20">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
-        
+
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
           <div className="max-w-2xl">
             <h2 className="text-4xl md:text-5xl font-bold text-brand-navy font-en mb-4">
-              Owned <span className="text-brand-teal">Hospitality</span>
+              {headingLead} <span className="text-brand-teal">{headingAccent}</span>
             </h2>
             <p className="text-slate-500 font-en text-lg leading-relaxed">
-              By owning our supply chain, we guarantee our B2B partners priority allocation, strict quality control, and unbeatable contracted rates.
+              {content?.intro || "By owning our supply chain, we guarantee our B2B partners priority allocation, strict quality control, and unbeatable contracted rates."}
             </p>
           </div>
           <div className="hidden md:block">
