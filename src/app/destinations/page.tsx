@@ -63,8 +63,8 @@ const fallbackDestinations = [
     subtitle: "The Gateway to Africa",
     description: "Immerse yourself in the vibrant colors and rich traditions of Morocco. From the bustling souks of Marrakech to the serene Atlas Mountains, our operations deliver an authentic and luxurious North African experience.",
     highlights: ["Luxury Riads in Marrakech", "Atlas Mountains Excursions", "Sahara Desert Glamping", "Premium Airport Transfers"],
-    // TODO: no Morocco destination photograph exists in public/images yet — add one and set this field once available.
-    image: "",
+    // Temporary placeholder photo (Wikimedia Commons, CC-licensed) — replace via the dashboard once real photography is supplied. See public/images/destinations/morocco/CREDITS.md
+    image: "/images/destinations/morocco/hero-koutoubia-mosque.jpg",
     icon: "Compass"
   }
 ];

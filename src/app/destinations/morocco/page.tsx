@@ -18,12 +18,12 @@ const defaultMoroccoData = [
     name: "MARRAKECH",
     icon: Building2,
     desc: "Known as the 'Red City', Marrakech is a sensory masterpiece where ancient traditions meet modern luxury. From the bustling souks and the historic Medina to our exclusive, meticulously restored luxury Riads, we offer your elite clients an authentic yet highly sophisticated Moroccan experience.",
-    // TODO: no photograph assets exist for Marrakech yet — add real ones once available.
-    mainImg: "",
+    // Temporary placeholder photo (Wikimedia Commons, CC-licensed) — replace via the dashboard once real photography is supplied. See public/images/destinations/morocco/CREDITS.md
+    mainImg: "/images/destinations/morocco/marrakech-medina-rooftops.jpg",
     places: [
-      { name: "Luxury Riads", desc: "Experience ultimate privacy and authentic Moroccan hospitality in our curated selection of high-end Riads located in the heart of the Medina.", img: "" },
-      { name: "Jemaa el-Fnaa", desc: "The vibrant heartbeat of the city. A UNESCO Masterpiece of the Oral and Intangible Heritage of Humanity, offering an unforgettable cultural immersion.", img: "" },
-      { name: "Bahia Palace", desc: "A 19th-century palace reflecting the true essence of Islamic and Moroccan architectural brilliance, surrounded by lush, tranquil gardens.", img: "" }
+      { name: "Luxury Riads", desc: "Experience ultimate privacy and authentic Moroccan hospitality in our curated selection of high-end Riads located in the heart of the Medina.", img: "/images/destinations/morocco/marrakech-riad-interior.jpg" },
+      { name: "Jemaa el-Fnaa", desc: "The vibrant heartbeat of the city. A UNESCO Masterpiece of the Oral and Intangible Heritage of Humanity, offering an unforgettable cultural immersion.", img: "/images/destinations/morocco/marrakech-jemaa-el-fnaa.jpg" },
+      { name: "Bahia Palace", desc: "A 19th-century palace reflecting the true essence of Islamic and Moroccan architectural brilliance, surrounded by lush, tranquil gardens.", img: "/images/destinations/morocco/marrakech-bahia-palace.jpg" }
     ]
   },
   {
@@ -32,8 +32,8 @@ const defaultMoroccoData = [
     name: "AGADIR",
     icon: Waves,
     desc: "Agadir is included in the official Morocco destination content.",
-    // TODO: no photograph assets or attraction details exist for Agadir yet — add real ones once available.
-    mainImg: "",
+    // Temporary placeholder photo (Wikimedia Commons, CC-licensed) — replace via the dashboard once real photography is supplied. See public/images/destinations/morocco/CREDITS.md
+    mainImg: "/images/destinations/morocco/agadir-beach.jpg",
     places: []
   }
 ];
