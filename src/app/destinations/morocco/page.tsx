@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { MapPin, ChevronRight, Waves, Building2 } from 'lucide-react';
 import Image from 'next/image';
 import Footer from "@/components/Footer";
+import DestinationHospitalitySection from "@/components/destinations/DestinationHospitalitySection";
 import { trackDestinationView } from '@/lib/analytics';
 import { usePublishedDestination } from '@/lib/cms/destinations/use-published-destination';
 
@@ -200,6 +201,8 @@ export default function MoroccoDestinationPage() {
 
         </div>
       </section>
+
+      <DestinationHospitalitySection country="Morocco" />
 
       <Footer />
     </main>

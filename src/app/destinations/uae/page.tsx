@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { MapPin, ChevronRight, Building2, Landmark, Mountain, Waves, Library } from 'lucide-react';
 import Image from 'next/image';
 import Footer from "@/components/Footer";
+import DestinationHospitalitySection from "@/components/destinations/DestinationHospitalitySection";
 import { trackDestinationView } from '@/lib/analytics';
 import { usePublishedDestination } from '@/lib/cms/destinations/use-published-destination';
 
@@ -220,6 +221,8 @@ export default function UAEDestinationPage() {
 
         </div>
       </section>
+
+      <DestinationHospitalitySection country="United Arab Emirates" />
 
       <Footer />
     </main>
