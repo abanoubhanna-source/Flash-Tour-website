@@ -28,11 +28,13 @@ import {
 } from "@/app/dashboard/pages/actions";
 import type {
   AboutBodySectionData,
+  AboutCeoMessageData,
   AboutExpansionJourneyData,
   AboutHeroIntroData,
   AboutHighlightsData,
   AboutListData,
   AboutSectionsData,
+  AboutTeamData,
 } from "@/lib/cms/pages/about-schema";
 import type { CmsAboutPageEditorData } from "@/lib/cms/pages/types";
 import type { PageSeoData } from "@/lib/cms/pages/schema";
@@ -143,8 +145,8 @@ function ListFields({ value, onChange, itemLabel }: { value: AboutListData; onCh
 }
 
 function ExpansionJourneyFields({ value, onChange }: { value: AboutExpansionJourneyData; onChange: (value: AboutExpansionJourneyData) => void }) {
-  const update = (index: number, milestone: { year: number; brand: string; country: string }) => onChange({ ...value, milestones: value.milestones.map((current, i) => (i === index ? milestone : current)) });
-  const add = () => onChange({ ...value, milestones: [...value.milestones, { year: new Date().getFullYear(), brand: "", country: "" }] });
+  const update = (index: number, milestone: AboutExpansionJourneyData["milestones"][number]) => onChange({ ...value, milestones: value.milestones.map((current, i) => (i === index ? milestone : current)) });
+  const add = () => onChange({ ...value, milestones: [...value.milestones, { year: new Date().getFullYear(), brand: "", country: "", title: "", desc: "" }] });
   const remove = (index: number) => onChange({ ...value, milestones: value.milestones.filter((_, i) => i !== index) });
   return (
     <div className="space-y-4">
@@ -160,15 +162,59 @@ function ExpansionJourneyFields({ value, onChange }: { value: AboutExpansionJour
       <div className="space-y-2">
         <p className="text-xs font-bold text-slate-700">Milestones</p>
         {value.milestones.map((milestone, index) => (
-          <div key={index} className="grid grid-cols-[80px_1fr_1fr_auto] items-center gap-2 rounded-xl border border-slate-200 p-3">
-            <input aria-label={`Milestone ${index + 1} year`} type="number" value={milestone.year} onChange={(event) => update(index, { ...milestone, year: Number(event.target.value) })} className="h-10 rounded-xl border px-2 text-sm" />
-            <input aria-label={`Milestone ${index + 1} brand`} value={milestone.brand} onChange={(event) => update(index, { ...milestone, brand: event.target.value })} placeholder="Brand" className="h-10 rounded-xl border px-3 text-sm" />
-            <input aria-label={`Milestone ${index + 1} country`} value={milestone.country} onChange={(event) => update(index, { ...milestone, country: event.target.value })} placeholder="Country" className="h-10 rounded-xl border px-3 text-sm" />
-            <button type="button" aria-label={`Remove milestone ${index + 1}`} onClick={() => remove(index)} className="text-[10px] font-bold text-red-600">Remove</button>
+          <div key={index} className="space-y-2 rounded-xl border border-slate-200 p-3">
+            <div className="grid grid-cols-[80px_1fr_1fr_auto] items-center gap-2">
+              <input aria-label={`Milestone ${index + 1} year`} type="number" value={milestone.year} onChange={(event) => update(index, { ...milestone, year: Number(event.target.value) })} className="h-10 rounded-xl border px-2 text-sm" />
+              <input aria-label={`Milestone ${index + 1} brand`} value={milestone.brand} onChange={(event) => update(index, { ...milestone, brand: event.target.value })} placeholder="Brand" className="h-10 rounded-xl border px-3 text-sm" />
+              <input aria-label={`Milestone ${index + 1} country`} value={milestone.country} onChange={(event) => update(index, { ...milestone, country: event.target.value })} placeholder="Country" className="h-10 rounded-xl border px-3 text-sm" />
+              <button type="button" aria-label={`Remove milestone ${index + 1}`} onClick={() => remove(index)} className="text-[10px] font-bold text-red-600">Remove</button>
+            </div>
+            <input aria-label={`Milestone ${index + 1} title`} value={milestone.title} onChange={(event) => update(index, { ...milestone, title: event.target.value })} placeholder="Timeline title (e.g. THE FOUNDATION)" className="h-10 w-full rounded-xl border px-3 text-sm" />
+            <textarea aria-label={`Milestone ${index + 1} description`} value={milestone.desc} onChange={(event) => update(index, { ...milestone, desc: event.target.value })} placeholder="Timeline description" rows={2} className="w-full rounded-xl border px-3 py-2 text-sm" />
           </div>
         ))}
         <button type="button" onClick={add} className="w-full rounded-xl border border-dashed border-slate-300 py-2 text-xs font-bold text-slate-500 hover:bg-slate-50">+ Add milestone</button>
       </div>
+    </div>
+  );
+}
+
+function CeoMessageFields({ value, onChange }: { value: AboutCeoMessageData; onChange: (value: AboutCeoMessageData) => void }) {
+  return (
+    <div className="space-y-4">
+      <label className="block text-xs font-bold text-slate-700">Title
+        <input value={value.title} onChange={(event) => onChange({ ...value, title: event.target.value })} className="mt-2 h-11 w-full rounded-xl border px-3.5 text-sm" />
+      </label>
+      <label className="block text-xs font-bold text-slate-700">Quote body
+        <textarea value={value.body} onChange={(event) => onChange({ ...value, body: event.target.value })} rows={4} className="mt-2 w-full rounded-xl border px-3 py-2 text-sm" />
+      </label>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <label className="block text-xs font-bold text-slate-700">Director name
+          <input value={value.directorName} onChange={(event) => onChange({ ...value, directorName: event.target.value })} placeholder="Amgad Hassoun" className="mt-2 h-11 w-full rounded-xl border px-3.5 text-sm" />
+        </label>
+        <label className="block text-xs font-bold text-slate-700">Director title
+          <input value={value.directorTitle} onChange={(event) => onChange({ ...value, directorTitle: event.target.value })} placeholder="Chairman" className="mt-2 h-11 w-full rounded-xl border px-3.5 text-sm" />
+        </label>
+      </div>
+      <label className="block text-xs font-bold text-slate-700">Signature image URL
+        <input value={value.signatureImageUrl} onChange={(event) => onChange({ ...value, signatureImageUrl: event.target.value })} placeholder="/images/Signuter.png" className="mt-2 h-11 w-full rounded-xl border px-3.5 font-mono text-xs" />
+      </label>
+    </div>
+  );
+}
+
+function TeamFields({ value, onChange }: { value: AboutTeamData; onChange: (value: AboutTeamData) => void }) {
+  return (
+    <div className="space-y-4">
+      <label className="block text-xs font-bold text-slate-700">Title
+        <input value={value.title} onChange={(event) => onChange({ ...value, title: event.target.value })} className="mt-2 h-11 w-full rounded-xl border px-3.5 text-sm" />
+      </label>
+      <label className="block text-xs font-bold text-slate-700">Body
+        <textarea value={value.body} onChange={(event) => onChange({ ...value, body: event.target.value })} rows={4} className="mt-2 w-full rounded-xl border px-3 py-2 text-sm" />
+      </label>
+      <label className="block text-xs font-bold text-slate-700">Team stats <span className="font-normal text-slate-400">(e.g. 5,000+)</span>
+        <input value={value.stats} onChange={(event) => onChange({ ...value, stats: event.target.value })} placeholder="5,000+" className="mt-2 h-11 w-full rounded-xl border px-3.5 text-sm" />
+      </label>
     </div>
   );
 }
@@ -435,10 +481,10 @@ export function AboutPageEditor({ page, canEdit, canPublish }: AboutPageEditorPr
                   <ExpansionJourneyFields value={draft.sections.expansion_journey} onChange={(value) => updateSection("expansion_journey", value)} />
                 </CollapsibleSection>
                 <CollapsibleSection eyebrow="About page" title="CEO message">
-                  <BodySectionFields value={draft.sections.ceo_message} onChange={(value) => updateSection("ceo_message", value)} />
+                  <CeoMessageFields value={draft.sections.ceo_message} onChange={(value) => updateSection("ceo_message", value)} />
                 </CollapsibleSection>
                 <CollapsibleSection eyebrow="About page" title="Team">
-                  <BodySectionFields value={draft.sections.team} onChange={(value) => updateSection("team", value)} />
+                  <TeamFields value={draft.sections.team} onChange={(value) => updateSection("team", value)} />
                 </CollapsibleSection>
                 <CollapsibleSection eyebrow="About page" title="Languages">
                   <ListFields value={draft.sections.languages} onChange={(value) => updateSection("languages", value)} itemLabel="Language" />

@@ -72,7 +72,13 @@ export default function AboutPage() {
               <span className="h-px w-4 bg-brand-gold" /> {aboutData.hero.tag}
             </span>
             <h1 className="text-5xl md:text-7xl font-bold text-white font-en mb-6 tracking-tight uppercase drop-shadow-lg">
-              {aboutData.hero.title_part1.replace('Empire', '').trim()} <span className="text-brand-gold">Empire</span> <br /> {aboutData.hero.title_part2}
+              {(() => {
+                const words = aboutData.hero.title_part1.split(' ');
+                const lead = words.slice(0, -1).join(' ');
+                const accent = words.slice(-1).join(' ');
+                return <>{lead} <span className="text-brand-gold">{accent}</span></>;
+              })()}
+              {aboutData.hero.title_part2 && <> <br /> {aboutData.hero.title_part2}</>}
             </h1>
             <p className="text-lg md:text-xl text-slate-300 font-en leading-relaxed max-w-3xl mx-auto font-light drop-shadow-md">
               {aboutData.hero.desc}

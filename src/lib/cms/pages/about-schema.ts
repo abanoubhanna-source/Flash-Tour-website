@@ -30,6 +30,8 @@ export const aboutMilestoneSchema = z.object({
   year: z.coerce.number().int().min(1900).max(2100).default(2000),
   brand: z.string().trim().max(120).default(""),
   country: z.string().trim().max(120).default(""),
+  title: z.string().trim().max(140).default(""),
+  desc: z.string().trim().max(600).default(""),
 });
 
 export const aboutExpansionJourneySchema = z.object({
@@ -39,11 +41,27 @@ export const aboutExpansionJourneySchema = z.object({
   milestones: z.array(aboutMilestoneSchema).min(0).max(20).default([]),
 });
 
+export const aboutCeoMessageSchema = z.object({
+  title: z.string().trim().max(140).default(""),
+  body: z.string().trim().max(2000).default(""),
+  directorName: z.string().trim().max(120).default(""),
+  directorTitle: z.string().trim().max(120).default(""),
+  signatureImageUrl: z.string().trim().max(2000).default(""),
+});
+
+export const aboutTeamSchema = z.object({
+  title: z.string().trim().max(140).default(""),
+  body: z.string().trim().max(2000).default(""),
+  stats: z.string().trim().max(40).default(""),
+});
+
 const emptyBody = { title: "", body: "" };
 const emptyHeroIntro = { eyebrow: "", title: "", body: "" };
 const emptyHighlights = { title: "Highlights", items: [] };
 const emptyList = { title: "", items: [] };
 const emptyExpansionJourney = { title: "", subtitle: "", body: "", milestones: [] };
+const emptyCeoMessage = { title: "", body: "", directorName: "", directorTitle: "", signatureImageUrl: "" };
+const emptyTeam = { title: "", body: "", stats: "" };
 
 export const aboutSectionsSchema = z.object({
   hero_intro: aboutHeroIntroSchema.default(emptyHeroIntro),
@@ -53,8 +71,8 @@ export const aboutSectionsSchema = z.object({
   mission: aboutBodySectionSchema.default(emptyBody),
   services_summary: aboutListSchema.default(emptyList),
   expansion_journey: aboutExpansionJourneySchema.default(emptyExpansionJourney),
-  ceo_message: aboutBodySectionSchema.default(emptyBody),
-  team: aboutBodySectionSchema.default(emptyBody),
+  ceo_message: aboutCeoMessageSchema.default(emptyCeoMessage),
+  team: aboutTeamSchema.default(emptyTeam),
   languages: aboutListSchema.default(emptyList),
   work_process: aboutBodySectionSchema.default(emptyBody),
 });
@@ -64,6 +82,8 @@ export type AboutHeroIntroData = z.infer<typeof aboutHeroIntroSchema>;
 export type AboutHighlightsData = z.infer<typeof aboutHighlightsSchema>;
 export type AboutListData = z.infer<typeof aboutListSchema>;
 export type AboutExpansionJourneyData = z.infer<typeof aboutExpansionJourneySchema>;
+export type AboutCeoMessageData = z.infer<typeof aboutCeoMessageSchema>;
+export type AboutTeamData = z.infer<typeof aboutTeamSchema>;
 export type AboutSectionsData = z.infer<typeof aboutSectionsSchema>;
 
 export const aboutSectionKeys = [
@@ -88,8 +108,8 @@ export const defaultAboutSections: AboutSectionsData = {
   mission: emptyBody,
   services_summary: emptyList,
   expansion_journey: emptyExpansionJourney,
-  ceo_message: emptyBody,
-  team: emptyBody,
+  ceo_message: emptyCeoMessage,
+  team: emptyTeam,
   languages: emptyList,
   work_process: emptyBody,
 };
