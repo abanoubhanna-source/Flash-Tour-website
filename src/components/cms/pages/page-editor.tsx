@@ -412,6 +412,23 @@ function HomeOwnedHospitalityEditor({ value, onChange, canUpload }: { value: Hom
   );
 }
 
+function HospitalityStatsEditor({ value, onChange }: { value: HomeStatItemData[]; onChange: (value: HomeStatItemData[]) => void }) {
+  const updateItem = (index: number, item: HomeStatItemData) => onChange(value.map((current, i) => (i === index ? item : current)));
+  return (
+    <CollapsibleSection eyebrow="Hospitality page" title="Stats bar" description="The 4 numbers shown on the floating bar at the bottom of the Hospitality hero.">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {value.map((item, index) => (
+          <div key={index} className="rounded-2xl border border-slate-200 p-3">
+            <p className="text-[10px] font-bold text-slate-500">Stat {index + 1}</p>
+            <input aria-label={`Stat ${index + 1} number`} value={item.number} onChange={(event) => updateItem(index, { ...item, number: event.target.value })} placeholder="4" className="mt-2 h-10 w-full rounded-xl border px-3 text-sm" />
+            <input aria-label={`Stat ${index + 1} label`} value={item.label} onChange={(event) => updateItem(index, { ...item, label: event.target.value })} placeholder="Global Regions" className="mt-2 h-10 w-full rounded-xl border px-3 text-sm" />
+          </div>
+        ))}
+      </div>
+    </CollapsibleSection>
+  );
+}
+
 function formatRevisionDate(value: string) {
   return new Intl.DateTimeFormat("en", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
 }
@@ -749,6 +766,7 @@ export function PageEditor({ page, canEdit, canPublish, canUpload, embedded = fa
                       description="The VIP Transportation section shown on the Home page, above the footer."
                     />
                   )}
+                  {page.path === "/hospitality" && <HospitalityStatsEditor value={draft.hero.hospitalityStats} onChange={(hospitalityStats) => updateHero("hospitalityStats", hospitalityStats)} />}
                   {page.path === "/hospitality" && <HospitalityRegionsEditor value={draft.hero.hospitalityRegions} onChange={(hospitalityRegions) => updateHero("hospitalityRegions", hospitalityRegions)} canUpload={canUpload} />}
                   {page.path === "/hospitality" && <HospitalityTransportationEditor value={draft.hero.transportation} onChange={(transportation) => updateHero("transportation", transportation)} canUpload={canUpload} />}
                 </fieldset>

@@ -236,6 +236,12 @@ export const pageHeroSchema = z.object({
     image: { assetId: null, url: "/images/fleet-showcase.jpg", alt: "Flash Group VIP Fleet" },
   }),
   hospitalityRegions: z.array(hospitalityRegionCardSchema).length(5).default(defaultHospitalityRegions),
+  hospitalityStats: z.array(homeStatItemSchema).length(4).default([
+    { number: "4", label: "Global Regions" },
+    { number: "15+", label: "Owned Properties" },
+    { number: "7", label: "Luxury Cruises" },
+    { number: "1", label: "Unmatched Standard" },
+  ]),
   enterpriseSolutions: homeEnterpriseSolutionsSchema.default({
     heading: "Enterprise Solutions",
     intro: "Tailored operational capabilities for global travel agencies, event organizers, and corporate entities seeking flawless execution.",
@@ -322,6 +328,12 @@ export const defaultPageHero: PageHeroData = {
     image: { assetId: null, url: "/images/fleet-showcase.jpg", alt: "Flash Group VIP Fleet" },
   },
   hospitalityRegions: defaultHospitalityRegions,
+  hospitalityStats: [
+    { number: "4", label: "Global Regions" },
+    { number: "15+", label: "Owned Properties" },
+    { number: "7", label: "Luxury Cruises" },
+    { number: "1", label: "Unmatched Standard" },
+  ],
   enterpriseSolutions: {
     heading: "Enterprise Solutions",
     intro: "Tailored operational capabilities for global travel agencies, event organizers, and corporate entities seeking flawless execution.",

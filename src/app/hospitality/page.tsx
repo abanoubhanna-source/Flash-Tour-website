@@ -78,26 +78,21 @@ export default function HospitalityPage() {
         </div>
 
         {/* Floating Quick Stats Bar */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }}
           className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[90%] max-w-4xl bg-brand-navy-deep/80 border border-white/10 backdrop-blur-md rounded-2xl p-6 z-30 flex flex-wrap md:flex-nowrap justify-between gap-6 shadow-2xl"
         >
-          <div className="text-left flex-1 border-r border-white/10 last:border-0 pr-4">
-            <div className="text-brand-gold text-3xl font-bold font-en mb-1">4</div>
-            <div className="text-slate-400 text-xs font-bold uppercase tracking-widest font-en">Global Regions</div>
-          </div>
-          <div className="text-left flex-1 border-r border-white/10 last:border-0 pr-4">
-            <div className="text-brand-gold text-3xl font-bold font-en mb-1">15+</div>
-            <div className="text-slate-400 text-xs font-bold uppercase tracking-widest font-en">Owned Properties</div>
-          </div>
-          <div className="text-left flex-1 border-r border-white/10 last:border-0 pr-4 hidden md:block">
-            <div className="text-brand-gold text-3xl font-bold font-en mb-1">7</div>
-            <div className="text-slate-400 text-xs font-bold uppercase tracking-widest font-en">Luxury Cruises</div>
-          </div>
-          <div className="text-left flex-1">
-            <div className="text-brand-teal text-3xl font-bold font-en mb-1">1</div>
-            <div className="text-slate-400 text-xs font-bold uppercase tracking-widest font-en">Unmatched Standard</div>
-          </div>
+          {(cms?.hero?.hospitalityStats?.length ? cms.hero.hospitalityStats : [
+            { number: "4", label: "Global Regions" },
+            { number: "15+", label: "Owned Properties" },
+            { number: "7", label: "Luxury Cruises" },
+            { number: "1", label: "Unmatched Standard" },
+          ]).map((stat, index) => (
+            <div key={stat.label} className={`text-left flex-1 border-r border-white/10 last:border-0 pr-4 ${index === 2 ? "hidden md:block" : ""}`}>
+              <div className={`text-3xl font-bold font-en mb-1 ${index === 3 ? "text-brand-teal" : "text-brand-gold"}`}>{stat.number}</div>
+              <div className="text-slate-400 text-xs font-bold uppercase tracking-widest font-en">{stat.label}</div>
+            </div>
+          ))}
         </motion.div>
       </section>
 
