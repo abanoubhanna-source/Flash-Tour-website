@@ -75,7 +75,7 @@ export default function Navbar() {
               </AnimatePresence>
             </div>
 
-            <Link href="/partner-portal" className="font-en px-8 py-3 bg-slate-900 text-white rounded-full hover:bg-teal-700 transition-all shadow-lg font-medium">
+            <Link href="/contact" className="font-en px-8 py-3 bg-slate-900 text-white rounded-full hover:bg-teal-700 transition-all shadow-lg font-medium">
               Partner With Us
             </Link>
           </div>
@@ -103,7 +103,7 @@ export default function Navbar() {
             <Link href="/hospitality" onClick={() => setIsMobileMenuOpen(false)} className="text-slate-800 font-medium">Hospitality</Link>
             <Link href="/services" onClick={() => setIsMobileMenuOpen(false)} className="text-slate-800 font-medium">Services</Link>
             <Link href="/destinations" onClick={() => setIsMobileMenuOpen(false)} className="text-slate-800 font-medium">Destinations</Link>
-            <Link href="/partner-portal" onClick={() => setIsMobileMenuOpen(false)} className="text-center px-6 py-3 bg-slate-900 text-white rounded-full font-medium">Partner With Us</Link>
+            <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className="text-center px-6 py-3 bg-slate-900 text-white rounded-full font-medium">Partner With Us</Link>
           </motion.div>
         )}
       </AnimatePresence>

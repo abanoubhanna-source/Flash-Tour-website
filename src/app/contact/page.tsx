@@ -2,8 +2,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { MapPin, Phone, Mail, Globe2, SendHorizontal, Building2, ShieldCheck } from 'lucide-react';
+import { MapPin, Phone, Mail, Globe2, SendHorizontal, Building2, ShieldCheck, ArrowUpRight } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import Footer from "@/components/Footer";
 import { trackContactFormSubmit, trackEmailClick } from '@/lib/analytics';
 import { usePublishedPage } from "@/lib/cms/pages/use-published-page";
@@ -125,6 +126,11 @@ export default function ContactPage() {
                     );
                   })}
                 </div>
+
+                <Link href="/partner-portal" className="mt-10 inline-flex items-center gap-2 text-sm font-bold font-en text-teal-400 hover:text-white transition-colors">
+                  Looking for a full B2B proposal? Access the Partner Portal
+                  <ArrowUpRight className="w-4 h-4" />
+                </Link>
               </div>
             </div>
 
