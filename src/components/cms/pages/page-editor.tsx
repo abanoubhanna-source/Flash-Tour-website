@@ -37,6 +37,7 @@ import type {
   HomeMapSectionData,
   HomeStatItemData,
   HomeStatsSectionData,
+  HospitalityRegionCardData,
   HospitalityTransportationSectionData,
   PageDraftData,
   PageHeroData,
@@ -262,6 +263,65 @@ function HospitalityTransportationEditor({ value, onChange, canUpload }: { value
           canUpload={canUpload}
           onChange={(image) => onChange({ ...value, image: { assetId: image.assetId ?? value.image.assetId, url: image.url, alt: image.alt ?? value.image.alt } })}
         />
+      </div>
+    </CollapsibleSection>
+  );
+}
+
+const hospitalityRegionIcons = ["Ship", "Waves", "Palmtree", "Map", "Building2"] as const;
+
+function HospitalityRegionsEditor({ value, onChange, canUpload }: { value: HospitalityRegionCardData[]; onChange: (value: HospitalityRegionCardData[]) => void; canUpload: boolean }) {
+  const updateRegion = (index: number, region: HospitalityRegionCardData) => onChange(value.map((current, i) => (i === index ? region : current)));
+  const updateFeature = (regionIndex: number, featureIndex: number, text: string) => {
+    const region = value[regionIndex];
+    updateRegion(regionIndex, { ...region, features: region.features.map((current, i) => (i === featureIndex ? text : current)) });
+  };
+  const addFeature = (regionIndex: number) => {
+    const region = value[regionIndex];
+    updateRegion(regionIndex, { ...region, features: [...region.features, ""] });
+  };
+  const removeFeature = (regionIndex: number, featureIndex: number) => {
+    const region = value[regionIndex];
+    updateRegion(regionIndex, { ...region, features: region.features.filter((_, i) => i !== featureIndex) });
+  };
+
+  return (
+    <CollapsibleSection eyebrow="Hospitality page" title="Region cards" description="The five region cards on the main Hospitality page, each linking to its own deep-dive page. Cards can't be added or removed since each links to a fixed page.">
+      <div className="space-y-3">
+        {value.map((region, index) => (
+          <details key={region.id} className="rounded-2xl border border-slate-200 p-4" open={index === 0}>
+            <summary className="cursor-pointer text-xs font-bold text-slate-700 select-none">{region.tag || `Region ${index + 1}`} <span className="font-mono font-normal text-slate-400">{region.link}</span></summary>
+            <div className="mt-4 space-y-3">
+              <div className="grid gap-3 sm:grid-cols-2">
+                <input aria-label={`Region ${index + 1} tag`} value={region.tag} onChange={(event) => updateRegion(index, { ...region, tag: event.target.value })} placeholder="THE NILE RIVER" className="h-10 rounded-xl border px-3 text-sm" />
+                <select aria-label={`Region ${index + 1} icon`} value={region.icon} onChange={(event) => updateRegion(index, { ...region, icon: event.target.value as HospitalityRegionCardData["icon"] })} className="h-10 rounded-xl border px-3 text-sm">
+                  {hospitalityRegionIcons.map((icon) => (
+                    <option key={icon} value={icon}>{icon}</option>
+                  ))}
+                </select>
+              </div>
+              <input aria-label={`Region ${index + 1} title`} value={region.title} onChange={(event) => updateRegion(index, { ...region, title: event.target.value })} placeholder="The River Fleet" className="h-10 w-full rounded-xl border px-3 text-sm" />
+              <input aria-label={`Region ${index + 1} subtitle`} value={region.subtitle} onChange={(event) => updateRegion(index, { ...region, subtitle: event.target.value })} placeholder="Sailing the Nile in Absolute Luxury" className="h-10 w-full rounded-xl border px-3 text-sm" />
+              <textarea aria-label={`Region ${index + 1} description`} value={region.desc} onChange={(event) => updateRegion(index, { ...region, desc: event.target.value })} rows={3} className="w-full rounded-xl border px-3 py-2 text-sm" />
+              <div className="space-y-2">
+                <p className="text-[11px] font-bold text-slate-600">Features</p>
+                {region.features.map((feature, featureIndex) => (
+                  <div key={featureIndex} className="flex items-center gap-2">
+                    <input aria-label={`Region ${index + 1} feature ${featureIndex + 1}`} value={feature} onChange={(event) => updateFeature(index, featureIndex, event.target.value)} className="h-10 flex-1 rounded-xl border px-3 text-sm" />
+                    <button type="button" aria-label={`Remove region ${index + 1} feature ${featureIndex + 1}`} onClick={() => removeFeature(index, featureIndex)} className="text-[10px] font-bold text-red-600">Remove</button>
+                  </div>
+                ))}
+                <button type="button" onClick={() => addFeature(index)} className="w-full rounded-xl border border-dashed border-slate-300 py-2 text-xs font-bold text-slate-500 hover:bg-slate-50">+ Add feature</button>
+              </div>
+              <MediaPicker
+                label="Region image"
+                value={region.image}
+                canUpload={canUpload}
+                onChange={(image) => updateRegion(index, { ...region, image: { assetId: image.assetId ?? region.image.assetId, url: image.url, alt: image.alt ?? region.image.alt } })}
+              />
+            </div>
+          </details>
+        ))}
       </div>
     </CollapsibleSection>
   );
@@ -592,6 +652,7 @@ export function PageEditor({ page, canEdit, canPublish, canUpload, embedded = fa
                   {page.path === "/" && <HomeSlidesEditor slides={draft.hero.slides.length === 4 ? draft.hero.slides : homeSlideDefaults} onChange={(slides) => updateHero("slides", slides)} canUpload={canUpload} />}
                   {page.path === "/" && <HomeStatsEditor value={draft.hero.stats} onChange={(stats) => updateHero("stats", stats)} canUpload={canUpload} />}
                   {page.path === "/" && <HomeMapEditor value={draft.hero.map} onChange={(map) => updateHero("map", map)} />}
+                  {page.path === "/hospitality" && <HospitalityRegionsEditor value={draft.hero.hospitalityRegions} onChange={(hospitalityRegions) => updateHero("hospitalityRegions", hospitalityRegions)} canUpload={canUpload} />}
                   {page.path === "/hospitality" && <HospitalityTransportationEditor value={draft.hero.transportation} onChange={(transportation) => updateHero("transportation", transportation)} canUpload={canUpload} />}
                 </fieldset>
               </div>
