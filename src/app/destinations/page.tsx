@@ -9,7 +9,7 @@ import Link from 'next/link';
 import Footer from "@/components/Footer";
 import { RichText } from "@/components/content/rich-text";
 import { usePublishedPage } from "@/lib/cms/pages/use-published-page";
-type PublicDestination={id:string;name:string;subtitle:string;description:string;highlights:string[];image:string;icon:string};
+type PublicDestination={id:string;slug:string;name:string;subtitle:string;description:string;highlights:string[];image:string;icon:string};
 
 // قاموس الأيقونات
 const iconMap: Record<string, React.ComponentType<{className?:string}>> = {
@@ -23,6 +23,7 @@ const iconMap: Record<string, React.ComponentType<{className?:string}>> = {
 const fallbackDestinations = [
   {
     id: "egypt",
+    slug: "egypt",
     name: "Egypt",
     subtitle: "The Crown Jewel of History",
     description: "Experience more than 7,000 years of living history. From the timeless majesty of the Pyramids to the pristine shores of the Red Sea and the historic waters of the Nile, our Egyptian operations are the beating heart of Flash Group.",
@@ -32,6 +33,7 @@ const fallbackDestinations = [
   },
   {
     id: "uae",
+    slug: "uae",
     name: "United Arab Emirates",
     subtitle: "Where Luxury Knows No Bounds",
     description: "Our UAE division caters to the most discerning travelers. We seamlessly blend ultra-modern luxury with authentic Arabian hospitality, offering exclusive access to VIP services, premium mobility, and bespoke experiences in Dubai and beyond.",
@@ -41,6 +43,7 @@ const fallbackDestinations = [
   },
   {
     id: "zanzibar",
+    slug: "zanzibar",
     name: "Zanzibar",
     subtitle: "The Pearl of the Indian Ocean",
     description: "Escape to a tropical paradise where white sandy beaches meet rich cultural heritage. Our Zanzibar operations deliver untouched nature paired with Flash Group’s signature 5-star standard of comfort and safety.",
@@ -50,6 +53,7 @@ const fallbackDestinations = [
   },
   {
     id: "italy",
+    slug: "italy",
     name: "Italy",
     subtitle: "The Essence of Sophistication",
     description: "Catering to the sophisticated European market, we bring our legacy of luxury to the Mediterranean. From the sweet life of Sicily to the glamour of San Remo and Sardinia, we operate 7 exclusive premium properties.",
@@ -59,6 +63,7 @@ const fallbackDestinations = [
   },
   {
     id: "morocco",
+    slug: "morocco",
     name: "Morocco",
     subtitle: "The Gateway to Africa",
     description: "Immerse yourself in the vibrant colors and rich traditions of Morocco. From the bustling souks of Marrakech to the serene Atlas Mountains, our operations deliver an authentic and luxurious North African experience.",
@@ -174,7 +179,7 @@ export default function DestinationsPage() {
                   </div>
 
                   <Link 
-                    href={`/destinations/${dest.id}`}
+                    href={`/destinations/${dest.slug}`}
                     className="w-fit group/btn flex items-center gap-3 text-white font-bold font-en hover:text-brand-gold transition-colors duration-300"
                   >
                     Discover {dest.name}
