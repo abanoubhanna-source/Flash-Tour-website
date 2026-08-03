@@ -17,9 +17,9 @@ export async function GET(request: NextRequest) {
     .map((entry) => ({ entry, data: publicData(entry) }))
     .filter(({ data }) => data.showcaseRegion === region)
     .map(({ entry, data }) => {
-      const locationParts = [data.location, data.region, data.country].filter(
+      const locationParts = [...new Set([data.location, data.region, data.country].filter(
         (part): part is string => typeof part === "string" && part.length > 0,
-      );
+      ))];
       const gallery = Array.isArray(data.gallery) ? data.gallery : [];
       const firstImage = gallery[0] && typeof gallery[0] === "object" ? (gallery[0] as { url?: unknown }).url : undefined;
       const specs: string[] = [];
