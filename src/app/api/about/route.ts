@@ -25,6 +25,9 @@ export async function GET() {
     languages: sections.languages.items.length
       ? { title: sections.languages.title || fallback.languages.title, items: sections.languages.items }
       : fallback.languages,
+    flawless_process: sections.flawless_process.items.length
+      ? { title: sections.flawless_process.title || fallback.flawless_process.title, items: sections.flawless_process.items }
+      : fallback.flawless_process,
     experience: sections.experience.body
       ? { title: sections.experience.title, body: sections.experience.body, bullets: sections.experience.bullets }
       : fallback.experience,

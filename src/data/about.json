@@ -15,6 +15,10 @@
     "title": "Languages",
     "items": ["Arabic", "English", "German", "French", "Russian", "Italian", "Dutch"]
   },
+  "flawless_process": {
+    "title": "The Flawless Process",
+    "items": ["Visa Processing", "Hotel Booking", "Airport Meet & Transfer", "VIP Transfer", "Guided Excursions", "Safe Journey Home"]
+  },
   "experience": {
     "title": "We Don't Just Plan Trips. We Own The Experience.",
     "body": "What sets Flash Group apart is our massive infrastructure. We own and operate our fleet, our cruises, and our hotels. This absolute control over the supply chain guarantees uncompromised 5-star quality at every touchpoint.",

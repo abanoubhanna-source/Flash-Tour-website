@@ -185,15 +185,6 @@ function ExpansionJourneyFields({ value, onChange, canUpload }: { value: AboutEx
   const remove = (index: number) => onChange({ ...value, milestones: value.milestones.filter((_, i) => i !== index) });
   return (
     <div className="space-y-4">
-      <label className="block text-xs font-bold text-slate-700">Title
-        <input value={value.title} onChange={(event) => onChange({ ...value, title: event.target.value })} className="mt-2 h-11 w-full rounded-xl border px-3.5 text-sm" />
-      </label>
-      <label className="block text-xs font-bold text-slate-700">Subtitle
-        <input value={value.subtitle} onChange={(event) => onChange({ ...value, subtitle: event.target.value })} className="mt-2 h-11 w-full rounded-xl border px-3.5 text-sm" />
-      </label>
-      <label className="block text-xs font-bold text-slate-700">Body
-        <textarea value={value.body} onChange={(event) => onChange({ ...value, body: event.target.value })} rows={3} className="mt-2 w-full rounded-xl border px-3 py-2 text-sm" />
-      </label>
       <div className="space-y-2">
         <p className="text-xs font-bold text-slate-700">Milestones</p>
         {value.milestones.map((milestone, index) => (
@@ -513,19 +504,22 @@ export function AboutPageEditor({ page, canEdit, canPublish, canUpload }: AboutP
                 <CollapsibleSection eyebrow="5. Services & Languages" title="Languages">
                   <ListFields value={draft.sections.languages} onChange={(value) => updateSection("languages", value)} itemLabel="Language" />
                 </CollapsibleSection>
-                <CollapsibleSection eyebrow="6. The Experience" title="Experience" description="Body paragraph plus the bullet list shown beside it.">
+                <CollapsibleSection eyebrow="6. The Flawless Process" title="Flawless process steps">
+                  <ListFields value={draft.sections.flawless_process} onChange={(value) => updateSection("flawless_process", value)} itemLabel="Step" />
+                </CollapsibleSection>
+                <CollapsibleSection eyebrow="7. The Experience" title="Experience" description="Body paragraph plus the bullet list shown beside it.">
                   <BodyWithBulletsFields value={draft.sections.experience} onChange={(value) => updateSection("experience", value)} />
                 </CollapsibleSection>
-                <CollapsibleSection eyebrow="7. The Evolution" title="Expansion journey (timeline)" description="Each milestone can have its own photo.">
+                <CollapsibleSection eyebrow="8. The Evolution" title="Expansion journey (timeline)" description="Each milestone can have its own photo.">
                   <ExpansionJourneyFields value={draft.sections.expansion_journey} onChange={(value) => updateSection("expansion_journey", value)} canUpload={canUpload} />
                 </CollapsibleSection>
-                <CollapsibleSection eyebrow="8. Operational Command Centers" title="Work process" description="Body paragraph plus the two bullet cards shown beside it.">
+                <CollapsibleSection eyebrow="9. Operational Command Centers" title="Work process" description="Body paragraph plus the two bullet cards shown beside it.">
                   <WorkProcessFields value={draft.sections.work_process} onChange={(value) => updateSection("work_process", value)} />
                 </CollapsibleSection>
-                <CollapsibleSection eyebrow="9. CEO & Team" title="CEO message">
+                <CollapsibleSection eyebrow="10. CEO & Team" title="CEO message">
                   <CeoMessageFields value={draft.sections.ceo_message} onChange={(value) => updateSection("ceo_message", value)} />
                 </CollapsibleSection>
-                <CollapsibleSection eyebrow="10. CEO & Team" title="Team">
+                <CollapsibleSection eyebrow="11. CEO & Team" title="Team">
                   <TeamFields value={draft.sections.team} onChange={(value) => updateSection("team", value)} />
                 </CollapsibleSection>
               </fieldset>
@@ -597,7 +591,7 @@ export function AboutPageEditor({ page, canEdit, canPublish, canUpload }: AboutP
           <div className="space-y-3 xl:sticky xl:top-0 rounded-[1.5rem] border border-slate-200/80 bg-white p-5 shadow-sm">
             <p className="text-xs font-bold text-slate-700">About this editor</p>
             <p className="text-xs leading-5 text-slate-500">
-              These 10 sections hold the About page&apos;s written content — bio, timeline, services, languages — in the same order they appear on the live page. Draft and publish here to update it.
+              These 11 sections hold the About page&apos;s written content — bio, timeline, services, languages — in the same order they appear on the live page. Draft and publish here to update it.
             </p>
           </div>
         </aside>

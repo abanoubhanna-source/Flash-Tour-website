@@ -51,9 +51,6 @@ export const aboutMilestoneSchema = z.object({
 });
 
 export const aboutExpansionJourneySchema = z.object({
-  title: z.string().trim().max(140).default(""),
-  subtitle: z.string().trim().max(200).default(""),
-  body: z.string().trim().max(2000).default(""),
   milestones: z.array(aboutMilestoneSchema).min(0).max(20).default([]),
 });
 
@@ -76,7 +73,7 @@ const emptyHeroIntro = { eyebrow: "", title: "", body: "" };
 const emptyBodyWithBullets = { title: "", body: "", bullets: [] };
 const emptyWorkProcess = { title: "", body: "", bullets: [] };
 const emptyList = { title: "", items: [] };
-const emptyExpansionJourney = { title: "", subtitle: "", body: "", milestones: [] };
+const emptyExpansionJourney = { milestones: [] };
 const emptyCeoMessage = { title: "", body: "", directorName: "", directorTitle: "", signatureImageUrl: "" };
 const emptyTeam = { title: "", body: "", stats: "" };
 
@@ -86,6 +83,7 @@ export const aboutSectionsSchema = z.object({
   mission: aboutBodySectionSchema.default(emptyBody),
   services_summary: aboutListSchema.default(emptyList),
   languages: aboutListSchema.default(emptyList),
+  flawless_process: aboutListSchema.default(emptyList),
   experience: aboutBodyWithBulletsSchema.default(emptyBodyWithBullets),
   expansion_journey: aboutExpansionJourneySchema.default(emptyExpansionJourney),
   work_process: aboutWorkProcessSchema.default(emptyWorkProcess),
@@ -110,6 +108,7 @@ export const aboutSectionKeys = [
   "mission",
   "services_summary",
   "languages",
+  "flawless_process",
   "experience",
   "expansion_journey",
   "work_process",
@@ -123,6 +122,7 @@ export const defaultAboutSections: AboutSectionsData = {
   mission: emptyBody,
   services_summary: emptyList,
   languages: emptyList,
+  flawless_process: emptyList,
   experience: emptyBodyWithBullets,
   expansion_journey: emptyExpansionJourney,
   work_process: emptyWorkProcess,

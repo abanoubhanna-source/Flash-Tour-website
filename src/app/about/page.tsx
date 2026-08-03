@@ -28,6 +28,7 @@ type AboutContent = {
   mission: string;
   services: { title: string; items: string[] };
   languages: { title: string; items: string[] };
+  flawless_process: { title: string; items: string[] };
   experience: { title: string; body: string; bullets: string[] };
   work_process: { title: string; body: string; bullets: AboutWorkProcessBullet[] };
   ceo_message: string;
@@ -165,7 +166,7 @@ export default function AboutPage() {
       )}
 
       {/* 4. The Flawless Process */}
-      <FlawlessProcess />
+      <FlawlessProcess title={aboutData.flawless_process.title} steps={aboutData.flawless_process.items} />
 
       {/* 5. Experience (Dynamic) */}
       <section className="w-full py-24 bg-slate-50 border-y border-slate-100">
