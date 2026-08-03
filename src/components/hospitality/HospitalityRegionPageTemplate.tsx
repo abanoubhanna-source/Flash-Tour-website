@@ -5,7 +5,8 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, ArrowUpRight, CheckCircle2, ShieldCheck, type LucideIcon } from 'lucide-react';
+import { Anchor, ArrowRight, ArrowUpRight, Briefcase, Building2, CheckCircle2, Crown, Landmark, MapPin, ShieldCheck, Ship, Sun, Trees, UtensilsCrossed, Wind, Wine, type LucideIcon } from 'lucide-react';
+import type { HospitalityShowcaseRegion } from '@/lib/cms/collections/schema';
 import { usePublishedPage } from '@/lib/cms/pages/use-published-page';
 import Footer from '@/components/Footer';
 
@@ -22,35 +23,34 @@ export type HospitalityShowcaseItem = {
 
 export type HospitalityRegionNavLink = { label: string; href: string; current?: boolean };
 
-type CmsProperty = { slug: string; name: string; tag: string; desc: string; roomsOrCabins: number | null; facilities: string[]; diningOptions: string[]; gallery: Array<{ url?: string }> };
+const showcaseIconByKey: Record<string, LucideIcon> = { Building2, Ship, Sun, Wind, Trees, Briefcase, Landmark, UtensilsCrossed, Wine, MapPin, Crown, Anchor };
 
-function buildSpecs(item: CmsProperty): string[] {
-  const specs: string[] = [];
-  if (item.roomsOrCabins) specs.push(`${item.roomsOrCabins} Rooms`);
-  specs.push(...item.diningOptions.slice(0, 1), ...item.facilities.slice(0, 3));
-  return specs.slice(0, 4);
-}
+type CmsShowcaseItem = { id: string; slug: string; name: string; tag: string; desc: string; img: string; iconKey: string; specs: string[] };
 
-export function useHospitalityShowcase(defaultItems: HospitalityShowcaseItem[]): HospitalityShowcaseItem[] {
-  const [items, setItems] = useState(defaultItems);
+// Fetches every published hospitality entry tagged for this region page and
+// uses them as the full card list (so cards can be added/removed/reordered
+// entirely from the dashboard). Falls back to the page's own hardcoded
+// defaults only while nothing has been tagged for this region yet.
+export function useHospitalityShowcase(region: HospitalityShowcaseRegion, fallbackItems: HospitalityShowcaseItem[]): HospitalityShowcaseItem[] {
+  const [items, setItems] = useState(fallbackItems);
   useEffect(() => {
-    const slugs = defaultItems.map((item) => item.slug).filter(Boolean).join(',');
-    if (!slugs) return;
-    fetch(`/api/hospitality/properties?slugs=${slugs}`)
+    fetch(`/api/hospitality/showcase?region=${region}`)
       .then((r) => (r.ok ? r.json() : []))
-      .then((cmsItems: CmsProperty[]) => {
+      .then((cmsItems: CmsShowcaseItem[]) => {
         if (!cmsItems.length) return;
-        const bySlug = new Map(cmsItems.map((cmsItem) => [cmsItem.slug, cmsItem]));
-        setItems((current) => current.map((entry) => {
-          const match = entry.slug ? bySlug.get(entry.slug) : undefined;
-          if (!match) return entry;
-          const specs = buildSpecs(match);
-          const image = match.gallery[0]?.url;
-          return { ...entry, name: match.name, tag: match.tag || entry.tag, desc: match.desc || entry.desc, specs: specs.length ? specs : entry.specs, img: image || entry.img };
-        }));
+        setItems(cmsItems.map((item) => ({
+          id: item.id,
+          slug: item.slug,
+          name: item.name,
+          tag: item.tag,
+          desc: item.desc,
+          img: item.img,
+          icon: showcaseIconByKey[item.iconKey] ?? Building2,
+          specs: item.specs,
+        })));
       })
       .catch(() => undefined);
-  }, [defaultItems]);
+  }, [region]);
   return items;
 }
 
@@ -203,17 +203,21 @@ export function HospitalityRegionPageTemplate({ path, eyebrowIcon: EyebrowIcon, 
                     viewport={{ once: true, margin: '-100px' }}
                     className="w-full lg:w-7/12 relative h-[500px] lg:h-[600px] rounded-[1.5rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.1)] group-hover:shadow-[0_20px_60px_rgba(21,118,112,0.15)] transition-all duration-700"
                   >
-                    <Image
-                      src={item.img}
-                      alt={item.name}
-                      sizes="(max-width: 1024px) 100vw, 58vw"
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-[2s] ease-out"
-                    />
+                    {item.img ? (
+                      <Image
+                        src={item.img}
+                        alt={item.name}
+                        sizes="(max-width: 1024px) 100vw, 58vw"
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-[2s] ease-out"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-brand-navy-deep" />
+                    )}
                     <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/60 via-transparent to-transparent"></div>
 
                     <div className="absolute top-8 right-8 bg-white/90 backdrop-blur-md w-16 h-16 rounded-full flex items-center justify-center shadow-lg">
-                      <span className="text-brand-teal font-bold text-xl font-en">{item.id}</span>
+                      <span className="text-brand-teal font-bold text-xl font-en">{String(idx + 1).padStart(2, '0')}</span>
                     </div>
 
                     <div className="absolute bottom-8 left-8 text-white font-bold font-en text-xl">

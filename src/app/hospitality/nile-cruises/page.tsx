@@ -20,7 +20,7 @@ const defaultFleet: HospitalityShowcaseItem[] = [
 
 export default function NileCruisesPage() {
   useEffect(() => { trackCruiseView('Nile Cruises'); }, []);
-  const fleet = useHospitalityShowcase(defaultFleet);
+  const fleet = useHospitalityShowcase('nile-cruises', defaultFleet);
 
   return (
     <HospitalityRegionPageTemplate

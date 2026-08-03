@@ -16,7 +16,7 @@ const defaultTropicalData: HospitalityShowcaseItem[] = [
 
 export default function TropicalRetreatsPage() {
   useEffect(() => { trackHospitalityPropertyView('Tropical Retreats'); }, []);
-  const tropicalData = useHospitalityShowcase(defaultTropicalData);
+  const tropicalData = useHospitalityShowcase('tropical-retreats', defaultTropicalData);
 
   return (
     <HospitalityRegionPageTemplate

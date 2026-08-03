@@ -7,7 +7,7 @@ import { getPublishedPageContent } from "@/lib/cms/pages/public";
 // geographic categories. The category cards themselves are dashboard-editable
 // via the Hospitality page's "Region cards" section (Dashboard → Hospitality
 // → Page header) — the individual CMS entries separately power the
-// deep-dive pages (e.g. /hospitality/nile-cruises) via /api/hospitality/properties.
+// deep-dive pages (e.g. /hospitality/nile-cruises) via /api/hospitality/showcase.
 export async function GET() {
   const content = await getPublishedPageContent("/hospitality");
   const regions = content?.hero.hospitalityRegions;

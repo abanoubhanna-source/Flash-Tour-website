@@ -9,7 +9,7 @@ import {
   restoreCollectionRevision,
   saveCollectionDraft,
 } from "@/app/dashboard/content/actions";
-import { isValidExternalImageUrl, type ManagedContent, type ManagedDraft } from "@/lib/cms/collections/schema";
+import { hospitalityShowcaseIcons, hospitalityShowcaseRegions, isValidExternalImageUrl, type ManagedContent, type ManagedDraft } from "@/lib/cms/collections/schema";
 import type { CmsCollectionEditor } from "@/lib/cms/collections/types";
 
 type ArrayField = "facilities" | "diningOptions" | "accessibility";
@@ -23,6 +23,13 @@ type Props = {
 
 const signature = (draft: ManagedDraft) => JSON.stringify(draft);
 const slugify = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const showcaseRegionLabel: Record<string, string> = {
+  "coastal-sanctuaries": "Coastal Sanctuaries (Red Sea)",
+  "tropical-retreats": "Tropical Retreats (Zanzibar)",
+  "nile-cruises": "Nile Cruises",
+  "european-elegance": "European Elegance (Italy)",
+  "urban-centers": "Urban Centers (Cairo)",
+};
 
 export function moveItem<T>(items: readonly T[], index: number, direction: -1 | 1): T[] {
   const destination = index + direction;
@@ -130,6 +137,22 @@ function ContentTab({ entry, draft, updateContent, updateDraft, updateArray }: {
   return <div className="space-y-5">
     <div className="grid gap-4 sm:grid-cols-2"><Field label="Title" value={draft.content.title} onChange={(value) => { updateContent("title", value); updateContent("slug", slugify(value)); }} /><Field label="Slug" value={draft.content.slug} onChange={(value) => updateContent("slug", slugify(value))} /></div>
     {entry.type === "hospitality" && <label className="block text-xs font-bold">Category <span className="text-red-600">*</span><select required value={draft.content.categoryId ?? ""} onChange={(event) => updateContent("categoryId", event.target.value || null)} className="mt-2 h-10 w-full rounded-xl border px-3 text-sm"><option value="">Choose category</option>{entry.categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}</select></label>}
+    {entry.type === "hospitality" && (
+      <div className="grid gap-4 rounded-2xl border border-slate-200 p-4 sm:grid-cols-2">
+        <label className="block text-xs font-bold">Showcase page <span className="font-normal text-slate-400">(which /hospitality/* deep-dive page shows this card)</span>
+          <select value={draft.content.showcaseRegion ?? ""} onChange={(event) => updateContent("showcaseRegion", (event.target.value || null) as ManagedContent["showcaseRegion"])} className="mt-2 h-10 w-full rounded-xl border px-3 text-sm">
+            <option value="">Not shown on a region page</option>
+            {hospitalityShowcaseRegions.map((region) => <option key={region} value={region}>{showcaseRegionLabel[region]}</option>)}
+          </select>
+        </label>
+        <label className="block text-xs font-bold">Card icon
+          <select value={draft.content.showcaseIcon ?? ""} onChange={(event) => updateContent("showcaseIcon", (event.target.value || null) as ManagedContent["showcaseIcon"])} className="mt-2 h-10 w-full rounded-xl border px-3 text-sm">
+            <option value="">Default</option>
+            {hospitalityShowcaseIcons.map((icon) => <option key={icon} value={icon}>{icon}</option>)}
+          </select>
+        </label>
+      </div>
+    )}
     {entry.parents.length > 0 && <label className="block text-xs font-bold">Parent <span className="text-red-600">*</span><select value={draft.parentId ?? ""} onChange={(event) => updateDraft((current) => ({ ...current, parentId: event.target.value || null }))} className="mt-2 h-10 w-full rounded-xl border px-3 text-sm"><option value="">Choose parent</option>{entry.parents.map((parent) => <option key={parent.id} value={parent.id}>{parent.title}</option>)}</select></label>}
     <div className="grid gap-4 sm:grid-cols-3"><Nullable label="Country" value={draft.content.country} onChange={(value) => updateContent("country", value)} /><Nullable label="Region" value={draft.content.region} onChange={(value) => updateContent("region", value)} /><Nullable label="Location" value={draft.content.location} onChange={(value) => updateContent("location", value)} /></div>
     <Area label="Short description" value={draft.content.shortDescription} onChange={(value) => updateContent("shortDescription", value)} rows={3} /><Area label="Rich text description" value={draft.content.fullDescription} onChange={(value) => updateContent("fullDescription", value)} rows={9} />

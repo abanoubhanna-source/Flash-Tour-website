@@ -16,7 +16,7 @@ const defaultUrbanData: HospitalityShowcaseItem[] = [
 
 export default function UrbanCentersPage() {
   useEffect(() => { trackHospitalityPropertyView('Urban Centers'); }, []);
-  const urbanData = useHospitalityShowcase(defaultUrbanData);
+  const urbanData = useHospitalityShowcase('urban-centers', defaultUrbanData);
 
   return (
     <HospitalityRegionPageTemplate

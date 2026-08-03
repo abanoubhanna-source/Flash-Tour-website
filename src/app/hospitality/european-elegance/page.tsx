@@ -19,7 +19,7 @@ const defaultMediterraneanData: HospitalityShowcaseItem[] = [
 
 export default function EuropeanElegancePage() {
   useEffect(() => { trackHospitalityPropertyView('European Elegance'); }, []);
-  const mediterraneanData = useHospitalityShowcase(defaultMediterraneanData);
+  const mediterraneanData = useHospitalityShowcase('european-elegance', defaultMediterraneanData);
 
   return (
     <HospitalityRegionPageTemplate

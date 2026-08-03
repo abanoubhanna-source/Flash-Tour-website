@@ -16,7 +16,7 @@ const defaultCoastalData: HospitalityShowcaseItem[] = [
 
 export default function CoastalSanctuariesPage() {
   useEffect(() => { trackHospitalityPropertyView('Coastal Sanctuaries'); }, []);
-  const coastalData = useHospitalityShowcase(defaultCoastalData);
+  const coastalData = useHospitalityShowcase('coastal-sanctuaries', defaultCoastalData);
 
   return (
     <HospitalityRegionPageTemplate
