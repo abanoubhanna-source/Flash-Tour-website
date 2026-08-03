@@ -22,7 +22,7 @@ export type HospitalityShowcaseItem = {
 
 export type HospitalityRegionNavLink = { label: string; href: string; current?: boolean };
 
-type CmsProperty = { slug: string; name: string; tag: string; desc: string; roomsOrCabins: number | null; facilities: string[]; diningOptions: string[] };
+type CmsProperty = { slug: string; name: string; tag: string; desc: string; roomsOrCabins: number | null; facilities: string[]; diningOptions: string[]; gallery: Array<{ url?: string }> };
 
 function buildSpecs(item: CmsProperty): string[] {
   const specs: string[] = [];
@@ -45,7 +45,8 @@ export function useHospitalityShowcase(defaultItems: HospitalityShowcaseItem[]):
           const match = entry.slug ? bySlug.get(entry.slug) : undefined;
           if (!match) return entry;
           const specs = buildSpecs(match);
-          return { ...entry, name: match.name, tag: match.tag || entry.tag, desc: match.desc || entry.desc, specs: specs.length ? specs : entry.specs };
+          const image = match.gallery[0]?.url;
+          return { ...entry, name: match.name, tag: match.tag || entry.tag, desc: match.desc || entry.desc, specs: specs.length ? specs : entry.specs, img: image || entry.img };
         }));
       })
       .catch(() => undefined);

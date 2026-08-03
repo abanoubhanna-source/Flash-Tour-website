@@ -64,6 +64,13 @@ type PageEditorProps = {
   embedded?: boolean;
 };
 
+// These paths have their own bespoke hero markup that never renders
+// hero.primaryCta/secondaryCta (only the generic [...slug] StandardCmsPage
+// renderer and the home page's hero slides actually use those buttons).
+// Hiding the fields here so editors aren't filling in a button that never
+// appears anywhere on the live page.
+const pagesWithoutHeroCtaButtons = ["/about", "/brands", "/contact", "/cruises", "/destinations", "/hospitality", "/services"];
+
 const homeSlideDefaults: PageHeroSlideData[] = [
   { id: "group", name: "Flash Group", eyebrow: "A 40-Year Hospitality Legacy", title: "Crafting Hospitality Since 1985", subtitle: "An Egyptian-born tourism and hospitality group owning Nile cruises, resorts, restaurants, yachts, and premium mobility assets across strategic destinations.", primaryCta: { label: "Partner With Flash Group", href: "/contact" }, secondaryCta: { label: "Explore Portfolio", href: "/brands" }, image: { assetId: null, url: "/images/egypt-bg.jpg", alt: "Flash Group" }, enabled: true },
   { id: "cruises", name: "Cruises", eyebrow: "Owned Nile Cruise Fleet", title: "Luxury Journeys on the Nile", subtitle: "A curated fleet of Nile vessels delivering controlled quality, seamless logistics, and unforgettable river experiences for global partners.", primaryCta: { label: "Discover Cruises", href: "/cruises" }, secondaryCta: { label: "Contact us", href: "/contact" }, image: { assetId: null, url: "/images/hospitality-cruise.jpg", alt: "Luxury Nile cruise" }, enabled: true },
@@ -804,22 +811,24 @@ export function PageEditor({ page, canEdit, canPublish, canUpload, embedded = fa
                           <span className="mt-1.5 block text-right text-[10px] font-normal text-slate-400">{draft.hero.subtitle.length}/500</span>
                         </label>
 
-                        <div className="grid gap-4 sm:grid-cols-2">
-                          <div className="rounded-2xl border border-slate-200 p-4">
-                            <p className="text-xs! font-bold text-slate-800">Primary CTA</p>
-                            <div className="mt-3 space-y-3">
-                              <input aria-label="Primary CTA label" value={draft.hero.primaryCta.label} onChange={(event) => updateHero("primaryCta", { ...draft.hero.primaryCta, label: event.target.value })} placeholder="Button label" maxLength={80} className="h-10 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#157670]" />
-                              <input aria-label="Primary CTA link" value={draft.hero.primaryCta.href} onChange={(event) => updateHero("primaryCta", { ...draft.hero.primaryCta, href: event.target.value })} placeholder="/contact" maxLength={500} className="h-10 w-full rounded-xl border border-slate-200 px-3 font-mono text-xs outline-none focus:border-[#157670]" />
+                        {!pagesWithoutHeroCtaButtons.includes(page.path) && (
+                          <div className="grid gap-4 sm:grid-cols-2">
+                            <div className="rounded-2xl border border-slate-200 p-4">
+                              <p className="text-xs! font-bold text-slate-800">Primary CTA</p>
+                              <div className="mt-3 space-y-3">
+                                <input aria-label="Primary CTA label" value={draft.hero.primaryCta.label} onChange={(event) => updateHero("primaryCta", { ...draft.hero.primaryCta, label: event.target.value })} placeholder="Button label" maxLength={80} className="h-10 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#157670]" />
+                                <input aria-label="Primary CTA link" value={draft.hero.primaryCta.href} onChange={(event) => updateHero("primaryCta", { ...draft.hero.primaryCta, href: event.target.value })} placeholder="/contact" maxLength={500} className="h-10 w-full rounded-xl border border-slate-200 px-3 font-mono text-xs outline-none focus:border-[#157670]" />
+                              </div>
+                            </div>
+                            <div className="rounded-2xl border border-slate-200 p-4">
+                              <p className="text-xs! font-bold text-slate-800">Secondary CTA</p>
+                              <div className="mt-3 space-y-3">
+                                <input aria-label="Secondary CTA label" value={draft.hero.secondaryCta.label} onChange={(event) => updateHero("secondaryCta", { ...draft.hero.secondaryCta, label: event.target.value })} placeholder="Button label" maxLength={80} className="h-10 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#157670]" />
+                                <input aria-label="Secondary CTA link" value={draft.hero.secondaryCta.href} onChange={(event) => updateHero("secondaryCta", { ...draft.hero.secondaryCta, href: event.target.value })} placeholder="/brands" maxLength={500} className="h-10 w-full rounded-xl border border-slate-200 px-3 font-mono text-xs outline-none focus:border-[#157670]" />
+                              </div>
                             </div>
                           </div>
-                          <div className="rounded-2xl border border-slate-200 p-4">
-                            <p className="text-xs! font-bold text-slate-800">Secondary CTA</p>
-                            <div className="mt-3 space-y-3">
-                              <input aria-label="Secondary CTA label" value={draft.hero.secondaryCta.label} onChange={(event) => updateHero("secondaryCta", { ...draft.hero.secondaryCta, label: event.target.value })} placeholder="Button label" maxLength={80} className="h-10 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#157670]" />
-                              <input aria-label="Secondary CTA link" value={draft.hero.secondaryCta.href} onChange={(event) => updateHero("secondaryCta", { ...draft.hero.secondaryCta, href: event.target.value })} placeholder="/brands" maxLength={500} className="h-10 w-full rounded-xl border border-slate-200 px-3 font-mono text-xs outline-none focus:border-[#157670]" />
-                            </div>
-                          </div>
-                        </div>
+                        )}
                       </div>
                     </CollapsibleSection>
                   )}
