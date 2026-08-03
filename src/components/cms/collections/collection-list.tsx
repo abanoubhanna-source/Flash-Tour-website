@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState, useTransition } from "react";
-import { Archive, ArrowRight, Building2, ChevronLeft, ChevronRight, Globe2, MapPin, Plus, Search, Ship, Sparkles, X } from "lucide-react";
+import { Archive, ArrowRight, Building2, ChevronDown, ChevronLeft, ChevronRight, Globe2, MapPin, Plus, Search, Ship, Sparkles, X } from "lucide-react";
 import { archiveCollectionItem, createCollectionItem } from "@/app/dashboard/content/actions";
 import type { ManagedContentType } from "@/lib/cms/collections/schema";
 import type { CmsCollectionSummary } from "@/lib/cms/collections/types";
@@ -64,6 +64,44 @@ const slugify = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]
 
 const PAGE_SIZE = 10;
 
+function ItemRow({ item, mode, canArchive, onArchive, href }: { item: CmsCollectionSummary; mode: CollectionMode; canArchive: boolean; onArchive: (item: CmsCollectionSummary) => void; href: string }) {
+  return (
+    <article className="flex flex-col gap-4 p-4 hover:bg-slate-50/70 sm:flex-row sm:items-center sm:p-5">
+      <TypeAvatar icon={typeIcon[item.type]} />
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-center gap-2">
+          <h3 className="truncate text-sm font-bold text-slate-900">{item.title}</h3>
+          <StatusBadge status={item.status} />
+          {!item.active && <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-slate-500">Inactive</span>}
+        </div>
+        <p className="mt-1 font-mono text-[10px] text-slate-500">
+          {item.slug} · order {item.sortOrder}
+          {item.parentTitle && ` · ${item.parentTitle}`}
+          {mode === "destinations" && ` · ${item.childCount} ${item.childCount === 1 ? "child" : "children"}`}
+        </p>
+      </div>
+      <div className="flex items-center gap-2">
+        {canArchive && item.status !== "archived" && (
+          <button
+            type="button"
+            aria-label={`Archive ${item.title}`}
+            onClick={() => onArchive(item)}
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-400 hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+          >
+            <Archive className="h-4 w-4" />
+          </button>
+        )}
+        <Link
+          href={href}
+          className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 px-3.5 text-xs font-bold text-slate-700 hover:border-[#157670]/30 hover:text-[#157670]"
+        >
+          Edit <ArrowRight className="h-4 w-4" />
+        </Link>
+      </div>
+    </article>
+  );
+}
+
 export function CollectionList({ mode, items, parents, categories, canCreate, canArchive }: Props) {
   const [type, setType] = useState<ManagedContentType>(
     mode === "hospitality" ? "hospitality" : mode === "cruises" ? "cruise" : mode === "brands" ? "brand" : "destination",
@@ -101,6 +139,29 @@ export function CollectionList({ mode, items, parents, categories, canCreate, ca
   const relevantParents = parents.filter((item) =>
     type === "destination_place" ? item.type === "destination" : type === "destination_attraction" ? item.type === "destination_place" : false,
   );
+
+  const isHierarchical = type === "destination_place" || type === "destination_attraction";
+  const groups = useMemo(() => {
+    if (!isHierarchical) return null;
+    const byParent = new Map<string, CmsCollectionSummary[]>();
+    for (const row of rows) {
+      const key = row.parentId ?? "unassigned";
+      if (!byParent.has(key)) byParent.set(key, []);
+      byParent.get(key)!.push(row);
+    }
+    const ordered = [...relevantParents.map((item) => item.id), "unassigned"].filter((id) => byParent.has(id));
+    return ordered.map((id) => ({
+      id,
+      title: id === "unassigned" ? "No parent assigned" : relevantParents.find((item) => item.id === id)?.title ?? "Unknown",
+      items: byParent.get(id)!,
+    }));
+  }, [isHierarchical, rows, relevantParents]);
+  const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set());
+  const toggleGroup = (id: string) => setCollapsedGroups((current) => {
+    const next = new Set(current);
+    if (next.has(id)) next.delete(id); else next.add(id);
+    return next;
+  });
 
   const href = (id: string) => `/dashboard/${mode}/${id}`;
 
@@ -233,73 +294,79 @@ export function CollectionList({ mode, items, parents, categories, canCreate, ca
         {notice && <p role="status" className="mt-4 rounded-xl bg-slate-50 px-4 py-3 text-xs text-slate-700">{notice}</p>}
       </section>
 
-      <section className="overflow-hidden rounded-[1.5rem] border border-slate-200/80 bg-white shadow-sm">
-        {visible.length === 0 ? (
-          <EmptyState icon={typeIcon[type]} label="No items match these filters" />
-        ) : (
-          <div className="divide-y divide-slate-100">
-            {visible.map((item) => (
-              <article key={item.id} className="flex flex-col gap-4 p-4 hover:bg-slate-50/70 sm:flex-row sm:items-center sm:p-5">
-                <TypeAvatar icon={typeIcon[item.type]} />
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="truncate text-sm font-bold text-slate-900">{item.title}</h3>
-                    <StatusBadge status={item.status} />
-                    {!item.active && <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-slate-500">Inactive</span>}
-                  </div>
-                  <p className="mt-1 font-mono text-[10px] text-slate-500">
-                    {item.slug} · order {item.sortOrder}
-                    {item.parentTitle && ` · ${item.parentTitle}`}
-                    {mode === "destinations" && ` · ${item.childCount} ${item.childCount === 1 ? "child" : "children"}`}
-                  </p>
-                </div>
-                <div className="flex items-center gap-2">
-                  {canArchive && item.status !== "archived" && (
+      {isHierarchical && groups ? (
+        <section className="overflow-hidden rounded-[1.5rem] border border-slate-200/80 bg-white shadow-sm">
+          {groups.length === 0 ? (
+            <EmptyState icon={typeIcon[type]} label="No items match these filters" />
+          ) : (
+            <div className="divide-y divide-slate-100">
+              {groups.map((group) => {
+                const collapsed = collapsedGroups.has(group.id);
+                return (
+                  <div key={group.id}>
                     <button
                       type="button"
-                      aria-label={`Archive ${item.title}`}
-                      onClick={() => archive(item)}
-                      className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-400 hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+                      onClick={() => toggleGroup(group.id)}
+                      className="flex w-full items-center justify-between gap-3 bg-slate-50/60 px-4 py-3 text-left hover:bg-slate-100/70 sm:px-5"
+                      aria-expanded={!collapsed}
                     >
-                      <Archive className="h-4 w-4" />
+                      <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-700">
+                        <Globe2 className="h-4 w-4 text-[#157670]" /> {group.title}
+                        <span className="rounded-full bg-slate-200 px-2 py-0.5 text-[10px] font-bold text-slate-600">{group.items.length}</span>
+                      </span>
+                      <ChevronDown className={`h-4 w-4 shrink-0 text-slate-400 transition-transform ${collapsed ? "" : "rotate-180"}`} />
                     </button>
-                  )}
-                  <Link
-                    href={href(item.id)}
-                    className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 px-3.5 text-xs font-bold text-slate-700 hover:border-[#157670]/30 hover:text-[#157670]"
-                  >
-                    Edit <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </div>
-              </article>
-            ))}
-          </div>
-        )}
+                    {!collapsed && (
+                      <div className="divide-y divide-slate-100">
+                        {group.items.map((item) => (
+                          <ItemRow key={item.id} item={item} mode={mode} canArchive={canArchive} onArchive={archive} href={href(item.id)} />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          <div className="border-t border-slate-100 p-4 text-xs text-slate-500">{rows.length} results across {groups.length} {groups.length === 1 ? "group" : "groups"}</div>
+        </section>
+      ) : (
+        <section className="overflow-hidden rounded-[1.5rem] border border-slate-200/80 bg-white shadow-sm">
+          {visible.length === 0 ? (
+            <EmptyState icon={typeIcon[type]} label="No items match these filters" />
+          ) : (
+            <div className="divide-y divide-slate-100">
+              {visible.map((item) => (
+                <ItemRow key={item.id} item={item} mode={mode} canArchive={canArchive} onArchive={archive} href={href(item.id)} />
+              ))}
+            </div>
+          )}
 
-        <div className="flex items-center justify-between border-t border-slate-100 p-4 text-xs text-slate-500">
-          <span>{rows.length} results · page {page} of {pages}</span>
-          <div className="flex gap-2">
-            <button
-              type="button"
-              aria-label="Previous page"
-              disabled={page === 1}
-              onClick={() => setPage((value) => value - 1)}
-              className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 disabled:opacity-30"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-            <button
-              type="button"
-              aria-label="Next page"
-              disabled={page >= pages}
-              onClick={() => setPage((value) => value + 1)}
-              className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 disabled:opacity-30"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
+          <div className="flex items-center justify-between border-t border-slate-100 p-4 text-xs text-slate-500">
+            <span>{rows.length} results · page {page} of {pages}</span>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                aria-label="Previous page"
+                disabled={page === 1}
+                onClick={() => setPage((value) => value - 1)}
+                className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 disabled:opacity-30"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+              <button
+                type="button"
+                aria-label="Next page"
+                disabled={page >= pages}
+                onClick={() => setPage((value) => value + 1)}
+                className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 disabled:opacity-30"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {open && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-slate-950/40 backdrop-blur-sm sm:items-center sm:p-6" role="dialog" aria-modal="true">
