@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, ChevronRight, Palmtree, Waves, Fish, Landmark, Ship } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import Footer from "@/components/Footer";
 import DestinationHospitalitySection from "@/components/destinations/DestinationHospitalitySection";
 import { trackDestinationView } from '@/lib/analytics';
@@ -190,6 +191,7 @@ export default function EgyptComprehensivePage() {
 
                   {/* Main Large Image */}
                   <motion.div initial={{ opacity: 0, x: isEven ? 40 : -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: "-100px" }} className="w-full lg:w-7/12 relative h-[400px] rounded-[1.5rem] overflow-hidden shadow-2xl group">
+                    <Link href={`/destinations/egypt/${city.slug}`} className="absolute inset-0 z-10" aria-label={`Explore ${city.name}`} />
                     <Image src={city.mainImg} alt={city.name} sizes="(max-width: 1024px) 100vw, 58vw" fill className="object-cover group-hover:scale-105 transition-transform duration-[1.5s]" />
                     <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/50 to-transparent"></div>
                     <div className="absolute bottom-6 left-8 text-white font-bold font-en text-2xl flex items-center gap-3">
@@ -201,15 +203,17 @@ export default function EgyptComprehensivePage() {
                 {/* Bottom Section: Landmarks Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {city.places.map((place, pIdx) => (
-                    <motion.div key={pIdx} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: pIdx * 0.1 }} className="group cursor-pointer">
-                      <div className="relative h-64 w-full rounded-2xl overflow-hidden shadow-md mb-6 border border-slate-100">
-                        <Image src={place.img} alt={place.name} sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
-                        <div className="absolute inset-0 bg-brand-navy/10 group-hover:bg-brand-navy/30 transition-colors duration-500"></div>
-                      </div>
-                      <h3 className="text-2xl font-bold text-brand-teal font-en mb-3 flex items-center gap-2">
-                        {place.name} <ChevronRight className="w-5 h-5 text-brand-gold opacity-0 -translate-x-3 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
-                      </h3>
-                      <p className="text-slate-600 font-en text-sm leading-relaxed">{place.desc}</p>
+                    <motion.div key={pIdx} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: pIdx * 0.1 }}>
+                      <Link href={`/destinations/egypt/${city.slug}/${place.slug}`} className="group cursor-pointer block">
+                        <div className="relative h-64 w-full rounded-2xl overflow-hidden shadow-md mb-6 border border-slate-100">
+                          <Image src={place.img} alt={place.name} sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
+                          <div className="absolute inset-0 bg-brand-navy/10 group-hover:bg-brand-navy/30 transition-colors duration-500"></div>
+                        </div>
+                        <h3 className="text-2xl font-bold text-brand-teal font-en mb-3 flex items-center gap-2">
+                          {place.name} <ChevronRight className="w-5 h-5 text-brand-gold opacity-0 -translate-x-3 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                        </h3>
+                        <p className="text-slate-600 font-en text-sm leading-relaxed">{place.desc}</p>
+                      </Link>
                     </motion.div>
                   ))}
                 </div>
