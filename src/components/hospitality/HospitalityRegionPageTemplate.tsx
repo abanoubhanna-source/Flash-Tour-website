@@ -77,6 +77,7 @@ const trustBadges = ['B2B Rates Available', 'IATA & ASTA Licensed', 'Direct From
 export function HospitalityRegionPageTemplate({ path, eyebrowIcon: EyebrowIcon, fallback, nav, showcase }: Props) {
   const cms = usePublishedPage(path);
   const hero = cms?.hero;
+  const region = path.split('/').pop();
 
   return (
     <main className="flex min-h-screen flex-col items-center w-full bg-white overflow-hidden">
@@ -172,9 +173,17 @@ export function HospitalityRegionPageTemplate({ path, eyebrowIcon: EyebrowIcon, 
                       </span>
                     </div>
 
-                    <h2 className="text-4xl md:text-5xl font-bold text-brand-navy font-en tracking-tight uppercase mb-6">
-                      {item.name}
-                    </h2>
+                    {item.slug ? (
+                      <Link href={`/hospitality/${region}/${item.slug}`}>
+                        <h2 className="text-4xl md:text-5xl font-bold text-brand-navy font-en tracking-tight uppercase mb-6 hover:text-brand-teal transition-colors">
+                          {item.name}
+                        </h2>
+                      </Link>
+                    ) : (
+                      <h2 className="text-4xl md:text-5xl font-bold text-brand-navy font-en tracking-tight uppercase mb-6">
+                        {item.name}
+                      </h2>
+                    )}
 
                     <p className="text-slate-600 font-en leading-relaxed text-lg mb-8">
                       {item.desc}
@@ -189,12 +198,22 @@ export function HospitalityRegionPageTemplate({ path, eyebrowIcon: EyebrowIcon, 
                       ))}
                     </div>
 
-                    <Link
-                      href="/partner-portal"
-                      className="inline-flex w-fit items-center gap-3 bg-brand-navy text-white px-6 py-3.5 rounded-full font-bold font-en text-sm uppercase tracking-widest hover:bg-brand-teal transition-colors duration-300 shadow-lg"
-                    >
-                      Request B2B Rates <ArrowUpRight className="w-4 h-4" />
-                    </Link>
+                    <div className="flex flex-wrap gap-3">
+                      {item.slug && (
+                        <Link
+                          href={`/hospitality/${region}/${item.slug}`}
+                          className="inline-flex w-fit items-center gap-3 border border-brand-navy text-brand-navy px-6 py-3.5 rounded-full font-bold font-en text-sm uppercase tracking-widest hover:bg-brand-navy hover:text-white transition-colors duration-300"
+                        >
+                          View Full Details <ArrowUpRight className="w-4 h-4" />
+                        </Link>
+                      )}
+                      <Link
+                        href="/partner-portal"
+                        className="inline-flex w-fit items-center gap-3 bg-brand-navy text-white px-6 py-3.5 rounded-full font-bold font-en text-sm uppercase tracking-widest hover:bg-brand-teal transition-colors duration-300 shadow-lg"
+                      >
+                        Request B2B Rates <ArrowUpRight className="w-4 h-4" />
+                      </Link>
+                    </div>
                   </motion.div>
 
                   <motion.div
@@ -203,6 +222,7 @@ export function HospitalityRegionPageTemplate({ path, eyebrowIcon: EyebrowIcon, 
                     viewport={{ once: true, margin: '-100px' }}
                     className="w-full lg:w-7/12 relative h-[500px] lg:h-[600px] rounded-[1.5rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.1)] group-hover:shadow-[0_20px_60px_rgba(21,118,112,0.15)] transition-all duration-700"
                   >
+                    {item.slug ? <Link href={`/hospitality/${region}/${item.slug}`} className="absolute inset-0 z-10" aria-label={`View ${item.name} details`} /> : null}
                     {item.img ? (
                       <Image
                         src={item.img}
