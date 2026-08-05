@@ -10,5 +10,5 @@ export default async function BrandEditorPage({ params }: { params: Promise<{ en
   const [{ entryId }, user] = await Promise.all([params, requireCmsUser()]);
   const entry = await getCollectionEditor(entryId, "brand");
   if (!entry) notFound();
-  return <CollectionEditor entry={entry} mode="brands" canEdit={user.permissions.includes("content.edit") && user.permissions.includes("seo.edit")} canPublish={user.permissions.includes("content.publish") && user.permissions.includes("seo.publish")} canArchive={user.permissions.includes("content.archive")} />;
+  return <CollectionEditor entry={entry} mode="brands" canEdit={user.permissions.includes("content.edit") && user.permissions.includes("seo.edit")} canPublish={user.permissions.includes("content.publish") && user.permissions.includes("seo.publish")} canArchive={user.permissions.includes("content.archive")} canUpload={user.permissions.includes("media.create")} />;
 }

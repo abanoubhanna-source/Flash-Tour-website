@@ -211,7 +211,7 @@ function ExpansionJourneyFields({ value, onChange, canUpload }: { value: AboutEx
   );
 }
 
-function CeoMessageFields({ value, onChange }: { value: AboutCeoMessageData; onChange: (value: AboutCeoMessageData) => void }) {
+function CeoMessageFields({ value, onChange, canUpload }: { value: AboutCeoMessageData; onChange: (value: AboutCeoMessageData) => void; canUpload: boolean }) {
   return (
     <div className="space-y-4">
       <label className="block text-xs font-bold text-slate-700">Title
@@ -228,9 +228,12 @@ function CeoMessageFields({ value, onChange }: { value: AboutCeoMessageData; onC
           <input value={value.directorTitle} onChange={(event) => onChange({ ...value, directorTitle: event.target.value })} placeholder="Chairman" className="mt-2 h-11 w-full rounded-xl border px-3.5 text-sm" />
         </label>
       </div>
-      <label className="block text-xs font-bold text-slate-700">Signature image URL
-        <input value={value.signatureImageUrl} onChange={(event) => onChange({ ...value, signatureImageUrl: event.target.value })} placeholder="/images/Signuter.png" className="mt-2 h-11 w-full rounded-xl border px-3.5 font-mono text-xs" />
-      </label>
+      <MediaPicker
+        label="Signature image"
+        value={{ url: value.signatureImageUrl }}
+        canUpload={canUpload}
+        onChange={(image) => onChange({ ...value, signatureImageUrl: image.url })}
+      />
     </div>
   );
 }
@@ -517,7 +520,7 @@ export function AboutPageEditor({ page, canEdit, canPublish, canUpload }: AboutP
                   <WorkProcessFields value={draft.sections.work_process} onChange={(value) => updateSection("work_process", value)} />
                 </CollapsibleSection>
                 <CollapsibleSection eyebrow="10. CEO & Team" title="CEO message">
-                  <CeoMessageFields value={draft.sections.ceo_message} onChange={(value) => updateSection("ceo_message", value)} />
+                  <CeoMessageFields value={draft.sections.ceo_message} onChange={(value) => updateSection("ceo_message", value)} canUpload={canUpload} />
                 </CollapsibleSection>
                 <CollapsibleSection eyebrow="11. CEO & Team" title="Team">
                   <TeamFields value={draft.sections.team} onChange={(value) => updateSection("team", value)} />

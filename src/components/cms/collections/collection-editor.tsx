@@ -2,14 +2,15 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState, useTransition, type Dispatch, type SetStateAction, type TransitionStartFunction } from "react";
-import { ArrowDown, ArrowLeft, ArrowUp, History, ImageOff, Plus, Rocket, Save, Trash2 } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowUp, History, Plus, Rocket, Save, Trash2 } from "lucide-react";
 import {
   archiveCollectionItem,
   publishCollectionItem,
   restoreCollectionRevision,
   saveCollectionDraft,
 } from "@/app/dashboard/content/actions";
-import { hospitalityShowcaseIcons, hospitalityShowcaseRegions, isValidExternalImageUrl, type ManagedContent, type ManagedDraft } from "@/lib/cms/collections/schema";
+import { MediaPicker } from "@/components/cms/media-picker";
+import { hospitalityShowcaseIcons, hospitalityShowcaseRegions, type ManagedContent, type ManagedDraft } from "@/lib/cms/collections/schema";
 import type { CmsCollectionEditor } from "@/lib/cms/collections/types";
 
 type ArrayField = "facilities" | "diningOptions" | "accessibility";
@@ -19,6 +20,7 @@ type Props = {
   canEdit: boolean;
   canPublish: boolean;
   canArchive: boolean;
+  canUpload: boolean;
 };
 
 const signature = (draft: ManagedDraft) => JSON.stringify(draft);
@@ -39,7 +41,7 @@ export function moveItem<T>(items: readonly T[], index: number, direction: -1 | 
   return next;
 }
 
-export function CollectionEditor({ entry, mode, canEdit, canPublish, canArchive }: Props) {
+export function CollectionEditor({ entry, mode, canEdit, canPublish, canArchive, canUpload }: Props) {
   const initialDraft: ManagedDraft = { content: entry.content, seo: entry.seo, parentId: entry.parentId };
   const [draft, setDraft] = useState<ManagedDraft>(initialDraft);
   const [saved, setSaved] = useState(signature(initialDraft));
@@ -124,7 +126,7 @@ export function CollectionEditor({ entry, mode, canEdit, canPublish, canArchive 
           {(["content", "seo", "history"] as const).map((value) => <button type="button" onClick={() => setTab(value)} key={value} className={`h-12 border-b-2 px-4 text-xs font-bold ${tab === value ? "border-[#157670] text-[#157670]" : "border-transparent text-slate-500"}`}>{value === "history" && <History className="mr-1 inline h-4 w-4" />}{value[0].toUpperCase() + value.slice(1)}</button>)}
         </div>
         <fieldset disabled={!canEdit || busy} className="p-5 disabled:opacity-60">
-          {tab === "content" && <ContentTab entry={entry} draft={draft} updateContent={updateContent} updateDraft={setDraft} updateArray={updateArray} />}
+          {tab === "content" && <ContentTab entry={entry} draft={draft} updateContent={updateContent} updateDraft={setDraft} updateArray={updateArray} canUpload={canUpload} />}
           {tab === "seo" && <SeoTab draft={draft} updateDraft={setDraft} />}
           {tab === "history" && <HistoryTab entry={entry} canEdit={canEdit} getLockVersion={() => lockVersion.current} setNotice={setNotice} startTransition={startTransition} />}
         </fieldset>
@@ -133,7 +135,7 @@ export function CollectionEditor({ entry, mode, canEdit, canPublish, canArchive 
   );
 }
 
-function ContentTab({ entry, draft, updateContent, updateDraft, updateArray }: { entry: CmsCollectionEditor; draft: ManagedDraft; updateContent: <Key extends keyof ManagedContent>(key: Key, value: ManagedContent[Key]) => void; updateDraft: Dispatch<SetStateAction<ManagedDraft>>; updateArray: (key: ArrayField, values: string[]) => void }) {
+function ContentTab({ entry, draft, updateContent, updateDraft, updateArray, canUpload }: { entry: CmsCollectionEditor; draft: ManagedDraft; updateContent: <Key extends keyof ManagedContent>(key: Key, value: ManagedContent[Key]) => void; updateDraft: Dispatch<SetStateAction<ManagedDraft>>; updateArray: (key: ArrayField, values: string[]) => void; canUpload: boolean }) {
   return <div className="space-y-5">
     <div className="grid gap-4 sm:grid-cols-2"><Field label="Title" value={draft.content.title} onChange={(value) => { updateContent("title", value); updateContent("slug", slugify(value)); }} /><Field label="Slug" value={draft.content.slug} onChange={(value) => updateContent("slug", slugify(value))} /></div>
     {entry.type === "hospitality" && <label className="block text-xs font-bold">Category <span className="text-red-600">*</span><select required value={draft.content.categoryId ?? ""} onChange={(event) => updateContent("categoryId", event.target.value || null)} className="mt-2 h-10 w-full rounded-xl border px-3 text-sm"><option value="">Choose category</option>{entry.categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}</select></label>}
@@ -162,21 +164,24 @@ function ContentTab({ entry, draft, updateContent, updateDraft, updateArray }: {
     </div>
     <label className="flex items-center gap-2 text-xs font-bold"><input type="checkbox" checked={draft.content.isActive} onChange={(event) => updateContent("isActive", event.target.checked)} />Active on public site when published</label>
     {entry.type !== "destination_place" && entry.type !== "destination_attraction" && (["facilities", "diningOptions", "accessibility"] as const).map((key) => <ArrayEditor key={key} label={key === "diningOptions" ? "Dining options" : key[0].toUpperCase() + key.slice(1)} values={draft.content[key]} onChange={(values) => updateArray(key, values)} />)}
-    <GalleryEditor images={draft.content.gallery} onChange={(gallery) => updateContent("gallery", gallery)} />
+    <GalleryEditor images={draft.content.gallery} onChange={(gallery) => updateContent("gallery", gallery)} canUpload={canUpload} />
   </div>;
 }
 
-function GalleryEditor({ images, onChange }: { images: ManagedContent["gallery"]; onChange: (images: ManagedContent["gallery"]) => void }) {
+function GalleryEditor({ images, onChange, canUpload }: { images: ManagedContent["gallery"]; onChange: (images: ManagedContent["gallery"]) => void; canUpload: boolean }) {
   return <div><div className="flex items-center justify-between"><h3 className="text-sm font-bold">Gallery</h3><button type="button" onClick={() => onChange([...images, { assetId: null, url: "", alt: "", caption: "" }])} className="text-xs font-bold text-[#157670]"><Plus className="inline h-4 w-4" />Add image</button></div>
-    {images.map((image, index) => <GalleryRow key={`${image.assetId ?? "external"}-${index}-${image.url}`} image={image} index={index} count={images.length} onChange={(next) => onChange(images.map((item, itemIndex) => itemIndex === index ? next : item))} onMove={(direction) => onChange(moveItem(images, index, direction))} onRemove={() => onChange(images.filter((_, itemIndex) => itemIndex !== index))} />)}
+    {images.map((image, index) => <GalleryRow key={`${image.assetId ?? "external"}-${index}-${image.url}`} image={image} index={index} count={images.length} onChange={(next) => onChange(images.map((item, itemIndex) => itemIndex === index ? next : item))} onMove={(direction) => onChange(moveItem(images, index, direction))} onRemove={() => onChange(images.filter((_, itemIndex) => itemIndex !== index))} canUpload={canUpload} />)}
   </div>;
 }
 
-function GalleryRow({ image, index, count, onChange, onMove, onRemove }: { image: ManagedContent["gallery"][number]; index: number; count: number; onChange: (image: ManagedContent["gallery"][number]) => void; onMove: (direction: -1 | 1) => void; onRemove: () => void }) {
-  const valid = isValidExternalImageUrl(image.url);
+function GalleryRow({ image, index, count, onChange, onMove, onRemove, canUpload }: { image: ManagedContent["gallery"][number]; index: number; count: number; onChange: (image: ManagedContent["gallery"][number]) => void; onMove: (direction: -1 | 1) => void; onRemove: () => void; canUpload: boolean }) {
   return <div className="mt-3 grid gap-3 rounded-xl border p-3 sm:grid-cols-[160px_1fr]">
-    <div className="flex aspect-video items-center justify-center overflow-hidden rounded-lg bg-slate-100 bg-cover bg-center text-slate-400" style={valid ? { backgroundImage: `url("${image.url.replaceAll('"', "%22")}")` } : undefined}>{!valid && <ImageOff className="h-5 w-5" />}</div>
-    <div className="space-y-2"><Field label="Image URL" value={image.url} onChange={(value) => onChange({ ...image, url: value })} /><p className={`text-[11px] ${image.url && !valid ? "text-red-600" : "text-slate-500"}`}>{image.url && !valid ? "Use \"/images/...\" or a full http(s):// image URL." : "A safe fallback is shown on the public website if this image cannot load."}</p><Field label="Alt text" value={image.alt} onChange={(value) => onChange({ ...image, alt: value })} /><Field label="Caption" value={image.caption} onChange={(value) => onChange({ ...image, caption: value })} /><div className="flex gap-2"><button type="button" disabled={index === 0} onClick={() => onMove(-1)} className="rounded-lg border p-2 disabled:opacity-40" aria-label="Move image up"><ArrowUp className="h-3 w-3" /></button><button type="button" disabled={index === count - 1} onClick={() => onMove(1)} className="rounded-lg border p-2 disabled:opacity-40" aria-label="Move image down"><ArrowDown className="h-3 w-3" /></button><button type="button" onClick={onRemove} className="ml-auto text-xs font-bold text-red-600"><Trash2 className="mr-1 inline h-3 w-3" />Remove</button></div></div>
+    <MediaPicker
+      value={{ url: image.url, alt: image.alt, assetId: image.assetId }}
+      canUpload={canUpload}
+      onChange={(next) => onChange({ ...image, url: next.url, assetId: next.assetId ?? null, alt: next.alt ?? image.alt })}
+    />
+    <div className="space-y-2"><Field label="Alt text" value={image.alt} onChange={(value) => onChange({ ...image, alt: value })} /><Field label="Caption" value={image.caption} onChange={(value) => onChange({ ...image, caption: value })} /><div className="flex gap-2"><button type="button" disabled={index === 0} onClick={() => onMove(-1)} className="rounded-lg border p-2 disabled:opacity-40" aria-label="Move image up"><ArrowUp className="h-3 w-3" /></button><button type="button" disabled={index === count - 1} onClick={() => onMove(1)} className="rounded-lg border p-2 disabled:opacity-40" aria-label="Move image down"><ArrowDown className="h-3 w-3" /></button><button type="button" onClick={onRemove} className="ml-auto text-xs font-bold text-red-600"><Trash2 className="mr-1 inline h-3 w-3" />Remove</button></div></div>
   </div>;
 }
 

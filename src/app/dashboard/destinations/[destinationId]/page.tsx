@@ -42,6 +42,7 @@ export default async function Page({ params }: { params: Promise<{ destinationId
       canEdit={canEdit}
       canPublish={canPublish}
       canArchive={user.permissions.includes("content.archive")}
+      canUpload={user.permissions.includes("media.create")}
     />
   );
 }
