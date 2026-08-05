@@ -79,6 +79,20 @@ export function HospitalityRegionPageTemplate({ path, eyebrowIcon: EyebrowIcon, 
   const hero = cms?.hero;
   const region = path.split('/').pop();
 
+  // The nav pill labels come from the same "Region cards" the main
+  // /hospitality page's dashboard editor already controls (one edit point
+  // for both), matched by link rather than id since the two use different
+  // internal keys. Falls back to the static nav prop until this loads.
+  const mainHospitality = usePublishedPage('/hospitality');
+  const regionCards = (mainHospitality?.hero as { hospitalityRegions?: Array<{ title: string; link: string }> } | undefined)?.hospitalityRegions;
+  const cmsNav: HospitalityRegionNavLink[] | null = regionCards?.length
+    ? [
+        { label: 'All Regions', href: '/hospitality' },
+        ...regionCards.map((card) => ({ label: card.title, href: card.link, current: card.link === path })),
+      ]
+    : null;
+  const activeNav = cmsNav ?? nav;
+
   return (
     <main className="flex min-h-screen flex-col items-center w-full bg-white overflow-hidden">
 
@@ -113,7 +127,7 @@ export function HospitalityRegionPageTemplate({ path, eyebrowIcon: EyebrowIcon, 
 
         {/* Region sub-nav */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-wrap justify-center gap-2 px-4">
-          {nav.map((link) => (
+          {activeNav.map((link) => (
             <Link
               key={link.href}
               href={link.href}
