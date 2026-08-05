@@ -29,8 +29,15 @@ export type ManagedContent = z.infer<typeof contentSchema>;
 export const draftSchema = z.object({ content: contentSchema, seo: seoSchema, parentId: z.uuid().nullable().default(null) });
 export type ManagedDraft = z.infer<typeof draftSchema>;
 
-/** External gallery URLs are intentionally limited to HTTP(S), never data: URLs. */
+/**
+ * Gallery images may be an absolute http(s) URL (external or uploaded to
+ * Supabase Storage) or a root-relative path into this site's own
+ * /public/images (e.g. "/images/foo.jpg") — never a protocol-relative
+ * ("//host/x"), data:, or other scheme, which could point at an
+ * attacker-controlled host or inline payload.
+ */
 export function isValidExternalImageUrl(value: string): boolean {
+  if (value.startsWith("/") && !value.startsWith("//")) return true;
   try {
     const url = new URL(value);
     return url.protocol === "https:" || url.protocol === "http:";
@@ -42,7 +49,7 @@ export function isValidExternalImageUrl(value: string): boolean {
 export function validateGalleryUrls(content: ManagedContent): string | null {
   for (const [index, image] of content.gallery.entries()) {
     if (!image.url || !isValidExternalImageUrl(image.url)) {
-      return `Gallery image ${index + 1} needs a valid http:// or https:// URL.`;
+      return `Gallery image ${index + 1} needs a valid image URL (either "/images/..." or a full http(s):// link).`;
     }
   }
   return null;
