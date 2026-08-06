@@ -521,28 +521,22 @@ export function AboutPageEditor({ page, canEdit, canPublish, canUpload }: AboutP
                 <CollapsibleSection eyebrow="3. Vision & Mission" title="Mission">
                   <BodySectionFields value={draft.sections.mission} onChange={(value) => updateSection("mission", value)} />
                 </CollapsibleSection>
-                <CollapsibleSection eyebrow="4. Services & Languages" title="Services summary">
-                  <ListFields value={draft.sections.services_summary} onChange={(value) => updateSection("services_summary", value)} itemLabel="Service" />
-                </CollapsibleSection>
-                <CollapsibleSection eyebrow="5. Services & Languages" title="Languages">
-                  <ListFields value={draft.sections.languages} onChange={(value) => updateSection("languages", value)} itemLabel="Language" />
-                </CollapsibleSection>
-                <CollapsibleSection eyebrow="6. The Flawless Process" title="Flawless process steps">
-                  <ListFields value={draft.sections.flawless_process} onChange={(value) => updateSection("flawless_process", value)} itemLabel="Step" />
-                </CollapsibleSection>
-                <CollapsibleSection eyebrow="7. The Experience" title="Experience" description="Body paragraph plus the bullet list and photo shown beside it.">
-                  <BodyWithBulletsFields value={draft.sections.experience} onChange={(value) => updateSection("experience", value)} canUpload={canUpload} />
-                </CollapsibleSection>
-                <CollapsibleSection eyebrow="8. The Evolution" title="Expansion journey (timeline)" description="Each milestone can have its own photo.">
+                <CollapsibleSection eyebrow="4. The Evolution" title="Expansion journey (timeline)" description="Each milestone can have its own photo.">
                   <ExpansionJourneyFields value={draft.sections.expansion_journey} onChange={(value) => updateSection("expansion_journey", value)} canUpload={canUpload} />
                 </CollapsibleSection>
-                <CollapsibleSection eyebrow="9. Operational Command Centers" title="Work process" description="Body paragraph plus the two bullet cards and photos shown beside it.">
+                <CollapsibleSection eyebrow="5. The Flawless Process" title="Flawless process steps">
+                  <ListFields value={draft.sections.flawless_process} onChange={(value) => updateSection("flawless_process", value)} itemLabel="Step" />
+                </CollapsibleSection>
+                <CollapsibleSection eyebrow="6. The Experience" title="Experience" description="Body paragraph plus the bullet list and photo shown beside it.">
+                  <BodyWithBulletsFields value={draft.sections.experience} onChange={(value) => updateSection("experience", value)} canUpload={canUpload} />
+                </CollapsibleSection>
+                <CollapsibleSection eyebrow="7. Operational Command Centers" title="Work process" description="Body paragraph plus the two bullet cards and photos shown beside it.">
                   <WorkProcessFields value={draft.sections.work_process} onChange={(value) => updateSection("work_process", value)} canUpload={canUpload} />
                 </CollapsibleSection>
-                <CollapsibleSection eyebrow="10. CEO & Team" title="CEO message">
+                <CollapsibleSection eyebrow="8. CEO & Team" title="CEO message">
                   <CeoMessageFields value={draft.sections.ceo_message} onChange={(value) => updateSection("ceo_message", value)} canUpload={canUpload} />
                 </CollapsibleSection>
-                <CollapsibleSection eyebrow="11. CEO & Team" title="Team">
+                <CollapsibleSection eyebrow="9. CEO & Team" title="Team">
                   <TeamFields value={draft.sections.team} onChange={(value) => updateSection("team", value)} />
                 </CollapsibleSection>
               </fieldset>

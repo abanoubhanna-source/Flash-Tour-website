@@ -19,12 +19,6 @@ export async function GET() {
     },
     vision: sections.vision.body || fallback.vision,
     mission: sections.mission.body || fallback.mission,
-    services: sections.services_summary.items.length
-      ? { title: sections.services_summary.title || fallback.services.title, items: sections.services_summary.items }
-      : fallback.services,
-    languages: sections.languages.items.length
-      ? { title: sections.languages.title || fallback.languages.title, items: sections.languages.items }
-      : fallback.languages,
     flawless_process: sections.flawless_process.items.length
       ? { title: sections.flawless_process.title || fallback.flawless_process.title, items: sections.flawless_process.items }
       : fallback.flawless_process,

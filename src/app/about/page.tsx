@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Building2, Ship, Bus, UtensilsCrossed, Eye, Target, Quote, Globe2, ShieldCheck, CheckCircle2, Languages, Loader2 } from 'lucide-react';
+import { Building2, Ship, Bus, UtensilsCrossed, Eye, Target, Quote, Globe2, ShieldCheck, CheckCircle2, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import Footer from "@/components/Footer";
 import FlawlessProcess from '@/components/FlawlessProcess';
@@ -27,8 +27,6 @@ type AboutContent = {
   };
   vision: string;
   mission: string;
-  services: { title: string; items: string[] };
-  languages: { title: string; items: string[] };
   flawless_process: { title: string; items: string[] };
   experience: { title: string; body: string; bullets: string[]; image?: string };
   work_process: { title: string; body: string; bullets: AboutWorkProcessBullet[]; image?: string; secondaryImage?: string };
@@ -132,83 +130,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 3. Services & Languages */}
-      {(aboutData.services.items.length > 0 || aboutData.languages.items.length > 0) && (
-        <section className="w-full py-24 bg-slate-50 border-y border-slate-100">
-          <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-              {aboutData.services.items.length > 0 && (
-                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-white p-12 rounded-[1.5rem] border border-slate-100 shadow-sm">
-                  <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mb-8">
-                    <CheckCircle2 className="w-8 h-8 text-teal-700" />
-                  </div>
-                  <h2 className="text-3xl font-bold text-slate-900 font-en mb-6">{aboutData.services.title || "Our Services"}</h2>
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {aboutData.services.items.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-3">
-                        <CheckCircle2 className="w-5 h-5 text-teal-700 shrink-0 mt-0.5" />
-                        <span className="text-slate-600 font-en leading-snug">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              )}
-
-              {aboutData.languages.items.length > 0 && (
-                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }} className="bg-white p-12 rounded-[1.5rem] border border-slate-100 shadow-sm">
-                  <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mb-8">
-                    <Languages className="w-8 h-8 text-teal-700" />
-                  </div>
-                  <h2 className="text-3xl font-bold text-slate-900 font-en mb-6">{aboutData.languages.title || "Languages"}</h2>
-                  <div className="flex flex-wrap gap-3">
-                    {aboutData.languages.items.map((item, idx) => (
-                      <span key={idx} className="px-4 py-2 rounded-full bg-teal-50 border border-teal-100 text-teal-800 font-en font-bold text-sm">{item}</span>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* 4. The Flawless Process */}
-      <FlawlessProcess title={aboutData.flawless_process.title} steps={aboutData.flawless_process.items} />
-
-      {/* 5. Experience (Dynamic) */}
-      <section className="w-full py-24 bg-slate-50 border-y border-slate-100">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-            <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-              <h2 className="text-4xl font-bold text-slate-900 font-en mb-6">{aboutData.experience.title}</h2>
-              <p className="text-lg text-slate-600 font-en leading-relaxed mb-8">
-                {aboutData.experience.body}
-              </p>
-              {aboutData.experience.bullets.length > 0 && (
-                <div className="grid grid-cols-2 gap-6">
-                  {aboutData.experience.bullets.map((label, idx) => {
-                    const Icon = experienceIcons[idx % experienceIcons.length];
-                    return (
-                      <div key={idx} className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center border border-slate-200 shadow-sm">
-                          <Icon className="w-5 h-5 text-teal-700" />
-                        </div>
-                        <span className="font-en font-bold text-slate-800">{label}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative h-[600px] rounded-[1.5rem] overflow-hidden shadow-2xl border border-slate-100">
-              <Image src={aboutData.experience.image || "/images/vip-bus.jpg"} alt="Flash Group Infrastructure" fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. The Heritage Timeline (Dynamic) */}
+      {/* 3. The Heritage Timeline (Dynamic) */}
       <section className="w-full py-32 bg-white">
         <div className="max-w-[1200px] mx-auto px-6 lg:px-8 relative">
 
@@ -265,7 +187,43 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 7. Work Process (Dynamic) */}
+      {/* 4. The Flawless Process */}
+      <FlawlessProcess title={aboutData.flawless_process.title} steps={aboutData.flawless_process.items} />
+
+      {/* 5. Experience (Dynamic) */}
+      <section className="w-full py-24 bg-slate-50 border-y border-slate-100">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+            <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+              <h2 className="text-4xl font-bold text-slate-900 font-en mb-6">{aboutData.experience.title}</h2>
+              <p className="text-lg text-slate-600 font-en leading-relaxed mb-8">
+                {aboutData.experience.body}
+              </p>
+              {aboutData.experience.bullets.length > 0 && (
+                <div className="grid grid-cols-2 gap-6">
+                  {aboutData.experience.bullets.map((label, idx) => {
+                    const Icon = experienceIcons[idx % experienceIcons.length];
+                    return (
+                      <div key={idx} className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center border border-slate-200 shadow-sm">
+                          <Icon className="w-5 h-5 text-teal-700" />
+                        </div>
+                        <span className="font-en font-bold text-slate-800">{label}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative h-[600px] rounded-[1.5rem] overflow-hidden shadow-2xl border border-slate-100">
+              <Image src={aboutData.experience.image || "/images/vip-bus.jpg"} alt="Flash Group Infrastructure" fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* 6. Work Process (Dynamic) */}
       <section className="w-full py-32 bg-slate-50 border-t border-slate-100 overflow-hidden">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
@@ -314,7 +272,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 8. CEO Message, Team & Signature (Dynamic) */}
+      {/* 7. CEO Message, Team & Signature (Dynamic) */}
       <section className="w-full py-24 bg-slate-950 text-white">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
