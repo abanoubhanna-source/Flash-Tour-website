@@ -8,6 +8,15 @@ type LibraryAsset = { id: string; bucket: string; storage_path: string; original
 type MediaPickerValue = { url: string; alt?: string; assetId?: string | null };
 const allowedTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/avif"]);
 
+function describeUploadError(error: unknown): string {
+  if (error instanceof Error && error.message) return error.message;
+  if (typeof error === "object" && error !== null) {
+    const message = (error as { message?: unknown }).message;
+    if (typeof message === "string" && message) return message;
+  }
+  return "Upload failed. Check your connection and try again.";
+}
+
 async function hashFile(file: File) {
   const digest = await crypto.subtle.digest("SHA-256", await file.arrayBuffer());
   return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
@@ -74,7 +83,7 @@ export function MediaPicker({ value, onChange, label, canUpload = true }: { valu
       setAssets((current) => (current ? [{ id: asset.id, bucket: asset.bucket, storage_path: asset.storage_path, original_name: file.name, alt_text: value.alt || "" }, ...current] : current));
       setOpen(false);
     } catch (error) {
-      setNotice(error instanceof Error ? error.message : "Upload failed.");
+      setNotice(describeUploadError(error));
     } finally {
       setBusy(false);
     }

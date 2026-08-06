@@ -96,8 +96,8 @@ export default function DestinationsPage() {
       <section className="relative w-full h-[60vh] flex items-center justify-center bg-slate-900">
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/map.png"
-            alt="Global Destinations"
+            src={cms?.hero?.image.url || "/images/map.png"}
+            alt={cms?.hero?.image.alt || "Global Destinations"}
             fill
             sizes="100vw"
             className="object-cover opacity-20"

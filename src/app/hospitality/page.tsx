@@ -57,7 +57,7 @@ export default function HospitalityPage() {
       {/* 1. Redesigned Premium Hero */}
       <section className="relative w-full h-[85vh] flex flex-col items-center justify-center bg-brand-navy-deep overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <Image src="/images/hospitality-hero.jpg" alt="Flash Group Portfolio" fill sizes="100vw" className="object-cover opacity-50 scale-105 animate-[pulse_10s_ease-in-out_infinite_alternate]" loading="eager" fetchPriority="high" />
+          <Image src={cms?.hero?.image.url || "/images/hospitality-hero.jpg"} alt={cms?.hero?.image.alt || "Flash Group Portfolio"} fill sizes="100vw" className="object-cover opacity-50 scale-105 animate-[pulse_10s_ease-in-out_infinite_alternate]" loading="eager" fetchPriority="high" />
           <div className="absolute inset-0 bg-gradient-to-b from-brand-navy-deep/70 via-brand-navy-deep/40 to-brand-navy-deep z-10"></div>
           <div className="absolute inset-0 opacity-[0.03] z-10" style={{ backgroundImage: 'linear-gradient(#ffffff 1px, transparent 1px), linear-gradient(90deg, #ffffff 1px, transparent 1px)', backgroundSize: '60px 60px' }}></div>
         </div>

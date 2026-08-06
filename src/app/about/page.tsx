@@ -7,6 +7,7 @@ import { Building2, Ship, Bus, UtensilsCrossed, Eye, Target, Quote, Globe2, Shie
 import Image from 'next/image';
 import Footer from "@/components/Footer";
 import FlawlessProcess from '@/components/FlawlessProcess';
+import { usePublishedPage } from "@/lib/cms/pages/use-published-page";
 
 type AboutTimelineEntry = {
   year: string;
@@ -45,6 +46,7 @@ const experienceIcons = [Ship, Building2, Bus, UtensilsCrossed];
 const workProcessIcons = [Globe2, ShieldCheck, CheckCircle2];
 
 export default function AboutPage() {
+  const cms = usePublishedPage('/about');
   const [aboutData, setAboutData] = useState<AboutContent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -76,6 +78,9 @@ export default function AboutPage() {
       
       {/* 1. Monumental Hero Section */}
       <section className="relative w-full py-40 flex flex-col items-center justify-center bg-brand-navy-deep overflow-hidden">
+        {cms?.hero?.image.url && (
+          <Image src={cms.hero.image.url} alt={cms.hero.image.alt || "Flash Group"} fill sizes="100vw" className="object-cover opacity-30" loading="eager" fetchPriority="high" />
+        )}
         <div className="absolute inset-0 z-0 opacity-20" style={{ backgroundImage: 'radial-gradient(var(--color-brand-teal) 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-brand-navy-deep/80 to-slate-50 z-10"></div>
 

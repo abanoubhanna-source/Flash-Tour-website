@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import Link from 'next/link';
 import {
   ArrowUpRight, Globe2, PlaneTakeoff, Building2,
@@ -69,6 +70,9 @@ export default function ServicesPage() {
       
       {/* 1. Elegant Hero Section */}
       <section className="relative w-full py-40 flex flex-col items-center justify-center bg-brand-navy-deep overflow-hidden">
+        {cms?.hero?.image.url && (
+          <Image src={cms.hero.image.url} alt={cms.hero.image.alt || "Flash Group Services"} fill sizes="100vw" className="object-cover opacity-30" loading="eager" fetchPriority="high" />
+        )}
         <div className="absolute inset-0 z-0 opacity-20" style={{ backgroundImage: 'radial-gradient(var(--color-brand-teal) 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-brand-navy-deep/80 to-slate-50 z-10"></div>
         
