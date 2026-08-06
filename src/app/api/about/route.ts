@@ -38,6 +38,8 @@ export async function GET() {
     director_name: sections.ceo_message.directorName || fallback.director_name,
     director_title: sections.ceo_message.directorTitle || fallback.director_title,
     signature_img: sections.ceo_message.signatureImageUrl || fallback.signature_img,
+    team_title: sections.team.title || fallback.team_title,
+    team_body: sections.team.body || fallback.team_body,
     team_stats: sections.team.stats || fallback.team_stats,
     timeline: sections.expansion_journey.milestones.length
       ? sections.expansion_journey.milestones.map((milestone) => ({

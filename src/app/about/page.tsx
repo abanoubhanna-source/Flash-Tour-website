@@ -35,6 +35,8 @@ type AboutContent = {
   director_name: string;
   director_title: string;
   signature_img?: string;
+  team_title: string;
+  team_body: string;
   team_stats: string;
   timeline: AboutTimelineEntry[];
 };
@@ -347,9 +349,9 @@ export default function AboutPage() {
               initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
               className="bg-white/5 backdrop-blur-md p-12 rounded-[1.5rem] border border-white/10"
             >
-              <h3 className="text-3xl font-bold font-en mb-6 text-amber-500">The Team Behind The Empire</h3>
+              <h3 className="text-3xl font-bold font-en mb-6 text-amber-500">{aboutData.team_title}</h3>
               <p className="text-slate-400 font-en leading-relaxed mb-8 text-lg">
-                With more than {aboutData.team_stats} dedicated experts and consultants across four continents, our workforce is our greatest asset. Our bilingual teams speak Arabic, English, German, French, Russian, Italian, and Dutch, ensuring every guest feels understood. From the captains of our Nile cruises to the concierges at our 5-star resorts, every member of the Flash family is committed to delivering perfection.
+                {aboutData.team_body}
               </p>
               <div className="flex items-center gap-6">
                 <div className="text-6xl font-bold text-white font-en">{aboutData.team_stats}</div>
