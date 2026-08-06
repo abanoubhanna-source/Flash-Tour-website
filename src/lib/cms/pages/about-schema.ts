@@ -11,10 +11,19 @@ export const aboutHeroIntroSchema = z.object({
   body: z.string().trim().max(2000).default(""),
 });
 
+export const aboutImageSchema = z.object({
+  assetId: z.uuid().nullable().default(null),
+  url: z.string().trim().max(2000).default(""),
+  alt: z.string().trim().max(180).default(""),
+});
+
+export const emptyAboutImage = { assetId: null, url: "", alt: "" };
+
 export const aboutBodyWithBulletsSchema = z.object({
   title: z.string().trim().max(140).default(""),
   body: z.string().trim().max(2000).default(""),
   bullets: z.array(z.string().trim().max(120)).min(0).max(8).default([]),
+  image: aboutImageSchema.default(emptyAboutImage),
 });
 
 export const aboutWorkProcessBulletSchema = z.object({
@@ -26,20 +35,14 @@ export const aboutWorkProcessSchema = z.object({
   title: z.string().trim().max(140).default(""),
   body: z.string().trim().max(2000).default(""),
   bullets: z.array(aboutWorkProcessBulletSchema).min(0).max(6).default([]),
+  image: aboutImageSchema.default(emptyAboutImage),
+  secondaryImage: aboutImageSchema.default(emptyAboutImage),
 });
 
 export const aboutListSchema = z.object({
   title: z.string().trim().max(140).default(""),
   items: z.array(z.string().trim().max(120)).min(0).max(20).default([]),
 });
-
-const aboutImageSchema = z.object({
-  assetId: z.uuid().nullable().default(null),
-  url: z.string().trim().max(2000).default(""),
-  alt: z.string().trim().max(180).default(""),
-});
-
-const emptyAboutImage = { assetId: null, url: "", alt: "" };
 
 export const aboutMilestoneSchema = z.object({
   year: z.coerce.number().int().min(1900).max(2100).default(2000),
@@ -70,8 +73,8 @@ export const aboutTeamSchema = z.object({
 
 const emptyBody = { title: "", body: "" };
 const emptyHeroIntro = { eyebrow: "", title: "", body: "" };
-const emptyBodyWithBullets = { title: "", body: "", bullets: [] };
-const emptyWorkProcess = { title: "", body: "", bullets: [] };
+const emptyBodyWithBullets = { title: "", body: "", bullets: [], image: emptyAboutImage };
+const emptyWorkProcess = { title: "", body: "", bullets: [], image: emptyAboutImage, secondaryImage: emptyAboutImage };
 const emptyList = { title: "", items: [] };
 const emptyExpansionJourney = { milestones: [] };
 const emptyCeoMessage = { title: "", body: "", directorName: "", directorTitle: "", signatureImageUrl: "" };

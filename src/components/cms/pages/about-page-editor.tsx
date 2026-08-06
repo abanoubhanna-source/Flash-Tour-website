@@ -102,7 +102,7 @@ function HeroIntroFields({ value, onChange }: { value: AboutHeroIntroData; onCha
   );
 }
 
-function BodyWithBulletsFields({ value, onChange }: { value: AboutBodyWithBulletsData; onChange: (value: AboutBodyWithBulletsData) => void }) {
+function BodyWithBulletsFields({ value, onChange, canUpload }: { value: AboutBodyWithBulletsData; onChange: (value: AboutBodyWithBulletsData) => void; canUpload: boolean }) {
   const update = (index: number, text: string) => onChange({ ...value, bullets: value.bullets.map((current, i) => (i === index ? text : current)) });
   const add = () => onChange({ ...value, bullets: [...value.bullets, ""] });
   const remove = (index: number) => onChange({ ...value, bullets: value.bullets.filter((_, i) => i !== index) });
@@ -124,11 +124,17 @@ function BodyWithBulletsFields({ value, onChange }: { value: AboutBodyWithBullet
         ))}
         <button type="button" onClick={add} className="w-full rounded-xl border border-dashed border-slate-300 py-2 text-xs font-bold text-slate-500 hover:bg-slate-50">+ Add bullet</button>
       </div>
+      <MediaPicker
+        label="Photo"
+        value={value.image}
+        canUpload={canUpload}
+        onChange={(image) => onChange({ ...value, image: { assetId: image.assetId ?? value.image.assetId, url: image.url, alt: image.alt ?? value.image.alt } })}
+      />
     </div>
   );
 }
 
-function WorkProcessFields({ value, onChange }: { value: AboutWorkProcessData; onChange: (value: AboutWorkProcessData) => void }) {
+function WorkProcessFields({ value, onChange, canUpload }: { value: AboutWorkProcessData; onChange: (value: AboutWorkProcessData) => void; canUpload: boolean }) {
   const update = (index: number, bullet: AboutWorkProcessData["bullets"][number]) => onChange({ ...value, bullets: value.bullets.map((current, i) => (i === index ? bullet : current)) });
   const add = () => onChange({ ...value, bullets: [...value.bullets, { title: "", desc: "" }] });
   const remove = (index: number) => onChange({ ...value, bullets: value.bullets.filter((_, i) => i !== index) });
@@ -152,6 +158,20 @@ function WorkProcessFields({ value, onChange }: { value: AboutWorkProcessData; o
           </div>
         ))}
         <button type="button" onClick={add} className="w-full rounded-xl border border-dashed border-slate-300 py-2 text-xs font-bold text-slate-500 hover:bg-slate-50">+ Add bullet</button>
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <MediaPicker
+          label="Main photo"
+          value={value.image}
+          canUpload={canUpload}
+          onChange={(image) => onChange({ ...value, image: { assetId: image.assetId ?? value.image.assetId, url: image.url, alt: image.alt ?? value.image.alt } })}
+        />
+        <MediaPicker
+          label="Overlay photo"
+          value={value.secondaryImage}
+          canUpload={canUpload}
+          onChange={(image) => onChange({ ...value, secondaryImage: { assetId: image.assetId ?? value.secondaryImage.assetId, url: image.url, alt: image.alt ?? value.secondaryImage.alt } })}
+        />
       </div>
     </div>
   );
@@ -510,14 +530,14 @@ export function AboutPageEditor({ page, canEdit, canPublish, canUpload }: AboutP
                 <CollapsibleSection eyebrow="6. The Flawless Process" title="Flawless process steps">
                   <ListFields value={draft.sections.flawless_process} onChange={(value) => updateSection("flawless_process", value)} itemLabel="Step" />
                 </CollapsibleSection>
-                <CollapsibleSection eyebrow="7. The Experience" title="Experience" description="Body paragraph plus the bullet list shown beside it.">
-                  <BodyWithBulletsFields value={draft.sections.experience} onChange={(value) => updateSection("experience", value)} />
+                <CollapsibleSection eyebrow="7. The Experience" title="Experience" description="Body paragraph plus the bullet list and photo shown beside it.">
+                  <BodyWithBulletsFields value={draft.sections.experience} onChange={(value) => updateSection("experience", value)} canUpload={canUpload} />
                 </CollapsibleSection>
                 <CollapsibleSection eyebrow="8. The Evolution" title="Expansion journey (timeline)" description="Each milestone can have its own photo.">
                   <ExpansionJourneyFields value={draft.sections.expansion_journey} onChange={(value) => updateSection("expansion_journey", value)} canUpload={canUpload} />
                 </CollapsibleSection>
-                <CollapsibleSection eyebrow="9. Operational Command Centers" title="Work process" description="Body paragraph plus the two bullet cards shown beside it.">
-                  <WorkProcessFields value={draft.sections.work_process} onChange={(value) => updateSection("work_process", value)} />
+                <CollapsibleSection eyebrow="9. Operational Command Centers" title="Work process" description="Body paragraph plus the two bullet cards and photos shown beside it.">
+                  <WorkProcessFields value={draft.sections.work_process} onChange={(value) => updateSection("work_process", value)} canUpload={canUpload} />
                 </CollapsibleSection>
                 <CollapsibleSection eyebrow="10. CEO & Team" title="CEO message">
                   <CeoMessageFields value={draft.sections.ceo_message} onChange={(value) => updateSection("ceo_message", value)} canUpload={canUpload} />

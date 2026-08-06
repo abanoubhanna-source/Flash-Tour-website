@@ -22,7 +22,8 @@
   "experience": {
     "title": "We Don't Just Plan Trips. We Own The Experience.",
     "body": "What sets Flash Group apart is our massive infrastructure. We own and operate our fleet, our cruises, and our hotels. This absolute control over the supply chain guarantees uncompromised 5-star quality at every touchpoint.",
-    "bullets": ["Luxury Nile Cruises", "5-Star Resorts & Hotels", "100+ VIP Fleet", "Award-Winning Dining"]
+    "bullets": ["Luxury Nile Cruises", "5-Star Resorts & Hotels", "100+ VIP Fleet", "Award-Winning Dining"],
+    "image": "/images/vip-bus.jpg"
   },
   "work_process": {
     "title": "Operational Command Centers",
@@ -30,7 +31,9 @@
     "bullets": [
       { "title": "Localized Excellence", "desc": "Direct oversight of all ground operations, VIP fleets, and hospitality assets without intermediaries." },
       { "title": "24/7 Precision Control", "desc": "Dedicated regional teams providing round-the-clock support for elite corporate events and high-net-worth clients." }
-    ]
+    ],
+    "image": "/images/office-1.jpg",
+    "secondaryImage": "/images/office-2.jpg"
   },
   "ceo_message": "Our commitment to excellence has driven Flash Group's growth for over 40 years. We believe in creating memories, setting benchmarks in hospitality, and leading the industry with integrity and passion.",
   "director_name": "Amgad Hassoun",

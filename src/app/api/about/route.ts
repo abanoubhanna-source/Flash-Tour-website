@@ -29,10 +29,10 @@ export async function GET() {
       ? { title: sections.flawless_process.title || fallback.flawless_process.title, items: sections.flawless_process.items }
       : fallback.flawless_process,
     experience: sections.experience.body
-      ? { title: sections.experience.title, body: sections.experience.body, bullets: sections.experience.bullets }
+      ? { title: sections.experience.title, body: sections.experience.body, bullets: sections.experience.bullets, image: sections.experience.image.url || fallback.experience.image }
       : fallback.experience,
     work_process: sections.work_process.body
-      ? { title: sections.work_process.title, body: sections.work_process.body, bullets: sections.work_process.bullets }
+      ? { title: sections.work_process.title, body: sections.work_process.body, bullets: sections.work_process.bullets, image: sections.work_process.image.url || fallback.work_process.image, secondaryImage: sections.work_process.secondaryImage.url || fallback.work_process.secondaryImage }
       : fallback.work_process,
     ceo_message: sections.ceo_message.body || fallback.ceo_message,
     director_name: sections.ceo_message.directorName || fallback.director_name,

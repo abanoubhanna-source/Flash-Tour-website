@@ -30,8 +30,8 @@ type AboutContent = {
   services: { title: string; items: string[] };
   languages: { title: string; items: string[] };
   flawless_process: { title: string; items: string[] };
-  experience: { title: string; body: string; bullets: string[] };
-  work_process: { title: string; body: string; bullets: AboutWorkProcessBullet[] };
+  experience: { title: string; body: string; bullets: string[]; image?: string };
+  work_process: { title: string; body: string; bullets: AboutWorkProcessBullet[]; image?: string; secondaryImage?: string };
   ceo_message: string;
   director_name: string;
   director_title: string;
@@ -202,7 +202,7 @@ export default function AboutPage() {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative h-[600px] rounded-[1.5rem] overflow-hidden shadow-2xl border border-slate-100">
-              <Image src="/images/vip-bus.jpg" alt="Flash Group Infrastructure" fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
+              <Image src={aboutData.experience.image || "/images/vip-bus.jpg"} alt="Flash Group Infrastructure" fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
             </motion.div>
           </div>
         </div>
@@ -303,10 +303,10 @@ export default function AboutPage() {
 
             <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative h-[500px] lg:h-[650px] w-full flex justify-end">
               <div className="relative w-[80%] h-[80%] rounded-[1.5rem] overflow-hidden shadow-2xl z-10 top-0 right-0 border-[12px] border-slate-50">
-                <Image src="/images/office-1.jpg" fill sizes="(max-width: 1024px) 80vw, 40vw" alt="Flash Group Operations Hub" className="object-cover" />
+                <Image src={aboutData.work_process.image || "/images/office-1.jpg"} fill sizes="(max-width: 1024px) 80vw, 40vw" alt="Flash Group Operations Hub" className="object-cover" />
               </div>
               <div className="absolute w-[60%] h-[55%] rounded-2xl overflow-hidden shadow-xl z-20 bottom-0 left-0 border-[12px] border-slate-50">
-                <Image src="/images/office-2.jpg" fill sizes="(max-width: 1024px) 60vw, 30vw" alt="Regional Operations Center" className="object-cover" />
+                <Image src={aboutData.work_process.secondaryImage || "/images/office-2.jpg"} fill sizes="(max-width: 1024px) 60vw, 30vw" alt="Regional Operations Center" className="object-cover" />
               </div>
             </motion.div>
 
