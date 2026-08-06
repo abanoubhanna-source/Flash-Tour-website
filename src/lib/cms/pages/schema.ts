@@ -279,6 +279,7 @@ export const pageHeroSchema = z.object({
   introBody: z.string().trim().max(800).default(""),
   ctaHeading: z.string().trim().max(140).default(""),
   ctaBody: z.string().trim().max(400).default(""),
+  trustBadges: z.array(z.string().trim().max(60)).length(3).default(["B2B Rates Available", "IATA & ASTA Licensed", "Direct From The Owner"]),
   contactOffices: z.array(contactOfficeSchema).min(1).max(6).default(defaultContactOffices),
   contactPanel: contactPanelSchema.default({
     heading: "Access the Group Network",
@@ -384,6 +385,7 @@ export const defaultPageHero: PageHeroData = {
   introBody: "",
   ctaHeading: "",
   ctaBody: "",
+  trustBadges: ["B2B Rates Available", "IATA & ASTA Licensed", "Direct From The Owner"],
   contactOffices: defaultContactOffices,
   contactPanel: {
     heading: "Access the Group Network",

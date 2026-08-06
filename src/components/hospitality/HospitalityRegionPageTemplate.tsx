@@ -72,12 +72,13 @@ type Props = {
   showcase: HospitalityShowcaseItem[];
 };
 
-const trustBadges = ['B2B Rates Available', 'IATA & ASTA Licensed', 'Direct From The Owner'];
+const defaultTrustBadges = ['B2B Rates Available', 'IATA & ASTA Licensed', 'Direct From The Owner'];
 
 export function HospitalityRegionPageTemplate({ path, eyebrowIcon: EyebrowIcon, fallback, nav, showcase }: Props) {
   const cms = usePublishedPage(path);
   const hero = cms?.hero;
   const region = path.split('/').pop();
+  const trustBadges = hero?.trustBadges?.length === 3 ? hero.trustBadges : defaultTrustBadges;
 
   // The nav pill labels come from the same "Region cards" the main
   // /hospitality page's dashboard editor already controls (one edit point

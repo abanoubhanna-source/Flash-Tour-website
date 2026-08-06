@@ -31,14 +31,15 @@ const defaultZanzibarData: ZanzibarCity[] = [
   },
   {
     id: "safari",
+    slug: "safari",
     name: "SAFARI",
     icon: Trees,
     desc: "Africa, the land of the wildlife. The most famous Safari’s in the world are in the biggest Savannas located in Africa. Luckily, we are here to make your experience unforgettable. Yes, you read it right. We organize Safari excursions with a private car, and accommodation. You can stay in the Savannah for a couple of days or you can enjoy the best of both worlds, because we have now launched an overday Safari from Zanzibar Island to Mikumi or Selous.",
     mainImg: "/images/safari-main.jpg",
     places: [
-      { name: "Selous Reserve", desc: "Africa’s largest protected reserve and home to the largest concentration of elephants in the world. Announced as a world heritage site by UNESCO.", img: "/images/selous.jpg" },
-      { name: "Ngorongoro Conservation", desc: "A safe haven for globally threatened species to thrive in their natural habitat free of poachers. Also serves as settlements for semi-nomadic Massai tribes.", img: "/images/ngorongoro.jpg" },
-      { name: "Mikumi Park", desc: "A wild park featuring a variety of wild animals and home to the tree-climbing lions. A resting spot for several migratory wildlife.", img: "/images/mikumi.jpg" }
+      { name: "Selous Reserve", slug: "selous-reserve", desc: "Africa’s largest protected reserve and home to the largest concentration of elephants in the world. Announced as a world heritage site by UNESCO.", img: "/images/selous.jpg" },
+      { name: "Ngorongoro Conservation", slug: "ngorongoro-conservation", desc: "A safe haven for globally threatened species to thrive in their natural habitat free of poachers. Also serves as settlements for semi-nomadic Massai tribes.", img: "/images/ngorongoro.jpg" },
+      { name: "Mikumi Park", slug: "mikumi-park", desc: "A wild park featuring a variety of wild animals and home to the tree-climbing lions. A resting spot for several migratory wildlife.", img: "/images/mikumi.jpg" }
     ]
   }
 ];

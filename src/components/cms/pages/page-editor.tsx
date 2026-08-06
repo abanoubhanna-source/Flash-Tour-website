@@ -498,28 +498,43 @@ function HospitalityIntroCtaEditor({
   introBody,
   ctaHeading,
   ctaBody,
+  trustBadges,
   onChange,
 }: {
   introHeading: string;
   introBody: string;
   ctaHeading: string;
   ctaBody: string;
-  onChange: (value: { introHeading: string; introBody: string; ctaHeading: string; ctaBody: string }) => void;
+  trustBadges: string[];
+  onChange: (value: { introHeading: string; introBody: string; ctaHeading: string; ctaBody: string; trustBadges: string[] }) => void;
 }) {
+  const updateBadge = (index: number, next: string) => {
+    const nextBadges = [...trustBadges];
+    nextBadges[index] = next;
+    onChange({ introHeading, introBody, ctaHeading, ctaBody, trustBadges: nextBadges });
+  };
   return (
     <CollapsibleSection eyebrow="Hospitality region page" title="Intro & closing CTA" description="The centered intro statement below the hero, and the closing 'Partner With...' section at the bottom of the page. The showcase cards below the intro pull each property's real content from the Hospitality collection.">
       <label className="block text-xs font-bold text-slate-700">Intro heading
-        <input value={introHeading} onChange={(event) => onChange({ introHeading: event.target.value, introBody, ctaHeading, ctaBody })} className="mt-2 h-11 w-full rounded-xl border px-3.5 text-sm" />
+        <input value={introHeading} onChange={(event) => onChange({ introHeading: event.target.value, introBody, ctaHeading, ctaBody, trustBadges })} className="mt-2 h-11 w-full rounded-xl border px-3.5 text-sm" />
       </label>
       <label className="mt-5 block text-xs font-bold text-slate-700">Intro body
-        <textarea value={introBody} onChange={(event) => onChange({ introHeading, introBody: event.target.value, ctaHeading, ctaBody })} rows={3} className="mt-2 w-full rounded-xl border px-3 py-2 text-sm" />
+        <textarea value={introBody} onChange={(event) => onChange({ introHeading, introBody: event.target.value, ctaHeading, ctaBody, trustBadges })} rows={3} className="mt-2 w-full rounded-xl border px-3 py-2 text-sm" />
       </label>
       <label className="mt-5 block text-xs font-bold text-slate-700">Closing CTA heading
-        <input value={ctaHeading} onChange={(event) => onChange({ introHeading, introBody, ctaHeading: event.target.value, ctaBody })} className="mt-2 h-11 w-full rounded-xl border px-3.5 text-sm" />
+        <input value={ctaHeading} onChange={(event) => onChange({ introHeading, introBody, ctaHeading: event.target.value, ctaBody, trustBadges })} className="mt-2 h-11 w-full rounded-xl border px-3.5 text-sm" />
       </label>
       <label className="mt-5 block text-xs font-bold text-slate-700">Closing CTA body
-        <textarea value={ctaBody} onChange={(event) => onChange({ introHeading, introBody, ctaHeading, ctaBody: event.target.value })} rows={2} className="mt-2 w-full rounded-xl border px-3 py-2 text-sm" />
+        <textarea value={ctaBody} onChange={(event) => onChange({ introHeading, introBody, ctaHeading, ctaBody: event.target.value, trustBadges })} rows={2} className="mt-2 w-full rounded-xl border px-3 py-2 text-sm" />
       </label>
+      <div className="mt-5 space-y-3">
+        <p className="text-xs font-bold text-slate-700">Trust badges (the 3 small badges under the closing CTA)</p>
+        <div className="grid gap-2 sm:grid-cols-3">
+          {trustBadges.map((badge, index) => (
+            <input key={index} aria-label={`Trust badge ${index + 1}`} value={badge} onChange={(event) => updateBadge(index, event.target.value)} placeholder="B2B Rates Available" className="h-10 rounded-xl border px-3 text-sm" />
+          ))}
+        </div>
+      </div>
     </CollapsibleSection>
   );
 }
@@ -872,11 +887,13 @@ export function PageEditor({ page, canEdit, canPublish, canUpload, embedded = fa
                       introBody={draft.hero.introBody}
                       ctaHeading={draft.hero.ctaHeading}
                       ctaBody={draft.hero.ctaBody}
+                      trustBadges={draft.hero.trustBadges}
                       onChange={(value) => {
                         updateHero("introHeading", value.introHeading);
                         updateHero("introBody", value.introBody);
                         updateHero("ctaHeading", value.ctaHeading);
                         updateHero("ctaBody", value.ctaBody);
+                        updateHero("trustBadges", value.trustBadges);
                       }}
                     />
                   )}
