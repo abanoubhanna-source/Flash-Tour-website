@@ -65,6 +65,19 @@ export function MediaPicker({ value, onChange, label, canUpload = true }: { valu
       const userId = userResult.user?.id;
       if (!userId) throw new Error("Sign in again to upload images.");
       const checksum = await hashFile(file);
+      const { data: existing } = await supabase
+        .from("media_assets")
+        .select("id,bucket,storage_path,original_name,alt_text")
+        .eq("checksum", checksum)
+        .eq("status", "ready")
+        .maybeSingle();
+      if (existing) {
+        const { data: pub } = supabase.storage.from(existing.bucket).getPublicUrl(existing.storage_path);
+        onChange({ assetId: existing.id, url: pub.publicUrl, alt: value.alt || existing.alt_text || existing.original_name });
+        setNotice("This image was already uploaded — reusing it.");
+        setOpen(false);
+        return;
+      }
       const extension = file.name.split(".").pop()?.toLowerCase() || "image";
       const path = `uploads/${userId}/${crypto.randomUUID()}.${extension}`;
       const { error: uploadError } = await supabase.storage.from("site-media").upload(path, file, { contentType: file.type, upsert: false });
