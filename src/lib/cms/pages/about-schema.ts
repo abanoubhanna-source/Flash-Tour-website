@@ -5,12 +5,6 @@ export const aboutBodySectionSchema = z.object({
   body: z.string().trim().max(2000).default(""),
 });
 
-export const aboutHeroIntroSchema = z.object({
-  eyebrow: z.string().trim().max(120).default(""),
-  title: z.string().trim().max(140).default(""),
-  body: z.string().trim().max(2000).default(""),
-});
-
 export const aboutImageSchema = z.object({
   assetId: z.uuid().nullable().default(null),
   url: z.string().trim().max(2000).default(""),
@@ -18,6 +12,13 @@ export const aboutImageSchema = z.object({
 });
 
 export const emptyAboutImage = { assetId: null, url: "", alt: "" };
+
+export const aboutHeroIntroSchema = z.object({
+  eyebrow: z.string().trim().max(120).default(""),
+  title: z.string().trim().max(140).default(""),
+  body: z.string().trim().max(2000).default(""),
+  image: aboutImageSchema.default(emptyAboutImage),
+});
 
 export const aboutBodyWithBulletsSchema = z.object({
   title: z.string().trim().max(140).default(""),
@@ -72,7 +73,7 @@ export const aboutTeamSchema = z.object({
 });
 
 const emptyBody = { title: "", body: "" };
-const emptyHeroIntro = { eyebrow: "", title: "", body: "" };
+const emptyHeroIntro = { eyebrow: "", title: "", body: "", image: emptyAboutImage };
 const emptyBodyWithBullets = { title: "", body: "", bullets: [], image: emptyAboutImage };
 const emptyWorkProcess = { title: "", body: "", bullets: [], image: emptyAboutImage, secondaryImage: emptyAboutImage };
 const emptyList = { title: "", items: [] };

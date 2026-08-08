@@ -16,6 +16,7 @@ export async function GET() {
       title_part1: sections.hero_intro.title || fallback.hero.title_part1,
       title_part2: "",
       desc: sections.hero_intro.body || fallback.hero.desc,
+      image: sections.hero_intro.image.url || fallback.hero.image,
     },
     vision: sections.vision.body || fallback.vision,
     mission: sections.mission.body || fallback.mission,

@@ -1,10 +1,10 @@
 // src/app/about/page.tsx
 import type { Metadata } from "next";
-import { getPublishedPageContent } from "@/lib/cms/pages/public";
+import { getPublishedAboutContent } from "@/lib/cms/pages/public";
 import AboutPageClient from "./AboutPageClient";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const content = await getPublishedPageContent("/about");
+  const content = await getPublishedAboutContent();
   return {
     title: content?.seo?.title || "About Us | Flash Group",
     description:

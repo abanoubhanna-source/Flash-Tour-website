@@ -86,7 +86,7 @@ function BodySectionFields({ value, onChange }: { value: AboutBodySectionData; o
   );
 }
 
-function HeroIntroFields({ value, onChange }: { value: AboutHeroIntroData; onChange: (value: AboutHeroIntroData) => void }) {
+function HeroIntroFields({ value, onChange, canUpload }: { value: AboutHeroIntroData; onChange: (value: AboutHeroIntroData) => void; canUpload: boolean }) {
   return (
     <div className="space-y-4">
       <label className="block text-xs font-bold text-slate-700">Eyebrow
@@ -98,6 +98,12 @@ function HeroIntroFields({ value, onChange }: { value: AboutHeroIntroData; onCha
       <label className="block text-xs font-bold text-slate-700">Body
         <textarea value={value.body} onChange={(event) => onChange({ ...value, body: event.target.value })} rows={4} className="mt-2 w-full rounded-xl border px-3 py-2 text-sm" />
       </label>
+      <MediaPicker
+        label="Hero background photo"
+        value={value.image}
+        canUpload={canUpload}
+        onChange={(image) => onChange({ ...value, image: { assetId: image.assetId ?? value.image.assetId, url: image.url, alt: image.alt ?? value.image.alt } })}
+      />
     </div>
   );
 }
@@ -513,7 +519,7 @@ export function AboutPageEditor({ page, canEdit, canPublish, canUpload }: AboutP
               <fieldset disabled={!canEdit} className="space-y-4 disabled:opacity-75">
                 <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#157670]">Shown on the live page, in page order</p>
                 <CollapsibleSection eyebrow="1. Hero" title="Hero intro" defaultOpen>
-                  <HeroIntroFields value={draft.sections.hero_intro} onChange={(value) => updateSection("hero_intro", value)} />
+                  <HeroIntroFields value={draft.sections.hero_intro} onChange={(value) => updateSection("hero_intro", value)} canUpload={canUpload} />
                 </CollapsibleSection>
                 <CollapsibleSection eyebrow="2. Vision & Mission" title="Vision">
                   <BodySectionFields value={draft.sections.vision} onChange={(value) => updateSection("vision", value)} />
