@@ -38,7 +38,7 @@ export default function ContactPageClient() {
     <main className="flex min-h-screen flex-col items-center justify-between w-full bg-slate-50 overflow-hidden">
 
       {/* 1. Elegant Hero Section */}
-      <section className="relative w-full h-[50vh] flex items-center justify-center bg-slate-950">
+      <section className="relative w-full h-[60vh] flex items-center justify-center bg-slate-950">
         <div className="absolute inset-0 z-0">
           <Image
             src={cms?.hero?.image.url || "/images/office-1.jpg"}
