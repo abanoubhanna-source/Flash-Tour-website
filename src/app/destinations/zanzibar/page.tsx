@@ -18,7 +18,7 @@ type ZanzibarCity = { id: string; slug?: string; name: string; icon: typeof Sun;
 const defaultZanzibarData: ZanzibarCity[] = [
   {
     id: "zanzibar",
-    slug: "zanzibar-island",
+    slug: "zanzibar",
     name: "ZANZIBAR",
     icon: Sun,
     desc: "In Zanzibar, our own resort Kiwengwa Beach has more than 200 rooms. It is directly located on the beach and offers a wide range of activities. The island itself has the most famous beaches in Africa, where we will organize your private boat Safaris to sand banks located in the middle of the ocean. A visit to the forest with a guide taking you on a spice tour, and a day of relaxation sipping on coconut by the beach.",

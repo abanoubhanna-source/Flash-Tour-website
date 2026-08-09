@@ -20,9 +20,9 @@ export async function getHospitalityCategories(): Promise<{ id: string; name: st
   return data;
 }
 
-export type HospitalityListParams = { search: string; category: string; country: string; region: string; status: "all" | "draft" | "published" | "archived"; active: "all" | "true" | "false"; sort: "order" | "updated" | "title"; page: number; pageSize: number };
-export type HospitalityListResult = { items: Array<Omit<CmsCollectionSummary, "type"> & { type: "hospitality" }>; total: number; pages: number; options: { categories: { id: string; name: string }[]; countries: string[]; regions: string[] }; params: HospitalityListParams };
-export function parseHospitalityListParams(value: Record<string, string | string[] | undefined>): HospitalityListParams { const text=(key:string,max=120)=>typeof value[key]==="string"?value[key].trim().slice(0,max):""; const status=text("status"); const active=text("active"); const sort=text("sort"); const int=(key:string,fallback:number,max:number)=>{const n=Number(text(key,10));return Number.isInteger(n)&&n>0&&n<=max?n:fallback}; return {search:text("search",120),category:text("category",80),country:text("country"),region:text("region"),status:["draft","published","archived"].includes(status)?status as HospitalityListParams["status"]:"all",active:active==="true"||active==="false"?active:"all",sort:["order","updated","title"].includes(sort)?sort as HospitalityListParams["sort"]:"order",page:int("page",1,100000),pageSize:[10,20,50].includes(int("pageSize",10,50))?int("pageSize",10,50):10}; }
+export type HospitalityListParams = { search: string; category: string; country: string; region: string; showcaseRegion: string; status: "all" | "draft" | "published" | "archived"; active: "all" | "true" | "false"; sort: "order" | "updated" | "title"; page: number; pageSize: number };
+export type HospitalityListResult = { items: Array<Omit<CmsCollectionSummary, "type"> & { type: "hospitality"; showcaseRegion: string | null }>; total: number; pages: number; options: { categories: { id: string; name: string }[]; countries: string[]; regions: string[]; showcaseRegionCounts: Record<string, number> }; params: HospitalityListParams };
+export function parseHospitalityListParams(value: Record<string, string | string[] | undefined>): HospitalityListParams { const text=(key:string,max=120)=>typeof value[key]==="string"?value[key].trim().slice(0,max):""; const status=text("status"); const active=text("active"); const sort=text("sort"); const int=(key:string,fallback:number,max:number)=>{const n=Number(text(key,10));return Number.isInteger(n)&&n>0&&n<=max?n:fallback}; return {search:text("search",120),category:text("category",80),country:text("country"),region:text("region"),showcaseRegion:text("showcaseRegion",60),status:["draft","published","archived"].includes(status)?status as HospitalityListParams["status"]:"all",active:active==="true"||active==="false"?active:"all",sort:["order","updated","title"].includes(sort)?sort as HospitalityListParams["sort"]:"order",page:int("page",1,100000),pageSize:[10,20,50].includes(int("pageSize",10,50))?int("pageSize",10,50):10}; }
 export async function getHospitalityList(params: HospitalityListParams): Promise<HospitalityListResult> {
   const s = await createSupabaseServerClient();
   const search = params.search.replace(/[%_,()]/g, "");
@@ -31,6 +31,7 @@ export async function getHospitalityList(params: HospitalityListParams): Promise
   if (params.category) countQuery = countQuery.filter("draft_data->>categoryId", "eq", params.category);
   if (params.country) countQuery = countQuery.filter("draft_data->>country", "eq", params.country);
   if (params.region) countQuery = countQuery.filter("draft_data->>region", "eq", params.region);
+  if (params.showcaseRegion) countQuery = countQuery.filter("draft_data->>showcaseRegion", "eq", params.showcaseRegion);
   if (params.status !== "all") countQuery = countQuery.eq("status", params.status);
   if (params.active !== "all") countQuery = countQuery.eq("is_active", params.active === "true");
   const countResult = await countQuery;
@@ -43,6 +44,7 @@ export async function getHospitalityList(params: HospitalityListParams): Promise
   if (params.category) dataQuery = dataQuery.filter("draft_data->>categoryId", "eq", params.category);
   if (params.country) dataQuery = dataQuery.filter("draft_data->>country", "eq", params.country);
   if (params.region) dataQuery = dataQuery.filter("draft_data->>region", "eq", params.region);
+  if (params.showcaseRegion) dataQuery = dataQuery.filter("draft_data->>showcaseRegion", "eq", params.showcaseRegion);
   if (params.status !== "all") dataQuery = dataQuery.eq("status", params.status);
   if (params.active !== "all") dataQuery = dataQuery.eq("is_active", params.active === "true");
   dataQuery = params.sort === "updated" ? dataQuery.order("updated_at", { ascending: false }) : params.sort === "title" ? dataQuery.order("title") : dataQuery.order("sort_order");
@@ -56,11 +58,17 @@ export async function getHospitalityList(params: HospitalityListParams): Promise
     const draft = row.draft_data as Record<string, unknown>;
     return typeof draft[key] === "string" ? draft[key].trim() : "";
   }).filter(Boolean))].sort();
+  const showcaseRegionCounts: Record<string, number> = {};
+  for (const row of all ?? []) {
+    const draft = row.draft_data as Record<string, unknown>;
+    const key = typeof draft.showcaseRegion === "string" ? draft.showcaseRegion.trim() : "";
+    if (key) showcaseRegionCounts[key] = (showcaseRegionCounts[key] ?? 0) + 1;
+  }
   const items = (data ?? []).map((row) => {
     const content = parseContent(row.draft_data, { title: row.title, slug: row.slug, sortOrder: row.sort_order, isActive: row.is_active });
-    return { id: row.id, type: "hospitality" as const, title: row.title, slug: row.slug, status: row.status, active: row.is_active, sortOrder: row.sort_order, updatedAt: row.updated_at, lockVersion: row.lock_version, parentId: null, parentTitle: null, childCount: 0, country: content.country, region: content.region, categoryId: content.categoryId };
+    return { id: row.id, type: "hospitality" as const, title: row.title, slug: row.slug, status: row.status, active: row.is_active, sortOrder: row.sort_order, updatedAt: row.updated_at, lockVersion: row.lock_version, parentId: null, parentTitle: null, childCount: 0, country: content.country, region: content.region, categoryId: content.categoryId, showcaseRegion: content.showcaseRegion };
   });
-  return { items, total, pages, options: { categories: categories ?? [], countries: values("country"), regions: values("region") }, params: { ...params, page } };
+  return { items, total, pages, options: { categories: categories ?? [], countries: values("country"), regions: values("region"), showcaseRegionCounts }, params: { ...params, page } };
 }
 
 export async function getCollectionEditor(id: string, expectedType?: ManagedContentType): Promise<CmsCollectionEditor | null> {

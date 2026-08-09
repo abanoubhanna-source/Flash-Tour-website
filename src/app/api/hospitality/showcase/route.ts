@@ -23,8 +23,10 @@ export async function GET(request: NextRequest) {
       const gallery = Array.isArray(data.gallery) ? data.gallery : [];
       const firstImage = gallery[0] && typeof gallery[0] === "object" ? (gallery[0] as { url?: unknown }).url : undefined;
       const specs: string[] = [];
-      if (typeof data.roomsOrCabins === "number") specs.push(`${data.roomsOrCabins} Rooms`);
-      if (Array.isArray(data.diningOptions)) specs.push(...data.diningOptions.slice(0, 1).filter((v): v is string => typeof v === "string"));
+      if (typeof data.rooms === "number") specs.push(`${data.rooms} Rooms`);
+      if (typeof data.cabins === "number") specs.push(`${data.cabins} Cabins`);
+      if (typeof data.suites === "number") specs.push(`${data.suites} Suites`);
+      if (Array.isArray(data.diningOptions)) specs.push(...data.diningOptions.filter((v): v is string => typeof v === "string"));
       if (Array.isArray(data.facilities)) specs.push(...data.facilities.filter((v): v is string => typeof v === "string"));
 
       return {
@@ -37,7 +39,7 @@ export async function GET(request: NextRequest) {
           : typeof data.shortDescription === "string" ? data.shortDescription : "",
         img: typeof firstImage === "string" && firstImage ? firstImage : "",
         iconKey: typeof data.showcaseIcon === "string" ? data.showcaseIcon : "",
-        specs: specs.slice(0, 4),
+        specs,
       };
     });
 

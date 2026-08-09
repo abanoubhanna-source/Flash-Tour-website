@@ -240,10 +240,6 @@ export function HospitalityRegionPageTemplate({ path, eyebrowIcon: EyebrowIcon, 
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/60 via-transparent to-transparent"></div>
 
-                    <div className="absolute top-8 right-8 bg-white/90 backdrop-blur-md w-16 h-16 rounded-full flex items-center justify-center shadow-lg">
-                      <span className="text-brand-teal font-bold text-xl font-en">{String(idx + 1).padStart(2, '0')}</span>
-                    </div>
-
                     <div className="absolute bottom-8 left-8 text-white font-bold font-en text-xl">
                       {item.name}
                     </div>
