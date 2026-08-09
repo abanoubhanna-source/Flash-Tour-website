@@ -14,7 +14,7 @@ type CollectionMode = "hospitality" | "destinations" | "cruises" | "brands";
 type Props = {
   mode: CollectionMode;
   items: CmsCollectionSummary[];
-  parents: { id: string; title: string; type: ManagedContentType }[];
+  parents: { id: string; title: string; type: ManagedContentType; country?: string | null }[];
   categories: { id: string; name: string }[];
   canCreate: boolean;
   canArchive: boolean;
@@ -416,11 +416,29 @@ export function CollectionList({ mode, items, parents, categories, canCreate, ca
                   className="mt-2 h-11 w-full rounded-xl border border-slate-200 px-3"
                 >
                   <option value="">Choose parent</option>
-                  {relevantParents.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {item.title}
-                    </option>
-                  ))}
+                  {type === "destination_attraction" ? (
+                    Object.entries(
+                      relevantParents.reduce<Record<string, typeof relevantParents>>((groups, item) => {
+                        const group = item.country || "Other";
+                        (groups[group] ??= []).push(item);
+                        return groups;
+                      }, {}),
+                    ).map(([country, group]) => (
+                      <optgroup key={country} label={country}>
+                        {group.map((item) => (
+                          <option key={item.id} value={item.id}>
+                            {item.title}
+                          </option>
+                        ))}
+                      </optgroup>
+                    ))
+                  ) : (
+                    relevantParents.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.title}
+                      </option>
+                    ))
+                  )}
                 </select>
               </label>
             )}

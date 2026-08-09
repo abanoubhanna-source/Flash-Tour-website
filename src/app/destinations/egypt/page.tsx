@@ -97,11 +97,9 @@ export default function EgyptComprehensivePage() {
             name: cmsCity.title ? cmsCity.title.toUpperCase() : city.name,
             desc: cmsCity.desc || city.desc,
             mainImg: cmsCity.image || city.mainImg,
-            places: city.places.map((spot) => {
-              const spotSlug = 'slug' in spot ? (spot as { slug?: string }).slug : undefined;
-              const cmsSpot = spotSlug ? cmsCity.attractions.find((a: { slug: string }) => a.slug === spotSlug) : undefined;
-              return cmsSpot ? { ...spot, name: cmsSpot.title || spot.name, desc: cmsSpot.desc || spot.desc, img: cmsSpot.image || spot.img } : spot;
-            }),
+            places: cmsCity.attractions && cmsCity.attractions.length
+              ? cmsCity.attractions.map((a: { slug: string; title: string; desc: string; image: string }) => ({ slug: a.slug, name: a.title, desc: a.desc, img: a.image }))
+              : city.places,
           };
         }));
       })

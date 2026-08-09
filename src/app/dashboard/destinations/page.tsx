@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Destinations" };
 
 export default async function DestinationsModulePage() {
   const [user, items, pageId] = await Promise.all([requireCmsUser(), getCollectionSummaries(), getPageIdByKey("destinations")]);
-  const parents = items.filter((item) => item.type === "destination" || item.type === "destination_place").map((item) => ({ id: item.id, title: item.title, type: item.type }));
+  const parents = items.filter((item) => item.type === "destination" || item.type === "destination_place").map((item) => ({ id: item.id, title: item.title, type: item.type, country: item.type === "destination_place" ? item.parentTitle : null }));
   const headerPage = pageId ? await getCmsPage(pageId) : null;
   return (
     <div className="space-y-5">

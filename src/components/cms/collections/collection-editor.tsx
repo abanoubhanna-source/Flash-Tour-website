@@ -144,7 +144,29 @@ function ContentTab({ entry, draft, updateContent, updateDraft, updateArray, can
         </label>
       </div>
     )}
-    {entry.parents.length > 0 && <label className="block text-xs font-bold">Parent <span className="text-red-600">*</span><select value={draft.parentId ?? ""} onChange={(event) => updateDraft((current) => ({ ...current, parentId: event.target.value || null }))} className="mt-2 h-10 w-full rounded-xl border px-3 text-sm"><option value="">Choose parent</option>{entry.parents.map((parent) => <option key={parent.id} value={parent.id}>{parent.title}</option>)}</select></label>}
+    {entry.parents.length > 0 && (
+      <label className="block text-xs font-bold">
+        Parent <span className="text-red-600">*</span>
+        <select value={draft.parentId ?? ""} onChange={(event) => updateDraft((current) => ({ ...current, parentId: event.target.value || null }))} className="mt-2 h-10 w-full rounded-xl border px-3 text-sm">
+          <option value="">Choose parent</option>
+          {entry.type === "destination_attraction" ? (
+            Object.entries(
+              entry.parents.reduce<Record<string, typeof entry.parents>>((groups, item) => {
+                const group = item.country || "Other";
+                (groups[group] ??= []).push(item);
+                return groups;
+              }, {}),
+            ).map(([country, group]) => (
+              <optgroup key={country} label={country}>
+                {group.map((parent) => <option key={parent.id} value={parent.id}>{parent.title}</option>)}
+              </optgroup>
+            ))
+          ) : (
+            entry.parents.map((parent) => <option key={parent.id} value={parent.id}>{parent.title}</option>)
+          )}
+        </select>
+      </label>
+    )}
     <div className="grid gap-4 sm:grid-cols-3"><Nullable label="Country" value={draft.content.country} onChange={(value) => updateContent("country", value)} /><Nullable label="Region" value={draft.content.region} onChange={(value) => updateContent("region", value)} /><Nullable label="Location" value={draft.content.location} onChange={(value) => updateContent("location", value)} /></div>
     <Area label="Short description" value={draft.content.shortDescription} onChange={(value) => updateContent("shortDescription", value)} rows={3} /><Area label="Rich text description" value={draft.content.fullDescription} onChange={(value) => updateContent("fullDescription", value)} rows={9} />
     <div className="grid gap-4 sm:grid-cols-2">
