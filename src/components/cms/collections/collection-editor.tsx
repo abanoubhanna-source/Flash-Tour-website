@@ -55,20 +55,6 @@ export function CollectionEditor({ entry, mode, canEdit, canPublish, canArchive,
 
   useEffect(() => { currentDraft.current = draft; }, [draft]);
   useEffect(() => {
-    if (!dirty || busy || !canEdit) return;
-    const timeout = window.setTimeout(() => {
-      startTransition(async () => {
-        const response = await saveCollectionDraft({ id: entry.id, lockVersion: lockVersion.current, type: entry.type, draft: currentDraft.current });
-        setNotice(response.message);
-        if (response.ok) {
-          lockVersion.current = response.lockVersion ?? lockVersion.current;
-          setSaved(signature(currentDraft.current));
-        }
-      });
-    }, 1400);
-    return () => window.clearTimeout(timeout);
-  }, [busy, canEdit, dirty, entry.id, entry.type, startTransition]);
-  useEffect(() => {
     if (!dirty) return;
     const beforeUnload = (event: BeforeUnloadEvent) => { event.preventDefault(); event.returnValue = ""; };
     window.addEventListener("beforeunload", beforeUnload);

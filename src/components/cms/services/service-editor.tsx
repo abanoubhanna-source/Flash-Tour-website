@@ -47,8 +47,6 @@ export function ServiceEditor({ service, canEdit, canPublish, canUpload }: Props
     if (!result.ok) { setStatus("error"); setNotice(result.message); return false; }
     lockRef.current = result.lockVersion; setSavedSignature(saved); setStatus(signature(draftRef.current) === saved ? "saved" : "dirty"); if (result.message) setNotice(result.message); if (version) router.refresh(); return true;
   }, [canEdit, router, service.id]);
-  useEffect(() => { if (!canEdit || !dirty || savingRef.current || busy) return; const timer = window.setTimeout(() => void performSave(false), 1400); return () => window.clearTimeout(timer); }, [busy, canEdit, dirty, draft, performSave]);
-
   function updateContent<K extends keyof ServiceContentData>(key: K, value: ServiceContentData[K]) { setDraft((current) => ({ ...current, content: { ...current.content, [key]: value } })); setStatus("dirty"); setNotice(null); }
   function updateSeo<K extends keyof ServiceSeoData>(key: K, value: ServiceSeoData[K]) { setDraft((current) => ({ ...current, seo: { ...current.seo, [key]: value } })); setStatus("dirty"); setNotice(null); }
   function applyMarkup(prefix: string, suffix = prefix, fallback = "text") { const textarea = descriptionRef.current; if (!textarea) return; const start = textarea.selectionStart; const end = textarea.selectionEnd; const selected = draft.content.description.slice(start, end) || fallback; updateContent("description", `${draft.content.description.slice(0, start)}${prefix}${selected}${suffix}${draft.content.description.slice(end)}`); requestAnimationFrame(() => { textarea.focus(); textarea.setSelectionRange(start + prefix.length, start + prefix.length + selected.length); }); }
@@ -61,7 +59,7 @@ export function ServiceEditor({ service, canEdit, canPublish, canUpload }: Props
   const statusInfo = {
     saved: { icon: Check, label: "All changes saved", className: "text-emerald-700" },
     dirty: { icon: Cloud, label: "Unsaved changes", className: "text-amber-700" },
-    saving: { icon: Loader2, label: "Autosaving…", className: "text-blue-700" },
+    saving: { icon: Loader2, label: "Saving…", className: "text-blue-700" },
     error: { icon: CloudAlert, label: "Save failed", className: "text-red-700" },
   }[status];
   const StatusIcon = statusInfo.icon;

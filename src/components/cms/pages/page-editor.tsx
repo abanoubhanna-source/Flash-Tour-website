@@ -622,12 +622,6 @@ export function PageEditor({ page, canEdit, canPublish, canUpload, embedded = fa
     return true;
   }, [canEdit, page.id, router]);
 
-  useEffect(() => {
-    if (!canEdit || !isDirty || savingRef.current || busyAction !== null) return;
-    const timer = window.setTimeout(() => void performSave(false), 1400);
-    return () => window.clearTimeout(timer);
-  }, [busyAction, canEdit, draft, isDirty, performSave]);
-
   function updateHero<K extends keyof PageHeroData>(key: K, value: PageHeroData[K]) {
     setDraft((current) => ({ ...current, hero: { ...current.hero, [key]: value } }));
     setSaveStatus("dirty");
@@ -702,7 +696,7 @@ export function PageEditor({ page, canEdit, canPublish, canUpload, embedded = fa
   const statusDetails = {
     saved: { icon: Check, label: "All changes saved", className: "text-emerald-700" },
     dirty: { icon: Cloud, label: "Unsaved changes", className: "text-amber-700" },
-    saving: { icon: Loader2, label: "Autosaving…", className: "text-blue-700" },
+    saving: { icon: Loader2, label: "Saving…", className: "text-blue-700" },
     error: { icon: CloudAlert, label: "Save failed", className: "text-red-700" },
   }[saveStatus];
   const StatusIcon = statusDetails.icon;
