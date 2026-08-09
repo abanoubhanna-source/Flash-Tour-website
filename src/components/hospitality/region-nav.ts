@@ -10,8 +10,5 @@ const regions = [
 ] as const;
 
 export function regionNav(current: (typeof regions)[number]['key']): HospitalityRegionNavLink[] {
-  return [
-    { label: 'All Regions', href: '/hospitality' },
-    ...regions.map((region) => ({ label: region.label, href: region.href, current: region.key === current })),
-  ];
+  return regions.map((region) => ({ label: region.label, href: region.href, current: region.key === current }));
 }

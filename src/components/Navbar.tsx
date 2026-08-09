@@ -45,7 +45,7 @@ export default function Navbar() {
 
           <div className="hidden md:flex items-center space-x-10">
             <Link href="/" className="font-en text-slate-800 hover:text-teal-700 transition-colors font-medium">Home</Link>
-            <Link href="/about" className="font-en text-slate-800 hover:text-teal-700 transition-colors font-medium">The Group</Link>
+            <Link href="/about" className="font-en text-slate-800 hover:text-teal-700 transition-colors font-medium">About Us</Link>
             <Link href="/hospitality" className="font-en text-slate-800 hover:text-teal-700 transition-colors font-medium">Hospitality</Link>
             <Link href="/services" className="font-en text-slate-800 hover:text-teal-700 transition-colors font-medium">Service</Link>
             
@@ -98,7 +98,7 @@ export default function Navbar() {
         {isMobileMenuOpen && (
           <motion.div id="mobile-nav-menu" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="md:hidden bg-white border-b border-slate-100 px-6 py-6 flex flex-col space-y-4">
             <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="text-slate-800 font-medium">Home</Link>
-            <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className="text-slate-800 font-medium">The Group</Link>
+            <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className="text-slate-800 font-medium">About Us</Link>
             {/* تم إضافة Hospitality وتعديل المسميات لتطابق نسخة الديسكتوب */}
             <Link href="/hospitality" onClick={() => setIsMobileMenuOpen(false)} className="text-slate-800 font-medium">Hospitality</Link>
             <Link href="/services" onClick={() => setIsMobileMenuOpen(false)} className="text-slate-800 font-medium">Services</Link>

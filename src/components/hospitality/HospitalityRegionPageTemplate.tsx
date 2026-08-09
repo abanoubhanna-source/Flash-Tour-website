@@ -87,10 +87,7 @@ export function HospitalityRegionPageTemplate({ path, eyebrowIcon: EyebrowIcon, 
   const mainHospitality = usePublishedPage('/hospitality');
   const regionCards = (mainHospitality?.hero as { hospitalityRegions?: Array<{ title: string; link: string }> } | undefined)?.hospitalityRegions;
   const cmsNav: HospitalityRegionNavLink[] | null = regionCards?.length
-    ? [
-        { label: 'All Regions', href: '/hospitality' },
-        ...regionCards.map((card) => ({ label: card.title, href: card.link, current: card.link === path })),
-      ]
+    ? regionCards.map((card) => ({ label: card.title, href: card.link, current: card.link === path }))
     : null;
   const activeNav = cmsNav ?? nav;
 
@@ -214,14 +211,6 @@ export function HospitalityRegionPageTemplate({ path, eyebrowIcon: EyebrowIcon, 
                     </div>
 
                     <div className="flex flex-wrap gap-3">
-                      {item.slug && (
-                        <Link
-                          href={`/hospitality/${region}/${item.slug}`}
-                          className="inline-flex w-fit items-center gap-3 border border-brand-navy text-brand-navy px-6 py-3.5 rounded-full font-bold font-en text-sm uppercase tracking-widest hover:bg-brand-navy hover:text-white transition-colors duration-300"
-                        >
-                          View Full Details <ArrowUpRight className="w-4 h-4" />
-                        </Link>
-                      )}
                       <Link
                         href="/partner-portal"
                         className="inline-flex w-fit items-center gap-3 bg-brand-navy text-white px-6 py-3.5 rounded-full font-bold font-en text-sm uppercase tracking-widest hover:bg-brand-teal transition-colors duration-300 shadow-lg"
