@@ -7,6 +7,7 @@ import { ArrowRight, BriefcaseBusiness, Plus, Search, Trash2, X } from "lucide-r
 import { createService, deleteService, type CreateServiceState } from "@/app/dashboard/services/actions";
 import type { CmsServiceSummary } from "@/lib/cms/services/types";
 import { EmptyState, StatusBadge, TypeAvatar } from "@/components/cms/collections/list-ui";
+import { useConfirm } from "@/components/cms/confirm-dialog";
 
 const initialState: CreateServiceState = { status: "idle" };
 type Props = { services: CmsServiceSummary[]; canCreate: boolean; canEdit: boolean; canDelete: boolean };
@@ -19,14 +20,15 @@ export function ServicesList({ services, canCreate, canEdit, canDelete }: Props)
   const [notice, setNotice] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const [state, action, createPending] = useActionState(createService, initialState);
+  const { confirm, dialog } = useConfirm();
   useEffect(() => { if (state.serviceId) router.push(`/dashboard/services/${state.serviceId}`); }, [router, state.serviceId]);
   const filtered = useMemo(() => {
     const term = query.trim().toLowerCase();
     return term ? services.filter((item) => item.title.toLowerCase().includes(term) || item.slug.includes(term)) : services;
   }, [query, services]);
 
-  function handleDelete(service: CmsServiceSummary) {
-    if (!window.confirm(`Permanently delete “${service.title}”?`)) return;
+  async function handleDelete(service: CmsServiceSummary) {
+    if (!(await confirm(`Permanently delete "${service.title}"?`))) return;
     setDeletingId(service.id);
     startTransition(async () => {
       const result = await deleteService(service.id);
@@ -89,6 +91,7 @@ export function ServicesList({ services, canCreate, canEdit, canDelete }: Props)
           </form>
         </div>
       )}
+      {dialog}
     </div>
   );
 }

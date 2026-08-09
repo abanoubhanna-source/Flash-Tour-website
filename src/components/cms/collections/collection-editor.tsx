@@ -10,6 +10,7 @@ import {
   saveCollectionDraft,
 } from "@/app/dashboard/content/actions";
 import { MediaPicker } from "@/components/cms/media-picker";
+import { useConfirm } from "@/components/cms/confirm-dialog";
 import { hospitalityShowcaseIcons, hospitalityShowcaseRegions, type ManagedContent, type ManagedDraft } from "@/lib/cms/collections/schema";
 import type { CmsCollectionEditor } from "@/lib/cms/collections/types";
 
@@ -52,6 +53,7 @@ export function CollectionEditor({ entry, mode, canEdit, canPublish, canArchive,
   const currentDraft = useRef(draft);
   const dirty = signature(draft) !== saved;
   const back = `/dashboard/${mode}`;
+  const { confirm, dialog } = useConfirm();
 
   useEffect(() => { currentDraft.current = draft; }, [draft]);
   useEffect(() => {
@@ -73,16 +75,16 @@ export function CollectionEditor({ entry, mode, canEdit, canPublish, canArchive,
       setSaved(signature(currentDraft.current));
     }
   });
-  const publish = () => {
-    if (!window.confirm("Publish this item to the public website?")) return;
+  const publish = async () => {
+    if (!(await confirm("Publish this item to the public website?"))) return;
     startTransition(async () => {
       const response = await publishCollectionItem({ id: entry.id, lockVersion: lockVersion.current, type: entry.type, draft: currentDraft.current });
       setNotice(response.message);
       if (response.ok) window.location.reload();
     });
   };
-  const archive = () => {
-    if (!window.confirm("Archive this item?")) return;
+  const archive = async () => {
+    if (!(await confirm("Archive this item?"))) return;
     startTransition(async () => {
       const response = await archiveCollectionItem(entry.id, entry.type, lockVersion.current);
       setNotice(response.message);
@@ -117,6 +119,7 @@ export function CollectionEditor({ entry, mode, canEdit, canPublish, canArchive,
           {tab === "history" && <HistoryTab entry={entry} canEdit={canEdit} getLockVersion={() => lockVersion.current} setNotice={setNotice} startTransition={startTransition} />}
         </fieldset>
       </section>
+      {dialog}
     </div>
   );
 }

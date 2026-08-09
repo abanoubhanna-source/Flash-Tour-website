@@ -7,6 +7,7 @@ import { archiveCollectionItem, createCollectionItem } from "@/app/dashboard/con
 import type { ManagedContentType } from "@/lib/cms/collections/schema";
 import type { CmsCollectionSummary } from "@/lib/cms/collections/types";
 import { EmptyState, StatusBadge, TypeAvatar } from "./list-ui";
+import { useConfirm } from "@/components/cms/confirm-dialog";
 
 type CollectionMode = "hospitality" | "destinations" | "cruises" | "brands";
 
@@ -117,6 +118,7 @@ export function CollectionList({ mode, items, parents, categories, canCreate, ca
   const [slug, setSlug] = useState("");
   const [parentId, setParentId] = useState("");
   const [notice, setNotice] = useState<string | null>(null);
+  const { confirm, dialog } = useConfirm();
   const [pending, startTransition] = useTransition();
 
   const rows = useMemo(
@@ -199,8 +201,8 @@ export function CollectionList({ mode, items, parents, categories, canCreate, ca
     });
   }
 
-  function archive(item: CmsCollectionSummary) {
-    if (!confirm(`Archive "${item.title}"?`)) return;
+  async function archive(item: CmsCollectionSummary) {
+    if (!(await confirm(`Archive "${item.title}"?`))) return;
     startTransition(async () => {
       const result = await archiveCollectionItem(item.id, item.type, item.lockVersion);
       setNotice(result.message);
@@ -446,6 +448,7 @@ export function CollectionList({ mode, items, parents, categories, canCreate, ca
           </div>
         </div>
       )}
+      {dialog}
     </div>
   );
 }

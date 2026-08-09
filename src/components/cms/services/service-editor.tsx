@@ -9,6 +9,7 @@ import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
 import type { ServiceContentData, ServiceDraftData, ServiceSeoData } from "@/lib/cms/services/schema";
 import type { CmsServiceEditorData } from "@/lib/cms/services/types";
 import { ServicePreview } from "./service-preview";
+import { useConfirm } from "@/components/cms/confirm-dialog";
 
 type Tab = "content" | "seo" | "history";
 type SaveStatus = "saved" | "dirty" | "saving" | "error";
@@ -29,6 +30,7 @@ export function ServiceEditor({ service, canEdit, canPublish, canUpload }: Props
   const [busy, setBusy] = useState<"publish" | "unpublish" | "version" | "restore" | "upload" | null>(null);
   const [mobilePreview, setMobilePreview] = useState(false);
   const [savedSignature, setSavedSignature] = useState(() => signature(draft));
+  const { confirm, dialog } = useConfirm();
   const lockRef = useRef(service.lockVersion); const draftRef = useRef(draft); const savingRef = useRef(false); const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const dirty = signature(draft) !== savedSignature;
   useEffect(() => { draftRef.current = draft; }, [draft]);
@@ -51,9 +53,9 @@ export function ServiceEditor({ service, canEdit, canPublish, canUpload }: Props
   function updateSeo<K extends keyof ServiceSeoData>(key: K, value: ServiceSeoData[K]) { setDraft((current) => ({ ...current, seo: { ...current.seo, [key]: value } })); setStatus("dirty"); setNotice(null); }
   function applyMarkup(prefix: string, suffix = prefix, fallback = "text") { const textarea = descriptionRef.current; if (!textarea) return; const start = textarea.selectionStart; const end = textarea.selectionEnd; const selected = draft.content.description.slice(start, end) || fallback; updateContent("description", `${draft.content.description.slice(0, start)}${prefix}${selected}${suffix}${draft.content.description.slice(end)}`); requestAnimationFrame(() => { textarea.focus(); textarea.setSelectionRange(start + prefix.length, start + prefix.length + selected.length); }); }
 
-  async function handlePublish() { if (!window.confirm("Publish this service to the live website?")) return; setBusy("publish"); const payload = draftRef.current; const result = await publishService(service.id, lockRef.current, payload); setBusy(null); if (!result.ok) { setStatus("error"); setNotice(result.message); return; } lockRef.current = result.lockVersion; setSavedSignature(signature(payload)); setStatus("saved"); setPublished(true); setNotice(result.message ?? "Service published."); router.refresh(); }
-  async function handleUnpublish() { if (!window.confirm("Move this service to draft? It will disappear from the public services grid.")) return; setBusy("unpublish"); const result = await unpublishService(service.id, lockRef.current); setBusy(null); if (!result.ok) { setNotice(result.message); return; } lockRef.current = result.lockVersion; setPublished(false); setNotice(result.message ?? "Service moved to draft."); router.refresh(); }
-  async function handleRestore(id: string, version: number) { if (!window.confirm(`Restore version ${version} as the current draft?`)) return; setBusy("restore"); const result = await restoreServiceRevision(service.id, id, lockRef.current); setBusy(null); if (!result.ok || !result.draft) { setNotice(result.message || "The version is invalid."); return; } lockRef.current = result.lockVersion; draftRef.current = result.draft; setDraft(result.draft); setSavedSignature(signature(result.draft)); setStatus("saved"); setNotice(result.message ?? "Version restored."); router.refresh(); }
+  async function handlePublish() { if (!(await confirm("Publish this service to the live website?"))) return; setBusy("publish"); const payload = draftRef.current; const result = await publishService(service.id, lockRef.current, payload); setBusy(null); if (!result.ok) { setStatus("error"); setNotice(result.message); return; } lockRef.current = result.lockVersion; setSavedSignature(signature(payload)); setStatus("saved"); setPublished(true); setNotice(result.message ?? "Service published."); router.refresh(); }
+  async function handleUnpublish() { if (!(await confirm("Move this service to draft? It will disappear from the public services grid."))) return; setBusy("unpublish"); const result = await unpublishService(service.id, lockRef.current); setBusy(null); if (!result.ok) { setNotice(result.message); return; } lockRef.current = result.lockVersion; setPublished(false); setNotice(result.message ?? "Service moved to draft."); router.refresh(); }
+  async function handleRestore(id: string, version: number) { if (!(await confirm(`Restore version ${version} as the current draft?`))) return; setBusy("restore"); const result = await restoreServiceRevision(service.id, id, lockRef.current); setBusy(null); if (!result.ok || !result.draft) { setNotice(result.message || "The version is invalid."); return; } lockRef.current = result.lockVersion; draftRef.current = result.draft; setDraft(result.draft); setSavedSignature(signature(result.draft)); setStatus("saved"); setNotice(result.message ?? "Version restored."); router.refresh(); }
   async function handleUpload(file?: File) { if (!file) return; setBusy("upload"); setNotice(null); try { const [checksum, dimensions] = await Promise.all([sha256(file), imageDimensions(file)]); const prepared = await prepareServiceImageUpload({ serviceId: service.id, fileName: file.name, mimeType: file.type as "image/jpeg" | "image/png" | "image/webp" | "image/avif", byteSize: file.size, checksum }); if (!prepared.ok) throw new Error(prepared.message); let uploaded: { assetId: string; url: string }; if (prepared.existing) uploaded = prepared; else { const supabase = createSupabaseBrowserClient(); const { error } = await supabase.storage.from("site-media").uploadToSignedUrl(prepared.path, prepared.token, file, { contentType: file.type }); if (error) throw error; const result = await finalizeServiceImageUpload({ serviceId: service.id, fileName: file.name, mimeType: file.type as "image/jpeg" | "image/png" | "image/webp" | "image/avif", byteSize: file.size, checksum, storagePath: prepared.path, width: dimensions.width, height: dimensions.height, altText: draftRef.current.content.image.alt }); if (!result.ok) throw new Error(result.message); uploaded = result; } updateContent("image", { ...draftRef.current.content.image, assetId: uploaded.assetId, url: uploaded.url }); setNotice("Image uploaded. Autosave will attach it to this draft."); } catch (error) { setNotice(error instanceof Error ? error.message : "The image could not be uploaded."); } finally { setBusy(null); } }
 
   const statusInfo = {
@@ -85,6 +87,7 @@ export function ServiceEditor({ service, canEdit, canPublish, canUpload }: Props
         </section>
         <aside className={`${mobilePreview ? "block" : "hidden"} min-w-0 xl:block`}><div className="space-y-3 xl:sticky xl:top-0"><div className="flex items-center justify-between px-1"><span className="flex items-center gap-2 text-xs font-bold text-slate-700"><Smartphone className="h-4 w-4 text-[#157670]" />Live draft preview</span><span className="text-[10px] text-slate-400">Updates instantly</span></div><ServicePreview content={draft.content} published={published} /></div></aside>
       </div>
+      {dialog}
     </div>
   );
 }

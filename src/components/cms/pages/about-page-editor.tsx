@@ -27,6 +27,7 @@ import {
   unpublishPage,
 } from "@/app/dashboard/pages/actions";
 import { MediaPicker } from "@/components/cms/media-picker";
+import { useConfirm } from "@/components/cms/confirm-dialog";
 import type {
   AboutBodySectionData,
   AboutBodyWithBulletsData,
@@ -297,6 +298,7 @@ function eventLabel(event: CmsAboutPageEditorData["revisions"][number]["event"])
 export function AboutPageEditor({ page, canEdit, canPublish, canUpload }: AboutPageEditorProps) {
   const router = useRouter();
   const [draft, setDraft] = useState<AboutDraftData>({ sections: page.sections, seo: page.seo });
+  const { confirm, dialog } = useConfirm();
   const [activeTab, setActiveTab] = useState<EditorTab>("content");
   const [saveStatus, setSaveStatus] = useState<SaveStatus>("saved");
   const [notice, setNotice] = useState<string | null>(null);
@@ -359,7 +361,7 @@ export function AboutPageEditor({ page, canEdit, canPublish, canUpload }: AboutP
   }
 
   async function handlePublish() {
-    if (!window.confirm("Publish this draft to the live website?")) return;
+    if (!(await confirm("Publish this draft to the live website?"))) return;
     setBusyAction("publish");
     setNotice(null);
     const payload = draftRef.current;
@@ -379,7 +381,7 @@ export function AboutPageEditor({ page, canEdit, canPublish, canUpload }: AboutP
   }
 
   async function handleUnpublish() {
-    if (!window.confirm("Move this page back to draft? It will no longer be available publicly.")) return;
+    if (!(await confirm("Move this page back to draft? It will no longer be available publicly."))) return;
     setBusyAction("unpublish");
     setNotice(null);
     const result = await unpublishPage(page.id, lockVersionRef.current);
@@ -395,7 +397,7 @@ export function AboutPageEditor({ page, canEdit, canPublish, canUpload }: AboutP
   }
 
   async function handleRestore(revisionId: string, version: number) {
-    if (!window.confirm(`Restore version ${version} as the current draft?`)) return;
+    if (!(await confirm(`Restore version ${version} as the current draft?`))) return;
     setBusyAction("restore");
     setNotice(null);
     const result = await restoreAboutRevision(page.id, revisionId, lockVersionRef.current);
@@ -608,11 +610,12 @@ export function AboutPageEditor({ page, canEdit, canPublish, canUpload }: AboutP
           <div className="space-y-3 xl:sticky xl:top-0 rounded-[1.5rem] border border-slate-200/80 bg-white p-5 shadow-sm">
             <p className="text-xs font-bold text-slate-700">About this editor</p>
             <p className="text-xs leading-5 text-slate-500">
-              These 11 sections hold the About page&apos;s written content — bio, timeline, services, languages — in the same order they appear on the live page. Draft and publish here to update it.
+              These 9 sections hold the About page&apos;s written content — bio, timeline, process, experience, leadership — in the same order they appear on the live page. Draft and publish here to update it.
             </p>
           </div>
         </aside>
       </div>
+      {dialog}
     </div>
   );
 }

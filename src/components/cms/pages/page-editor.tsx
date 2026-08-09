@@ -31,6 +31,7 @@ import {
   unpublishPage,
 } from "@/app/dashboard/pages/actions";
 import { MediaPicker } from "@/components/cms/media-picker";
+import { useConfirm } from "@/components/cms/confirm-dialog";
 import type {
   ContactOfficeData,
   ContactPanelData,
@@ -563,6 +564,7 @@ export function PageEditor({ page, canEdit, canPublish, canUpload, embedded = fa
   const [busyAction, setBusyAction] = useState<"publish" | "unpublish" | "version" | "restore" | "upload" | null>(null);
   const [mobilePreview, setMobilePreview] = useState(false);
   const [savedSignature, setSavedSignature] = useState(() => draftSignature(draft));
+  const { confirm, dialog } = useConfirm();
   const lockVersionRef = useRef(page.lockVersion);
   const draftRef = useRef(draft);
   const savingRef = useRef(false);
@@ -635,7 +637,7 @@ export function PageEditor({ page, canEdit, canPublish, canUpload, embedded = fa
   }
 
   async function handlePublish() {
-    if (!window.confirm("Publish this draft to the live website?")) return;
+    if (!(await confirm("Publish this draft to the live website?"))) return;
     setBusyAction("publish");
     setNotice(null);
     const payload = draftRef.current;
@@ -655,7 +657,7 @@ export function PageEditor({ page, canEdit, canPublish, canUpload, embedded = fa
   }
 
   async function handleUnpublish() {
-    if (!window.confirm("Move this page back to draft? It will no longer be available publicly.")) return;
+    if (!(await confirm("Move this page back to draft? It will no longer be available publicly."))) return;
     setBusyAction("unpublish");
     setNotice(null);
     const result = await unpublishPage(page.id, lockVersionRef.current);
@@ -671,7 +673,7 @@ export function PageEditor({ page, canEdit, canPublish, canUpload, embedded = fa
   }
 
   async function handleRestore(revisionId: string, version: number) {
-    if (!window.confirm(`Restore version ${version} as the current draft?`)) return;
+    if (!(await confirm(`Restore version ${version} as the current draft?`))) return;
     setBusyAction("restore");
     setNotice(null);
     const result = await restorePageRevision(page.id, revisionId, lockVersionRef.current);
@@ -976,6 +978,7 @@ export function PageEditor({ page, canEdit, canPublish, canUpload, embedded = fa
           </div>
         </aside>
       </div>
+      {dialog}
     </div>
   );
 }

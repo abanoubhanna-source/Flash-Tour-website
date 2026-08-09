@@ -3,6 +3,7 @@
 import { useMemo, useState, useTransition } from "react";
 import { UserPlus, X } from "lucide-react";
 import { assignCmsRole, inviteCmsUser, removeCmsRole, updateCmsUserStatus } from "@/app/dashboard/users/actions";
+import { useConfirm } from "@/components/cms/confirm-dialog";
 
 type Role = { id: string; name: string; key: string; rank: number };
 type Profile = {
@@ -103,6 +104,7 @@ function RoleChip({ name, onRemove }: { name: string; onRemove?: () => void }) {
 
 function UserRow({ profile, roles, canManage, onNotice }: { profile: Profile; roles: Role[]; canManage: boolean; onNotice: (message: string) => void }) {
   const [pending, startTransition] = useTransition();
+  const { confirm, dialog } = useConfirm();
   const assignedRoleIds = new Set(profile.user_roles.map((assignment) => assignment.role_id));
   const availableRoles = roles.filter((role) => !assignedRoleIds.has(role.id));
 
@@ -113,17 +115,17 @@ function UserRow({ profile, roles, canManage, onNotice }: { profile: Profile; ro
     });
   }
 
-  function remove(roleId: string, roleName: string) {
-    if (!window.confirm(`Remove the ${roleName} role from ${profile.display_name || profile.email}?`)) return;
+  async function remove(roleId: string, roleName: string) {
+    if (!(await confirm(`Remove the ${roleName} role from ${profile.display_name || profile.email}?`))) return;
     startTransition(async () => {
       const result = await removeCmsRole({ userId: profile.id, roleId });
       onNotice(result.message);
     });
   }
 
-  function toggleStatus() {
+  async function toggleStatus() {
     const next = profile.status === "active" ? "suspended" : "active";
-    if (next === "suspended" && !window.confirm(`Suspend ${profile.display_name || profile.email}? They will immediately lose dashboard access.`)) return;
+    if (next === "suspended" && !(await confirm(`Suspend ${profile.display_name || profile.email}? They will immediately lose dashboard access.`))) return;
     startTransition(async () => {
       const result = await updateCmsUserStatus({ userId: profile.id, status: next });
       onNotice(result.message);
@@ -179,6 +181,7 @@ function UserRow({ profile, roles, canManage, onNotice }: { profile: Profile; ro
           </button>
         </div>
       )}
+      {dialog}
     </article>
   );
 }

@@ -6,6 +6,7 @@ import { useActionState, useEffect, useState, useTransition } from "react";
 import { ArrowRight, FileText, Globe2, MoreHorizontal, Plus, Search, Trash2, X } from "lucide-react";
 import { createPage, deletePage, type CreatePageState } from "@/app/dashboard/pages/actions";
 import type { CmsPageSummary } from "@/lib/cms/pages/types";
+import { useConfirm } from "@/components/cms/confirm-dialog";
 
 const initialCreateState: CreatePageState = { status: "idle" };
 
@@ -31,6 +32,7 @@ export function PagesList({ pages, canCreate, canEdit, canDelete }: PagesListPro
   const [message, setMessage] = useState<string | null>(null);
   const [isDeleting, startDelete] = useTransition();
   const [createState, createAction, createPending] = useActionState(createPage, initialCreateState);
+  const { confirm, dialog } = useConfirm();
 
   useEffect(() => {
     if (createState.pageId) router.push(`/dashboard/pages/${createState.pageId}`);
@@ -40,8 +42,8 @@ export function PagesList({ pages, canCreate, canEdit, canDelete }: PagesListPro
     `${page.name} ${page.path} ${page.key}`.toLowerCase().includes(query.toLowerCase()),
   );
 
-  function handleDelete(page: CmsPageSummary) {
-    if (!window.confirm(`Permanently delete “${page.name}”? This cannot be undone.`)) return;
+  async function handleDelete(page: CmsPageSummary) {
+    if (!(await confirm(`Permanently delete "${page.name}"? This cannot be undone.`))) return;
     startDelete(async () => {
       const result = await deletePage(page.id);
       setMessage(result.message);
@@ -208,6 +210,7 @@ export function PagesList({ pages, canCreate, canEdit, canDelete }: PagesListPro
           </div>
         </div>
       )}
+      {dialog}
     </div>
   );
 }
