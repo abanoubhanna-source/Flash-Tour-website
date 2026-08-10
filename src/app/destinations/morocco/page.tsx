@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, ChevronRight, Waves, Building2 } from 'lucide-react';
+import { MapPin, Waves, Building2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Footer from "@/components/Footer";
@@ -175,20 +175,17 @@ export default function MoroccoDestinationPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {region.places.map((place, pIdx) => (
                     <motion.div key={pIdx} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: pIdx * 0.1 }}>
-                      <Link href={`/destinations/morocco/${region.slug}/${place.slug}`} className="group cursor-pointer block">
+                      <div className="block">
                         <div className="relative h-64 w-full rounded-2xl overflow-hidden shadow-md mb-6 border border-slate-100">
                           {place.img ? (
-                            <Image src={place.img} alt={place.name} sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
+                            <Image src={place.img} alt={place.name} sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" fill className="object-cover" />
                           ) : (
                             <div className="absolute inset-0 bg-brand-navy-deep" />
                           )}
-                          <div className="absolute inset-0 bg-brand-navy/10 group-hover:bg-brand-navy/30 transition-colors duration-500"></div>
                         </div>
-                        <h3 className="text-2xl font-bold text-brand-teal font-en mb-3 flex items-center gap-2">
-                          {place.name} <ChevronRight className="w-5 h-5 text-brand-gold opacity-0 -translate-x-3 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
-                        </h3>
+                        <h3 className="text-2xl font-bold text-brand-teal font-en mb-3">{place.name}</h3>
                         <p className="text-slate-600 font-en text-sm leading-relaxed">{place.desc}</p>
-                      </Link>
+                      </div>
                     </motion.div>
                   ))}
                 </div>

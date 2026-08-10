@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, ChevronRight, Trees, Sun } from 'lucide-react';
+import { MapPin, Trees, Sun } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Footer from "@/components/Footer";
@@ -173,22 +173,15 @@ export default function ZanzibarDestinationPage() {
                     const card = (
                       <>
                         <div className="relative h-64 w-full rounded-2xl overflow-hidden shadow-md mb-6 border border-slate-100">
-                          <Image src={place.img} alt={place.name} sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
-                          <div className="absolute inset-0 bg-brand-navy/10 group-hover:bg-brand-navy/30 transition-colors duration-500"></div>
+                          <Image src={place.img} alt={place.name} sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" fill className="object-cover" />
                         </div>
-                        <h3 className="text-2xl font-bold text-brand-teal font-en mb-3 flex items-center gap-2">
-                          {place.name} <ChevronRight className="w-5 h-5 text-brand-gold opacity-0 -translate-x-3 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
-                        </h3>
+                        <h3 className="text-2xl font-bold text-brand-teal font-en mb-3">{place.name}</h3>
                         <p className="text-slate-600 font-en text-sm leading-relaxed">{place.desc}</p>
                       </>
                     );
                     return (
                       <motion.div key={pIdx} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: pIdx * 0.1 }}>
-                        {region.slug && place.slug ? (
-                          <Link href={`/destinations/zanzibar/${region.slug}/${place.slug}`} className="group cursor-pointer block">{card}</Link>
-                        ) : (
-                          <div className="group">{card}</div>
-                        )}
+                        <div className="block">{card}</div>
                       </motion.div>
                     );
                   })}

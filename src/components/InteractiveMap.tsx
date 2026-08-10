@@ -136,9 +136,13 @@ export default function InteractiveMap({ content }: Props) {
                     <span className="w-2 h-2 rounded-full bg-brand-teal"></span>
                     {loc.name}
                   </h3>
-                  <p className="text-xs md:text-sm text-slate-600 font-en leading-relaxed font-medium">
-                    {loc.details}
-                  </p>
+                  <div className="space-y-1">
+                    {loc.details.split('•').map((line) => line.trim()).filter(Boolean).map((line) => (
+                      <p key={line} className="text-xs md:text-sm text-brand-navy font-en leading-relaxed font-bold">
+                        {line}
+                      </p>
+                    ))}
+                  </div>
                   <div className="absolute top-full left-1/2 -translate-x-1/2 border-6 md:border-8 border-transparent border-t-white"></div>
                 </div>
               </div>
