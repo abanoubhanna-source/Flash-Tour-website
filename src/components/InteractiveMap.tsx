@@ -136,9 +136,10 @@ export default function InteractiveMap({ content }: Props) {
                     <span className="w-2 h-2 rounded-full bg-brand-teal"></span>
                     {loc.name}
                   </h3>
-                  <div className="space-y-1">
+                  <div className="space-y-1.5">
                     {loc.details.split('•').map((line) => line.trim()).filter(Boolean).map((line) => (
-                      <p key={line} className="text-xs md:text-sm text-brand-navy font-en leading-relaxed font-bold">
+                      <p key={line} className="flex items-start gap-2 text-xs md:text-sm text-slate-600 font-en leading-relaxed font-medium">
+                        <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-brand-teal"></span>
                         {line}
                       </p>
                     ))}
