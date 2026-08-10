@@ -49,9 +49,9 @@ export default function StatsAndCerts({ content }: Props) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 }}
-              className="flex flex-col items-center justify-center p-8 bg-slate-50 rounded-2xl border border-slate-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+              className="flex flex-col items-center justify-center p-5 sm:p-8 bg-slate-50 rounded-2xl border border-slate-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
             >
-              <span className="text-5xl md:text-6xl font-bold text-brand-teal font-en mb-3 drop-shadow-sm">
+              <span className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-brand-teal font-en mb-3 drop-shadow-sm break-words text-center">
                 {stat.number}
               </span>
               <span className="text-sm md:text-base text-slate-600 font-en font-bold uppercase tracking-wider text-center">
