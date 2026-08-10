@@ -144,19 +144,21 @@ export default function HeroSection({ content }: HeroSectionProps) {
           </motion.div>
         </AnimatePresence>
 
-        <div className="absolute bottom-10 left-0 w-full flex justify-center gap-3 md:gap-5 z-20 px-4 flex-wrap">
-          {cmsShowcases.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setSelected(item)}
-              className={`font-en font-bold text-xs md:text-sm tracking-widest uppercase px-5 md:px-7 py-3 rounded-full transition-all duration-300 backdrop-blur-sm shadow-lg
-                ${selected.id === item.id
-                  ? 'bg-brand-gold text-brand-navy border border-brand-gold scale-105'
-                  : 'bg-white/15 text-white border border-white/25 hover:bg-white/30'}`}
-            >
-              {item.name}
-            </button>
-          ))}
+        <div className="absolute bottom-10 left-0 w-full z-20 px-4">
+          <div className="flex justify-start md:justify-center gap-3 md:gap-5 overflow-x-auto no-scrollbar">
+            {cmsShowcases.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => setSelected(item)}
+                className={`shrink-0 font-en font-bold text-xs md:text-sm tracking-widest uppercase px-5 md:px-7 py-3 rounded-full transition-all duration-300 backdrop-blur-sm shadow-lg
+                  ${selected.id === item.id
+                    ? 'bg-brand-gold text-brand-navy border border-brand-gold scale-105'
+                    : 'bg-white/15 text-white border border-white/25 hover:bg-white/30'}`}
+              >
+                {item.name}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </section>

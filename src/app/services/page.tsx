@@ -1,6 +1,7 @@
 // src/app/services/page.tsx
 import type { Metadata } from "next";
 import { getPublishedPageContent } from "@/lib/cms/pages/public";
+import { getPublishedCollection, publicData } from "@/lib/cms/public-content";
 import ServicesPageClient from "./ServicesPageClient";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -15,6 +16,28 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function ServicesPage() {
-  return <ServicesPageClient />;
+export default async function ServicesPage() {
+  const services = await getPublishedCollection("service");
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@graph": services.map((entry) => {
+      const data = publicData(entry);
+      return {
+        "@type": "Service",
+        name: entry.title,
+        description: typeof data.description === "string" ? data.description : undefined,
+        provider: { "@type": "TravelAgency", name: "Flash Group" },
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://flash-tour-group.vercel.app"}/services#${entry.slug}`,
+      };
+    }),
+  };
+
+  return (
+    <>
+      {services.length > 0 && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }} />
+      )}
+      <ServicesPageClient />
+    </>
+  );
 }

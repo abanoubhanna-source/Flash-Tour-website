@@ -21,6 +21,31 @@ export const metadata: Metadata = {
 const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 const shouldLoadAnalytics = process.env.NODE_ENV === "production" && !!gaMeasurementId;
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://flash-tour-group.vercel.app";
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "TravelAgency",
+  name: "Flash Group",
+  legalName: "Flash Tour Group",
+  url: siteUrl,
+  logo: `${siteUrl}/images/logo.png`,
+  foundingDate: "1985",
+  description: "An Egyptian International company offering full-fledged services in tourism and hospitality.",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "30 Thawra St., Heliopolis",
+    addressLocality: "Cairo",
+    addressCountry: "EG",
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+20226904654",
+    email: "info@flashtour.travel",
+    contactType: "customer service",
+  },
+  sameAs: ["https://www.linkedin.com/company/flash-tour/posts/?feedView=all"],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -29,6 +54,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} bg-white text-slate-900 min-h-screen pt-20`}>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
         <Navbar />
         {children}
       </body>

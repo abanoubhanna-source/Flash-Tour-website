@@ -4,7 +4,7 @@
 import { SendHorizontal, MapPin, Mail, Phone } from 'lucide-react';
 import { useEffect, useState } from 'react';
 // ضفنا FaFacebookF هنا
-import { FaFacebookF, FaLinkedinIn, FaInstagram, FaXTwitter } from 'react-icons/fa6';
+import { FaFacebookF, FaLinkedinIn, FaInstagram } from 'react-icons/fa6';
 import Image from 'next/image';
 import Link from 'next/link';
 import { trackEmailClick, trackPhoneClick } from '@/lib/analytics';
@@ -40,9 +40,6 @@ export default function Footer() {
               </Link>
               <Link href={settings.instagram || '#'} target="_blank" rel="noopener noreferrer" aria-label="Flash Group on Instagram" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-teal-700 hover:border-teal-700 transition-all duration-300 group">
                 <FaInstagram aria-hidden="true" className="w-5 h-5 text-slate-400 group-hover:text-white" />
-              </Link>
-              <Link href="#" aria-label="Flash Group on X" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-teal-700 hover:border-teal-700 transition-all duration-300 group">
-                <FaXTwitter aria-hidden="true" className="w-5 h-5 text-slate-400 group-hover:text-white" />
               </Link>
             </div>
           </div>
