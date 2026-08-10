@@ -45,7 +45,7 @@ export default function Footer() {
           </div>
 
           <div className="lg:col-span-3 space-y-8">
-            <h4 className="text-teal-500 font-bold uppercase tracking-[0.2em] text-sm">Headquarters</h4>
+            <h3 className="text-teal-500 font-bold uppercase tracking-[0.2em] text-sm">Headquarters</h3>
             <ul className="space-y-6">
               
               {/* 2. تفعيل العنوان ليفتح خريطة جوجل */}
@@ -89,7 +89,7 @@ export default function Footer() {
           </div>
 
           <div className="lg:col-span-4 space-y-6">
-            <h4 className="text-white font-bold text-2xl">Partner with <span className="text-teal-500">Flash Group</span></h4>
+            <h3 className="text-white font-bold text-2xl">Partner with <span className="text-teal-500">Flash Group</span></h3>
             <div className="relative group">
               <label htmlFor="footer-newsletter-email" className="sr-only">Your corporate email</label>
               <input

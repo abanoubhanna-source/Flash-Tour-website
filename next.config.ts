@@ -66,6 +66,13 @@ const nextConfig: NextConfig = {
           { key: "Content-Security-Policy", value: cspDirectives.join("; ") },
         ],
       },
+      {
+        // Static photos/logos in /public never change in place — a content
+        // update always ships under a new filename — so they're safe to
+        // cache for a year.
+        source: "/images/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
     ];
   },
 };

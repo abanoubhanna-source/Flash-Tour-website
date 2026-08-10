@@ -75,7 +75,7 @@ export default function B2BSolutions({ content }: Props) {
               <p className="text-white/90 font-en leading-relaxed mb-8 h-20 overflow-hidden line-clamp-3">
                 {displayServices[1]?.desc}
               </p>
-              <Link href="/services" className="text-brand-gold font-bold font-en flex items-center gap-2 hover:translate-x-2 transition-transform">
+              <Link href="/services" className="text-white font-bold font-en flex items-center gap-2 hover:translate-x-2 transition-transform">
                 {ctaLabel} <ArrowRight className="w-5 h-5"/>
               </Link>
             </div>
