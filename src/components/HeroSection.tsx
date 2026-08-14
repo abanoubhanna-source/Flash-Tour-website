@@ -137,7 +137,7 @@ export default function HeroSection({ content }: HeroSectionProps) {
                 {selected.primaryCta?.label || content?.primaryCta.label || "Partner With Flash Group"}
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
-              <Link href={selected.secondaryCta?.href || content?.secondaryCta.href || "/brands"} className="inline-flex items-center justify-center gap-3 bg-white/15 text-white border border-white/25 px-8 py-4 rounded-full text-base font-bold font-en hover:bg-white/25 transition-all duration-300">
+              <Link href={selected.secondaryCta?.href || content?.secondaryCta.href || "/hospitality"} className="inline-flex items-center justify-center gap-3 bg-white/15 text-white border border-white/25 px-8 py-4 rounded-full text-base font-bold font-en hover:bg-white/25 transition-all duration-300">
                 {selected.secondaryCta?.label || content?.secondaryCta.label || "Explore Portfolio"}
               </Link>
             </div>

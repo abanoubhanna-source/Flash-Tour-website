@@ -81,7 +81,7 @@ export default function ContactPageClient() {
                 <div className="w-14 h-14 bg-teal-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-teal-700 transition-colors duration-300">
                   <Building2 className="w-6 h-6 text-teal-700 group-hover:text-white transition-colors duration-300" />
                 </div>
-                <h2 className="text-xs font-bold text-teal-600 uppercase tracking-widest font-en mb-2">{office.region}</h2>
+                <span className="block text-xs font-bold text-teal-600 uppercase tracking-widest font-en mb-2">{office.region}</span>
                 <h3 className="text-2xl font-bold text-slate-900 font-en mb-6">{office.city}</h3>
                 
                 <ul className="space-y-4">
