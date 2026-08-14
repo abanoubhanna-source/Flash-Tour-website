@@ -16,50 +16,60 @@
   --color-brand-gold: #f1b820;
 }
 
-html {
-  scroll-behavior: smooth;
-}
+/*
+ * Everything below is wrapped in Tailwind's own `base` layer. Turbopack's
+ * bundler places this file's un-layered rules AFTER Tailwind's generated
+ * `utilities` layer closes in the compiled output — which makes them
+ * unlayered CSS, and unlayered CSS always beats ANY layered rule
+ * (including utility classes) regardless of specificity. Explicitly
+ * naming the layer here is what makes Tailwind text-size utilities on
+ * h1/h2/h3/p actually win over these defaults, as intended.
+ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
 
-body {
-  background: var(--color-background);
-  color: var(--color-foreground);
-  font-family: system-ui, -apple-system, sans-serif;
-}
+  body {
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font-family: system-ui, -apple-system, sans-serif;
+  }
 
-/* Typography control */
-h1 {
-  font-size: clamp(2.4rem, 4.5vw, 4.25rem);
-  line-height: 1.05;
-  font-weight: 700;
-  letter-spacing: -0.045em;
-}
+  h1 {
+    font-size: clamp(2.4rem, 4.5vw, 4.25rem);
+    line-height: 1.05;
+    font-weight: 700;
+    letter-spacing: -0.045em;
+  }
 
-h2 {
-  font-size: clamp(2rem, 3.5vw, 3rem);
-  line-height: 1.12;
-  font-weight: 700;
-  letter-spacing: -0.035em;
-}
+  h2 {
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    line-height: 1.12;
+    font-weight: 700;
+    letter-spacing: -0.035em;
+  }
 
-h3 {
-  font-size: clamp(1.35rem, 2vw, 2rem);
-  line-height: 1.2;
-  font-weight: 700;
-  letter-spacing: -0.025em;
-}
+  h3 {
+    font-size: clamp(1.35rem, 2vw, 2rem);
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
 
-p {
-  font-size: clamp(0.9rem, 1vw, 1rem);
-  line-height: 1.75;
-  font-weight: 400;
-}
+  p {
+    font-size: clamp(0.9rem, 1vw, 1rem);
+    line-height: 1.75;
+    font-weight: 400;
+  }
 
-button,
-a,
-input,
-textarea,
-select {
-  font-family: inherit;
+  button,
+  a,
+  input,
+  textarea,
+  select {
+    font-family: inherit;
+  }
 }
 
 .no-scrollbar {
